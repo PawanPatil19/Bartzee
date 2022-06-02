@@ -166,6 +166,7 @@ app.post("/productReg", upload.single('image'), (req, res) => {
         	image:new Buffer(encode_img,'base64')
         },
 		productQuantity: req.body.productQuantity,
+		productDesc: req.body.productDesc,
 		sellerPhone: req.body.sellerPhone,
 		sellerEmail: req.body.sellerEmail,
 		productPrice: req.body.productPrice,

@@ -14,6 +14,7 @@ const productSchema = mongoose.Schema(
         contentType: String
     },
 		productQuantity: { type: String, required: false },
+        productDesc: {type: String, required: false },
         sellerPhone: {type: String, required: false},
         sellerEmail: {type: String, required: false},
         productPrice: {type: Number, required: false}
