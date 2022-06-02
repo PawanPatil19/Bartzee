@@ -8,8 +8,24 @@ var LocalStrategy = require("passport-local").Strategy;
 var passportLocalMongoose = require("passport-local-mongoose");
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+var fs = require("fs")
+require("dotenv").config();
 
 const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
+
+// setting up multer to stroing uploaded images
+var multer = require('multer');
+  
+var storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './src/uploads')
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now())
+    }
+});
+  
+var upload = multer({ storage: storage });
 
 
 //calling the database connection
@@ -25,14 +41,6 @@ app.use(require("express-session")({
     resave: false,
     saveUninitialized: false
 }));
-
-// app.use(passport.initialize());
-// app.use(passport.session());
-
-// passport.use(new LocalStrategy(User.authenticate()));
-// passport.serializeUser(User.serializeUser());
-// passport.deserializeUser(User.deserializeUser());
-
 
 
 const staticpath = path.join(__dirname, "../public");
@@ -129,6 +137,10 @@ function isLoggedIn(req, res, next) {
     res.redirect("/login");
 }
 
+app.get("/error", (req, res) => {
+    res.render("error");
+})
+
 
 // Product Registration Page
 app.get("/productReg", (req, res) => {
@@ -136,32 +148,63 @@ app.get("/productReg", (req, res) => {
 })
 
 
+
+
 //Post Product registration
-app.post("/productReg", async(req, res) => {
-    const { sellerName, address, productName, productImage, productQuantity, sellerPhone, sellerEmail, productPrice } = req.body    
+app.post("/productReg", upload.single('image'), (req, res) => {
+    console.log(req.file)
 
-	try {
-		const response = await Product.create({
-			sellerName, 
-            address, 
-            productName, 
-            productImage, 
-            productQuantity, 
-            sellerPhone, 
-            sellerEmail ,
-            productPrice
-		})
-		console.log('Product registered successfully: ', response)
-	} catch (error) {
-		if (error.code === 11000) {
-			// duplicate key
-			return res.json({ status: 'error', error: 'Product already registered' })
-		}
-		throw error
-	}
+	var img = fs.readFileSync(req.file.path);
+    var encode_img = img.toString('base64');
 
-    res.render("secret")
-	//res.json({ status: 'ok' })
+	var obj = {
+        sellerName: req.body.sellerName,
+        address: req.body.address,
+		productName: req.body.productName,
+        image: {
+            contentType:req.file.mimetype,
+        	image:new Buffer(encode_img,'base64')
+        },
+		productQuantity: req.body.productQuantity,
+		sellerPhone: req.body.sellerPhone,
+		sellerEmail: req.body.sellerEmail,
+		productPrice: req.body.productPrice,
+    }
+	
+	//const { sellerName, address, productName, productImage, productQuantity, sellerPhone, sellerEmail, productPrice } = req.body    
+
+	// try {
+	// 	const response = await Product.create({
+	// 		sellerName, 
+    //         address, 
+    //         productName, 
+    //         productImage, 
+    //         productQuantity, 
+    //         sellerPhone, 
+    //         sellerEmail ,
+    //         productPrice
+	// 	})
+	// 	console.log('Product registered successfully: ', response)
+	// } catch (error) {
+	// 	if (error.code === 11000) {
+	// 		// duplicate key
+	// 		return res.json({ status: 'error', error: 'Product already registered' })
+	// 	}
+	// 	throw error
+	// }
+
+	Product.create(obj, (err, item) => {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            // item.save();
+			res.render("secret")
+        }
+    });
+
+    //res.render("secret")
+	res.json({ status: 'ok' })
 });
 
 

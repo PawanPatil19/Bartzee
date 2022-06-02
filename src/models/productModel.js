@@ -8,7 +8,7 @@ const productSchema = mongoose.Schema(
         sellerName: {type: String, required: false},
 		address: { type: String, required: false },
 		productName: { type: String, required: false },
-		productImage: 
+		image: 
     {
         data: Buffer,
         contentType: String

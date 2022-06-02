@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/buttons.css">
-    >
+
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -20,6 +20,12 @@
         href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Bertzee</title>
 </head>
+
+<style>
+    div.preview-images>img {
+        width: 30%;
+    }
+</style>
 
 
 <body>
@@ -47,7 +53,7 @@
     <div class="container mt-5">
         <div class="row d-flex justify-content-center align-items-center">
             <div class="col-md-8">
-                <form id="regForm" method="post">
+                <form id="regForm" method="post" enctype="multipart/form-data">
                     <h1 id="register">Register your product here</h1>
                     <div class="all-steps" id="all-steps">
                         <span class="step"><i class="fa fa-user"></i></span>
@@ -82,21 +88,21 @@
                         <h6>Upload an image of the product</h6>
                         <p>
                         <div class="input-group mb-3">
-                            <input type="file" class="form-control" id="productImage" name="productImage">
-                            <label class="input-group-text" for="inputGroupFile02" id="productImage"
-                                name="productImage">Upload</label>
+                            <input type="file" class="form-control" id="image" name="image" accept="image/*">
+
                         </div>
                         </p>
+
+
                         <br>
                         <h6>Quantity</h6>
                         <p>
                             <input placeholder="##" oninput="this.className = ''" name="productQuantity"
                                 id="productQuantity">
                         </p>
-
-
-
                     </div>
+
+
                     <div class="tab">
                         <h6>Contact</h6>
                         <p><input placeholder="Enter your phone number.." oninput="this.className = ''"
@@ -204,6 +210,7 @@
 
 
 
+
         // Handling user input
         window.onload = function () {
             const form = document.getElementById("regForm")
@@ -215,7 +222,7 @@
             const sellerName = document.getElementById('sellerName').value
             const address = document.getElementById('address').value
             const productName = document.getElementById('productName').value
-            const productImage = document.getElementById('productImage').value
+            const image = document.getElementById('image').value
             const productQuantity = document.getElementById('productQuantity').value
             const sellerPhone = document.getElementById('sellerPhone').value
             const sellerEmail = document.getElementById('sellerEmail').value
@@ -230,7 +237,7 @@
                     sellerName,
                     address,
                     productName,
-                    productImage,
+                    image,
                     productQuantity,
                     sellerPhone,
                     sellerEmail,
