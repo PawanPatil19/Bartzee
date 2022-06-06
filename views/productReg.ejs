@@ -12,13 +12,14 @@
     <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/product.css">
 
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css"
         href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>Bertzee</title>
+    <title>Bartzee</title>
 </head>
 
 <style>
@@ -50,9 +51,9 @@
         </div>
     </div>
 
-    <div class="container mt-5">
+    <div class="container mt-lg-5">
         <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <form id="regForm" method="post" enctype="multipart/form-data">
                     <h1 id="register">Register your product here</h1>
                     <div class="all-steps" id="all-steps">
@@ -61,6 +62,7 @@
                         <span class="step"><i class="fa fa-shopping-bag"></i></span>
                         <span class="step"><i class="fa fa-mobile-phone"></i></span>
                         <span class="step"><i class="fa fa-money"></i></span>
+                        <span class="step"><i class="fa fa-flag"></i></span>
                         <span class="step"><i class="fa fa-send-o"></i></span>
                     </div>
 
@@ -80,6 +82,22 @@
 
                     </div>
                     <div class="tab">
+                        <h6>Type of product</h6>
+                        <p>
+                            <select class="form-select" placeholder="Select the type of product you are selling..." type="text"
+                                name="productType" id="productType" class='input_field'>
+                                <option selected>Choose...</option>
+                                <option>Electronics</option>
+                                <option>Stationary</option>
+                                <option>Sport Equipments</option>
+                                <option>Games</option>
+                                <option>Clothing</option>
+                                <option>Student Resources</option>
+                                <option>Room Decor</option>
+                                <otpion>Others</otpion>
+                            </select>
+                        </p>
+                        <br>
                         <h6>Product Name</h6>
                         <p><input placeholder="Enter your product name..." oninput="this.className = ''"
                                 name="productName" id="productName">
@@ -102,8 +120,10 @@
                         </p>
                         <br>
                         <p>
-                            <h6>Product Description</h6>
-                            <textarea class="form-control" placeholder="Enter some details about the product like color, size, etc..." id="productDesc" name="productDesc"></textarea>
+                        <h6>Product Description</h6>
+                        <textarea class="form-control"
+                            placeholder="Enter some details about the product like color, size, etc..." id="productDesc"
+                            name="productDesc"></textarea>
                         </p>
                     </div>
 
@@ -129,11 +149,68 @@
 
                     </div>
 
+                    <div class="tab" style="height:700px">
+                        <h3>Review your product</h3>
+                        <br>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-5">
+                                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            <div class="carousel-item active">
+                                                <img class="d-block w-100" src="../logo.png" alt="First slide">
+                                            </div>
+
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
+                                            data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
+                                            data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="col-sm-7">
+                                    <div class="type"><label id="type"></label></div>
+                                    <h2><label id="name"></label></h1>
+                                        <hr>
+
+                                        <h4>About</h4>
+                                        <label id="about"></label>
+                                        <br>
+                                        <ul>
+                                            <li>Color: </li>
+                                            <li>Size: </li>
+                                            <li>Quantity: <label id="quantity"></label></li>
+                                        </ul>
+
+                                        <br>
+                                        <br>
+                                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp; Seller: <label id="seller"></label><br>
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Seller Address:
+                                        <label id="add"></label><br>
+                                        <i class="fa fa-phone" aria-hidden="true"></i>&nbsp; Seller Contact: 
+                                        <label id="contact"></label>
+                                        <hr>
+
+                                        <h2><b>$<label id="price"></label></b></h2>
+                                        <br>
+                                        <button type="button" class="btn btn-outline-secondary btn-lg"><i
+                                                class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
+                                            ADD TO CART</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="tab">
                         <input type="submit" value="Register your product" id='input_submit' class='input_field'>
                     </div>
-
-
 
                     <div style="overflow:auto;" id="nextprevious">
                         <div style="float:right;">
@@ -185,6 +262,26 @@
                 document.getElementById("text-message").style.display = "block";
             }
             showTab(currentTab);
+
+            const productType = document.getElementById('productType').value
+            const sellerName = document.getElementById('sellerName').value
+            const address = document.getElementById('address').value
+            const productName = document.getElementById('productName').value
+            const image = document.getElementById('image').value
+            const productQuantity = document.getElementById('productQuantity').value
+            const productDesc = document.getElementById('productDesc').value
+            const sellerPhone = document.getElementById('sellerPhone').value
+            const sellerEmail = document.getElementById('sellerEmail').value
+            const productPrice = document.getElementById('productPrice').value
+
+            document.getElementById("type").innerHTML = productType
+            document.getElementById("name").innerHTML = productName
+            document.getElementById("about").innerHTML = productDesc
+            document.getElementById("quantity").innerHTML = productQuantity
+            document.getElementById("seller").innerHTML = sellerName
+            document.getElementById("add").innerHTML = address
+            document.getElementById("contact").innerHTML = sellerPhone
+            document.getElementById("price").innerHTML = productPrice
         }
 
         function validateForm() {
@@ -224,6 +321,7 @@
 
         async function registerProduct(event) {
             event.preventDefault()
+            const productType = document.getElementById('productType').value
             const sellerName = document.getElementById('sellerName').value
             const address = document.getElementById('address').value
             const productName = document.getElementById('productName').value
@@ -234,12 +332,22 @@
             const sellerEmail = document.getElementById('sellerEmail').value
             const productPrice = document.getElementById('productPrice').value
 
+            document.getElementById("type").innerHTML = productType
+            document.getElementById("name").innerHTML = productName
+            document.getElementById("about").innerHTML = productDesc
+            document.getElementById("quantity").innerHTML = productQuantity
+            document.getElementById("seller").innerHTML = sellerName
+            document.getElementById("address").innerHTML = address
+            document.getElementById("contact").innerHTML = sellerPhone
+            document.getElementById("price").innerHTML = productPrice
+
             const result = await fetch('/productReg', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
+                    productType,
                     sellerName,
                     address,
                     productName,

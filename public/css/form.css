@@ -1,15 +1,14 @@
 
-
 #regForm {
     background-color: #eee;
     margin: 0px auto;
     font-family: Raleway;
-    padding: 40px;
+    padding: 60px;
     border-radius: 20px
+
 }
 
 #register{
-
   color: #6A1B9A;
 }
 
@@ -41,6 +40,9 @@ input.invalid {
 }
 
 .tab {
+    display: none
+}
+.tab-a {
     display: none
 }
 

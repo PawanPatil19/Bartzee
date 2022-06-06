@@ -1,0 +1,11 @@
+div.type {
+    text-transform: uppercase;
+    color: darkgoldenrod;
+}
+.container {
+    border: 1px;
+}
+
+div.addButton {
+    font-size: large;
+}

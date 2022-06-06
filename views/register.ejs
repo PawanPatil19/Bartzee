@@ -64,9 +64,12 @@
                     <i class="far fa-building"></i>
                     <select placeholder="Search your Organization" type="text" name="organization" id="organization"
                         class='input_field'>
-                        <option selected>Select your Organization</option>
-                        <option>National University of Singapore</option>
-                        <option>Nanyang Technological University, Singapore</option>
+                        <option>Select your school/university/office..</option>
+                        <% for (var i in Organization) { %>
+                            <option value="<%= Organization[i].id %>">
+                                <%= Organization[i].org %>, &nbsp;<%= Organization[i].country %>
+                            </option>
+                            <% } %>
 
                     </select>
 
@@ -74,7 +77,7 @@
 
                 <div style="margin-bottom: 15px;">
                     <div style="margin-bottom: 15px;">
-                        <a href="/addOrganization">Is your organzation not in the list?</a>
+                        <a href="/orgReg">Is your organzation not in the list?</a>
                         <br><br>
                         <b style="color:red;">*</b>Password must contain atleast 8 characters including
                         a letter and a
@@ -83,9 +86,7 @@
                     </div>
 
                     <b style="color:red;">*</b>Password must contain atleast 8 characters including a
-                    letter and a
-                    number
-
+                    letter and a number
                 </div>
 
                 <div class="input_container" style="margin-bottom: 15px;">
@@ -104,9 +105,15 @@
                 <input type="submit" value="Register" id='input_submit' class='input_field'>
             </form>
             <span id='create_account'>
-                <a href="/login" style="color:green;">Login <i class="fas fa-sign-in-alt"></i></a>
+                <h5><a href="/login" style="color:green;">Login&nbsp;<i class="fas fa-sign-in-alt"></i></a></h5>
             </span>
+            <br>
+            <span id='create_account'>
+                <a href="/"><u>Go to Home page</u></a>
+            </span>
+            <br>
         </div>
+
     </div>
 
     <script>
@@ -123,7 +130,7 @@
         //     }
         // }
 
-        window.onload = function() {
+        window.onload = function () {
             const form = document.getElementById("reg-form")
         }
         form.addEventListener("submit", registerUser)
@@ -161,4 +168,4 @@
 
 </body>
 
-</html>Added something to register.ejs
+</html>
