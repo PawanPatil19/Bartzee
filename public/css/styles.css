@@ -71,7 +71,7 @@ body {
     display: flex;
     align-items: center;
     padding: 20px;
-    background-color: lightgray;
+    background-color:#ECECEC;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -91,7 +91,7 @@ body {
     outline: none;
     font-size: 18px;
     padding-left: 10px;
-    background-color: lightgray;
+    background-color: #ECECEC;
 }
 
 .header-buttons {

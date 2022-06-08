@@ -47,7 +47,6 @@
                 <div class="input_container" style="margin-bottom: 15px;">
                     <i class="fas fa-bars"></i>
                     <input placeholder="Enter Full Name" type="text" name="name" id="name" class='input_field'>
-
                 </div>
                 <div class="input_container" style="margin-bottom: 15px;">
                     <i class="fas fa-envelope"></i>
@@ -66,18 +65,17 @@
                         class='input_field'>
                         <option>Select your school/university/office..</option>
                         <% for (var i in Organization) { %>
-                            <option value="<%= Organization[i].id %>">
-                                <%= Organization[i].org %>, &nbsp;<%= Organization[i].country %>
+                            <option value="<%= Organization[i].id %>" class="input_field">
+                                <%= Organization[i].org %>, <%= Organization[i].country %>
                             </option>
                             <% } %>
-
                     </select>
-
                 </div>
 
                 <div style="margin-bottom: 15px;">
                     <div style="margin-bottom: 15px;">
-                        <a href="/orgReg">Is your organzation not in the list?</a>
+                        <a href="/orgReg"><i class="fa fa-question-circle" aria-hidden="true"></i>
+                            Is your organzation not in the list?</a>
                         <br><br>
                         <b style="color:red;">*</b>Password must contain atleast 8 characters including
                         a letter and a

@@ -16,6 +16,7 @@ const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhf
 
 // setting up multer to stroing uploaded images
 var multer = require('multer');
+const { Template } = require("ejs");
 
 var storage = multer.diskStorage({
 	destination: (req, file, cb) => {
@@ -72,7 +73,6 @@ app.get("/register", (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		console.log("Organization  :" + Org);
 		res.render("register", { Organization: Organization });
 	});
 
@@ -175,14 +175,11 @@ app.post("/orgReg", async (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		console.log("Organization  :" + Org);
+		
 		res.render("register", { Organization: Organization });
 	});
 	//res.json({ status: 'ok' })
 });
-
-
-
 
 
 
@@ -194,7 +191,14 @@ app.get("/error", (req, res) => {
 
 // Product Registration Page
 app.get("/productReg", (req, res) => {
-	res.render("productReg");
+	Org.find({}).exec(function (err, Organization) {
+
+		if (err) {
+			console.log("Error:", err);
+		}
+		
+		res.render("productReg", { Organization: Organization });
+	});
 })
 
 
@@ -210,6 +214,7 @@ app.post("/productReg", upload.single('image'), (req, res) => {
 	var obj = {
 		productType: req.body.productType,
 		sellerName: req.body.sellerName,
+		organization: req.body.organization,
 		address: req.body.address,
 		productName: req.body.productName,
 		image: {
@@ -218,6 +223,8 @@ app.post("/productReg", upload.single('image'), (req, res) => {
 		},
 		productQuantity: req.body.productQuantity,
 		productDesc: req.body.productDesc,
+		productColor: req.body.productColor,
+		productSize: req.body.productSize,
 		sellerPhone: req.body.sellerPhone,
 		sellerEmail: req.body.sellerEmail,
 		productPrice: req.body.productPrice,
@@ -229,13 +236,17 @@ app.post("/productReg", upload.single('image'), (req, res) => {
 			console.log(err);
 		}
 		else {
-			// item.save();
-			res.render("secret")
+			item.save();
+			console.log("ID: ", item._id)
+			Product.find({id: item._id}, (err, prd) => {
+				err ? console.log(err) : res.render('review', { prd: prd });
+			});
 		}
 	});
+	
 
 	//res.render("secret")
-	res.json({ status: 'ok' })
+	//res.json({ status: 'ok' })
 });
 
 // Product review page

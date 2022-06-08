@@ -5,8 +5,9 @@ var passportLocalMongoose = require('passport-local-mongoose');
 // create an schema
 const productSchema = mongoose.Schema(
     {
-        productType: {type: String, required: false },
+        productType: { type: String, required: false },
         sellerName: { type: String, required: false },
+        organization: { type: String, required: false },
         address: { type: String, required: false },
         productName: { type: String, required: false },
         image:
@@ -16,6 +17,8 @@ const productSchema = mongoose.Schema(
         },
         productQuantity: { type: String, required: false },
         productDesc: { type: String, required: false },
+        productColor: { type: String, required: false },
+        productSize: { type: String, required: false },
         sellerPhone: { type: String, required: false },
         sellerEmail: { type: String, required: false },
         productPrice: { type: Number, required: false }

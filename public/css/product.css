@@ -2,8 +2,24 @@ div.type {
     text-transform: uppercase;
     color: darkgoldenrod;
 }
-.container {
-    border: 1px;
+.container-a {
+    width: 80%;
+    /* this will help us center it*/
+    margin:auto;
+    margin-bottom: 20px;
+    background-color: var(--form_bg);
+    border-radius: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* make it a grid container*/
+    display: grid;
+    /* with two columns of same width*/
+    /* with a small gap in between them*/
+    grid-gap: 5vw;
+    /* add some padding around */
+    padding: 30px;
+
+        
+    
 }
 
 div.addButton {

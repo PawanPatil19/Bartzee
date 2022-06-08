@@ -26,6 +26,16 @@ input {
     -webkit-appearance: none;
 }
 
+.input-select {
+    padding: 10px;
+    width: 100%;
+    font-size: 17px;
+    font-family: Raleway;
+    border: 1px solid #aaaaaa;
+    border-radius: 10px;
+    -webkit-appearance: none;
+}
+
 
 
 .tab input:focus{
