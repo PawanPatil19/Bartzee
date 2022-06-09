@@ -70,24 +70,39 @@
     <!-- Main Body -->
     <div class="container-main">
         <div class="row">
-            <% for (var i in product) { %>
-            <div class="col-sm-3">
-                <div class="card" style="width: 18rem;">
-                    <img src="data:image/<%= product[i].image.contentType%>;base64,
-                    <%=product[i].image.data.toString('base64')%>" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h6 class="prdType"><%= product[i].productType%></h6>
-                        <h4 class="prdName"><b><%= product[i].productName%></b></h4>
-                        <p class="prdDesc"><%= product[i].productDesc%></p>
-                        <p><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; 
-                        <%= product[i].organization %><br>
-                        </p>
-                        <a href="/review/<%= product[i]._id %>" class="btn btn-outline-warning stretched-link">View</a>
+            <div class="card-deck">
+                <% for (var i in product) { %>
+
+                    <div class="card" style="height: 600px; width: 20rem;">
+                        <img src="data:image/<%= product[i].image.contentType%>;base64,
+                    <%=product[i].image.data.toString('base64')%>" style="height:300px;" class="card-img-top"
+                            alt="...">
+                        <div class="card-body">
+                            <h6 class="prdType">
+                                <%= product[i].productType%>
+                            </h6>
+                            <h4 class="prdName"><b>
+                                    <%= product[i].productName%>
+                                </b></h4>
+                            <p class="prdDesc">
+                                <%= product[i].productDesc%>
+                            </p>
+                            <p><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;
+                                <%= product[i].organization %><br>
+                            </p>
+
+                            <h4><b>$&nbsp;<%= product[i].productPrice%></b></h4>
+                            <hr>
+                            <a href="/review/<%= product[i]._id %>" class="btn btn-outline-warning stretched-link"><i
+                                    class="fa fa-eye" aria-hidden="true"></i>
+                                &nbsp; View</a>
+
+                        </div>
                     </div>
-                </div>
+
+                    <% } %>
             </div>
-            <% } %>
-            
+
         </div>
     </div>
 
