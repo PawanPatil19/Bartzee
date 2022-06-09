@@ -25,3 +25,7 @@ div.type {
 div.addButton {
     font-size: large;
 }
+
+.checked {
+    color: orange;
+  }

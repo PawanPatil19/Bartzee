@@ -103,7 +103,7 @@
                         </p>
                         <h6>Address</h6>
                         <p><input placeholder="Enter your full address here..." oninput="this.className = ''"
-                                name="address" id="address">
+                                name="sellerAddress" id="sellerAddress">
                         </p>
 
                     </div>
@@ -321,7 +321,7 @@
             const sellerName = document.getElementById('sellerName').value
             const orgn = document.getElementById('organization')
             const organization = orgn.options[orgn.selectedIndex].text
-            const address = document.getElementById('address').value
+            const sellerAddress = document.getElementById('sellerAddress').value
             const productName = document.getElementById('productName').value
 
             const productQuantity = document.getElementById('productQuantity').value
@@ -343,7 +343,7 @@
             document.getElementById("quantity").innerHTML = productQuantity
             document.getElementById("seller").innerHTML = sellerName
             document.getElementById("org").innerHTML = organization
-            document.getElementById("add").innerHTML = address
+            document.getElementById("add").innerHTML = sellerAddress
             document.getElementById("contact").innerHTML = sellerPhone
             document.getElementById("price").innerHTML = productPrice
         }
@@ -396,7 +396,7 @@
             const sellerName = document.getElementById('sellerName').value
             const orgn = document.getElementById('organization')
             const organization = orgn.options[orgn.selectedIndex].text
-            const address = document.getElementById('address').value
+            const sellerAddress = document.getElementById('sellerAddress').value
             const productName = document.getElementById('productName').value
             const image = document.getElementById('image').value
             const productQuantity = document.getElementById('productQuantity').value
@@ -407,14 +407,6 @@
             const sellerEmail = document.getElementById('sellerEmail').value
             const productPrice = document.getElementById('productPrice').value
 
-            document.getElementById("type").innerHTML = productType
-            document.getElementById("name").innerHTML = productName
-            document.getElementById("about").innerHTML = productDesc
-            document.getElementById("quantity").innerHTML = productQuantity
-            document.getElementById("seller").innerHTML = sellerName
-            document.getElementById("address").innerHTML = address
-            document.getElementById("contact").innerHTML = sellerPhone
-            document.getElementById("price").innerHTML = productPrice
 
             const result = await fetch('/productReg', {
                 method: 'POST',
@@ -425,7 +417,7 @@
                     productType,
                     sellerName,
                     organization,
-                    address,
+                    sellerAddress,
                     productName,
                     image,
                     productQuantity,

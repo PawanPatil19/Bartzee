@@ -9,7 +9,9 @@ var LocalStrategy = require("passport-local").Strategy;
 var passportLocalMongoose = require("passport-local-mongoose");
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const session = require("express-session");
 var fs = require("fs")
+var ObjectId = require('mongodb').ObjectID;
 require("dotenv").config();
 
 const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
@@ -38,12 +40,9 @@ const port = process.env.PORT || 3000;
 
 //user management
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(require("express-session")({
-	secret: "node js mongodb",
-	resave: false,
-	saveUninitialized: false
-}));
 
+
+// Session management
 
 const staticpath = path.join(__dirname, "../public");
 
@@ -60,7 +59,7 @@ app.get("/", (req, res) => {
 })
 
 //Showing secret page
-app.get("/secret", isLoggedIn, function (req, res) {
+app.get("/secret", function (req, res) {
 	res.render("secret");
 });
 
@@ -130,9 +129,11 @@ app.post('/login', async (req, res) => {
 			JWT_SECRET
 		)
 
-		console.log("Data added")
-		//res.render("index")
-		return res.json({ status: 'ok', data: token })
+		console.log(user);
+		User.find({ 'email': email }, (err, user) => {
+			err ? console.log(err) : res.render('index', { user: user });
+		});
+		
 	}
 	else {
 		res.json({ status: 'error', error: 'Invalid email/password' })
@@ -140,12 +141,6 @@ app.post('/login', async (req, res) => {
 
 
 })
-
-
-function isLoggedIn(req, res, next) {
-	if (req.isAuthenticated()) return next();
-	res.redirect("/login");
-}
 
 //Organization Registration page
 app.get("/orgReg", (req, res) => {
@@ -175,19 +170,16 @@ app.post("/orgReg", async (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		
+
 		res.render("register", { Organization: Organization });
 	});
 	//res.json({ status: 'ok' })
 });
 
-
-
 //Error page
 app.get("/error", (req, res) => {
 	res.render("error");
 })
-
 
 // Product Registration Page
 app.get("/productReg", (req, res) => {
@@ -196,13 +188,10 @@ app.get("/productReg", (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		
+
 		res.render("productReg", { Organization: Organization });
 	});
 })
-
-
-
 
 //Post Product registration
 app.post("/productReg", upload.single('image'), (req, res) => {
@@ -215,12 +204,16 @@ app.post("/productReg", upload.single('image'), (req, res) => {
 		productType: req.body.productType,
 		sellerName: req.body.sellerName,
 		organization: req.body.organization,
-		address: req.body.address,
+		sellerAddress: req.body.sellerAddress,
 		productName: req.body.productName,
+		// image: {
+		// 	contentType: req.file.mimetype,
+		// 	image: new Buffer(encode_img, 'base64')
+		// },
 		image: {
-			contentType: req.file.mimetype,
-			image: new Buffer(encode_img, 'base64')
-		},
+            data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+            contentType: 'image/jpg'
+        },
 		productQuantity: req.body.productQuantity,
 		productDesc: req.body.productDesc,
 		productColor: req.body.productColor,
@@ -238,12 +231,12 @@ app.post("/productReg", upload.single('image'), (req, res) => {
 		else {
 			item.save();
 			console.log("ID: ", item._id)
-			Product.find({id: item._id}, (err, prd) => {
+			Product.find({ '_id': item._id }, (err, prd) => {
 				err ? console.log(err) : res.render('review', { prd: prd });
 			});
 		}
 	});
-	
+
 
 	//res.render("secret")
 	//res.json({ status: 'ok' })
@@ -251,7 +244,10 @@ app.post("/productReg", upload.single('image'), (req, res) => {
 
 // Product review page
 app.get("/review", (req, res) => {
-	res.render("review");
+	Product.find({ '_id': ObjectId("62a113615627c9a1ee5ffda7") }, (err, prd) => {
+		err ? console.log(err) : res.render('review', { prd: prd });
+		console.log(prd);
+	});
 })
 
 
