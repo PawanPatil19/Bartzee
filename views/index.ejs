@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/dropdown.css">
+    <link rel="stylesheet" href="../css/home.css">
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -36,25 +37,21 @@
             <i class="fa fa-search" aria-hidden="true"></i>
             <input type="text" name="">
         </div>
-       
+
 
         <div class="header-buttons">
             <button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
                     class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart</button>
 
-            
-                <a href="/login"><button class="btn btn-outline-secondary btn-lg" type="button" style="width: 30%;"><i
-                    class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</button></a>
-            
 
-            
+            <a href="/login"><button class="btn btn-outline-secondary btn-lg" type="button" style="width: 30%;"><i
+                        class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</button></a>
         </div>
-       
+
     </div>
 
 
-    <!-- Main block -->
-
+    <!-- Menu Bar -->
 
     <nav class="navbar bg-light">
         <form class="container-fluid justify-content-start">
@@ -70,6 +67,30 @@
         </form>
     </nav>
 
+    <!-- Main Body -->
+    <div class="container-main">
+        <div class="row">
+            <% for (var i in product) { %>
+            <div class="col-sm-3">
+                <div class="card" style="width: 18rem;">
+                    <img src="data:image/<%= product[i].image.contentType%>;base64,
+                    <%=product[i].image.data.toString('base64')%>" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h6 class="prdType"><%= product[i].productType%></h6>
+                        <h4 class="prdName"><b><%= product[i].productName%></b></h4>
+                        <p class="prdDesc"><%= product[i].productDesc%></p>
+                        <p><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; 
+                        <%= product[i].organization %><br>
+                        </p>
+                        <a href="/review/<%= product[i]._id %>" class="btn btn-outline-warning stretched-link">View</a>
+                    </div>
+                </div>
+            </div>
+            <% } %>
+            
+        </div>
+    </div>
+
 
 
     <!-- Footer -->
@@ -79,6 +100,7 @@
         <i class="fa fa-twitter w3-hover-opacity"></i>
         <i class="fa fa-linkedin w3-hover-opacity"></i>
     </footer>
+
 
     <script src="../jq/jquery.js" type="text/javascript"></script>
     <script src="../js/bootstrap.js" type="text/javascript"></script>

@@ -55,7 +55,14 @@ app.set('view engine', 'ejs');
 
 //Home Page
 app.get("/", (req, res) => {
-	res.render("index");
+	Product.find({}).exec(function (err, product) {
+
+		if (err) {
+			console.log("Error:", err);
+		}
+
+		res.render("index", { product: product });
+	});
 })
 
 //Showing secret page
@@ -243,10 +250,9 @@ app.post("/productReg", upload.single('image'), (req, res) => {
 });
 
 // Product review page
-app.get("/review", (req, res) => {
-	Product.find({ '_id': ObjectId("62a113615627c9a1ee5ffda7") }, (err, prd) => {
+app.get("/review/:id", (req, res) => {
+	Product.find({ '_id': req.params.id }, (err, prd) => {
 		err ? console.log(err) : res.render('review', { prd: prd });
-		console.log(prd);
 	});
 })
 
