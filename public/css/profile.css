@@ -1,0 +1,17 @@
+.container-profile {
+    width:30%;
+    margin:auto;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    padding:30px;
+}
+
+.profile-labels {
+    font-size: 13px;
+    color: grey;
+}
+
+.profile-data {
+    font-size: 15px;
+    font-weight: 400;
+}

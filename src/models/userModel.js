@@ -9,7 +9,8 @@ const userSchema = mongoose.Schema(
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
 		phone: { type: String, required: false },
-		organization: { type: String, required: false }
+		organization: { type: String, required: false },
+		date: { type: Date, default: Date.now }
 
 	},
 	{ collection: 'users' }

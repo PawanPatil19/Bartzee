@@ -34,26 +34,7 @@
     <!-- Loader in the start -->
     <!-- <div id="loader"></div> -->
 
-    <!-- Top Navigation Bar if user is not logged in-->
-    <div class="container" id="div-main">
-      <div class="logo">
-        <a class="navbar-brand mt-2" href="/"><img src="../orbitalLogo.png" style="width:200px;height:60px;"></a>
-      </div>
-
-
-      <div class="box">
-        <i class="fa fa-search" aria-hidden="true"></i>
-        <input type="text" name="">
-      </div>
-
-      <div class="header-buttons">
-        <button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
-            class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart</button>
-
-        <a href="/login"><button class="btn btn-outline-secondary btn-lg" type="button" style="width: 30%;"><i
-              class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</button></a>
-      </div>
-    </div>
+    <%- include('partials/header', {user: user}); %>
 
 
     <!-- Main block -->
@@ -64,7 +45,11 @@
           <button class="dropbtn"><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;&nbsp;Menu</button>
           <div class="dropdown-content">
             <a href="/">Home</a>
-            <a href="/productReg">Sell your item</a>
+            <% if (user) { %>
+              <a href="/productReg">Sell your item</a>
+              <% } else { %>
+              <a href="/users/login">Sell your item</a>
+              <% } %>
             <a href="/">About Us</a>
           </div>
         </div>
@@ -138,10 +123,19 @@
 
                             <h2><b>$&nbsp;<%= prd[i].productPrice %></b></h2>
                             <br>
-                            <button type="button" class="btn btn-outline-secondary btn-lg"><i
-                                class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
-                              ADD TO CART
-                            </button>
+                            <% if (user) { %>
+                              <a href="/cart"><button type="button" class="btn btn-outline-secondary btn-lg"><i
+                                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
+                                  ADD TO CART
+                                </button></a>
+                              <% } else { %>
+                                <a href="/users/login"><button type="button" class="btn btn-outline-secondary btn-lg"><i
+                                      class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
+                                    ADD TO CART
+                                  </button></a>
+                                <% } %>
+
+
           </div>
 
         </div>
@@ -152,9 +146,6 @@
 
 
 
-      <script>
-        console.log(pr);
-      </script>
   </body>
 
 </html>

@@ -7,42 +7,71 @@ var passport = require("passport");
 var bodyParser = require("body-parser");
 var LocalStrategy = require("passport-local").Strategy;
 var passportLocalMongoose = require("passport-local-mongoose");
-const bcrypt = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const session = require("express-session");
+var bcrypt = require('bcryptjs')
+var jwt = require('jsonwebtoken')
+const flash = require('connect-flash');
+var session = require("express-session");
+var cookieParser = require("cookie-parser");
 var fs = require("fs")
 var ObjectId = require('mongodb').ObjectID;
+var Auth0Strategy = require("passport-auth0");
 require("dotenv").config();
+require("./config/passport")(passport)
+
+
+
+
+
 
 const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 
 // setting up multer to stroing uploaded images
-var multer = require('multer');
-const { Template } = require("ejs");
+// var multer = require('multer');
+// const { Template } = require("ejs");
 
-var storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, './src/uploads')
-	},
-	filename: (req, file, cb) => {
-		cb(null, file.fieldname + '-' + Date.now())
-	}
-});
+// var storage = multer.diskStorage({
+// 	destination: (req, file, cb) => {
+// 		cb(null, './src/uploads')
+// 	},
+// 	filename: (req, file, cb) => {
+// 		cb(null, file.fieldname + '-' + Date.now())
+// 	}
+// });
 
-var upload = multer({ storage: storage });
+// var upload = multer({ storage: storage });
 
 
 //calling the database connection
 require("./connection")
 
 const app = express();
+const router = express.Router();
 const port = process.env.PORT || 3000;
 
 //user management
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+
 // Session management
+app.use(session({
+	secret: 'secret',
+	resave : true,
+	saveUninitialized : true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+app.use((req,res,next)=> {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error  = req.flash('error');
+next();
+})
+
+
+const {ensureAuthenticated} = require("./config/auth.js")
+
 
 const staticpath = path.join(__dirname, "../public");
 
@@ -53,208 +82,113 @@ app.use(express.static(staticpath))
 
 app.set('view engine', 'ejs');
 
-//Home Page
-app.get("/", (req, res) => {
-	Product.find({}).exec(function (err, product) {
+app.use('/',require('./routes/index'));
+app.use('/users',require('./routes/users'));
 
-		if (err) {
-			console.log("Error:", err);
-		}
+// //Organization Registration page
+// app.get("/orgReg", (req, res) => {
+// 	res.render("orgReg");
+// })
 
-		res.render("index", { product: product });
-	});
-})
+// //Post Organization Registration
+// app.post("/orgReg", async (req, res) => {
+// 	const { org, country } = req.body
 
-//Showing secret page
-app.get("/secret", function (req, res) {
-	res.render("secret");
-});
+// 	try {
+// 		const response = await Org.create({
+// 			org,
+// 			country
+// 		})
+// 		console.log('Organization Registered ', response)
+// 	} catch (error) {
+// 		if (error.code === 11000) {
+// 			// duplicate key
+// 			return res.json({ status: 'error', error: 'Organization already registered..' })
+// 		}
+// 		throw error
+// 	}
 
+// 	Org.find({}).exec(function (err, Organization) {
 
-// Registration Page
-app.get("/register", (req, res) => {
+// 		if (err) {
+// 			console.log("Error:", err);
+// 		}
 
-	Org.find({}).exec(function (err, Organization) {
+// 		res.render("register", { Organization: Organization });
+// 	});
+// 	//res.json({ status: 'ok' })
+// });
 
-		if (err) {
-			console.log("Error:", err);
-		}
-		res.render("register", { Organization: Organization });
-	});
+// //Error page
+// app.get("/error", (req, res) => {
+// 	res.render("error");
+// })
 
-})
+// // Product Registration Page
+// app.get("/productReg", ensureAuthenticated, (req, res) => {
+// 	console.log(req.user);
+// 	Org.find({}).exec(function (err, Organization) {
 
-//Post Registration
-app.post("/register", async (req, res) => {
-	const { name, email, password: plainTextPassword, phone, organization } = req.body
+// 		if (err) {
+// 			console.log("Error:", err);
+// 		}
 
-	const password = await bcrypt.hash(plainTextPassword, 10)
+// 		res.render("productReg", { Organization: Organization, layout: false, user: req.user});
+// 	});
+// })
 
-	try {
-		const response = await User.create({
-			name,
-			email,
-			password,
-			phone,
-			organization
-		})
-		console.log('User created successfully: ', response)
-	} catch (error) {
-		if (error.code === 11000) {
-			// duplicate key
-			return res.json({ status: 'error', error: 'Username already in use' })
-		}
-		throw error
-	}
+// //Post Product registration
+// app.post("/productReg", upload.single('image'), (req, res) => {
+// 	console.log(req.file)
 
-	res.render("login")
-	//res.json({ status: 'ok' })
-});
+// 	var img = fs.readFileSync(req.file.path);
+// 	var encode_img = img.toString('base64');
 
-//Login Page
-app.get("/login", function (req, res) {
-	res.render('login');
-});
-
-//Post user login
-app.post('/login', async (req, res) => {
-	const { email, password } = req.body
-	const user = await User.findOne({ email }).lean()
-
-	if (!user) {
-		return res.json({ status: 'error', error: 'Invalid email/password' })
-	}
-
-	if (await bcrypt.compare(password, user.password)) {
-		// the username, password combination is successful
-
-		const token = jwt.sign(
-			{
-				id: user._id,
-				email: user.email
-			},
-			JWT_SECRET
-		)
-
-		console.log(user);
-		User.find({ 'email': email }, (err, user) => {
-			err ? console.log(err) : res.render('index', { user: user });
-		});
-		
-	}
-	else {
-		res.json({ status: 'error', error: 'Invalid email/password' })
-	}
+// 	var obj = {
+// 		productType: req.body.productType,
+// 		sellerName: req.body.sellerName,
+// 		organization: req.body.organization,
+// 		sellerAddress: req.body.sellerAddress,
+// 		productName: req.body.productName,
+// 		image: {
+// 			data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+// 			contentType: 'image/jpg'
+// 		},
+// 		productQuantity: req.body.productQuantity,
+// 		productDesc: req.body.productDesc,
+// 		productColor: req.body.productColor,
+// 		productSize: req.body.productSize,
+// 		sellerPhone: req.body.sellerPhone,
+// 		sellerEmail: req.body.sellerEmail,
+// 		productPrice: req.body.productPrice,
+// 	}
 
 
-})
+// 	Product.create(obj, (err, item) => {
+// 		if (err) {
+// 			console.log(err);
+// 		}
+// 		else {
+// 			item.save();
+// 			console.log("ID: ", item._id)
+// 			Product.find({ '_id': item._id }, (err, prd) => {
+// 				err ? console.log(err) : res.render('review', { prd: prd });
+// 			});
+// 		}
+// 	});
+// });
 
-//Organization Registration page
-app.get("/orgReg", (req, res) => {
-	res.render("orgReg");
-})
-
-//Post Organization Registration
-app.post("/orgReg", async (req, res) => {
-	const { org, country } = req.body
-
-	try {
-		const response = await Org.create({
-			org,
-			country
-		})
-		console.log('Organization Registered ', response)
-	} catch (error) {
-		if (error.code === 11000) {
-			// duplicate key
-			return res.json({ status: 'error', error: 'Organization already registered..' })
-		}
-		throw error
-	}
-
-	Org.find({}).exec(function (err, Organization) {
-
-		if (err) {
-			console.log("Error:", err);
-		}
-
-		res.render("register", { Organization: Organization });
-	});
-	//res.json({ status: 'ok' })
-});
-
-//Error page
-app.get("/error", (req, res) => {
-	res.render("error");
-})
-
-// Product Registration Page
-app.get("/productReg", (req, res) => {
-	Org.find({}).exec(function (err, Organization) {
-
-		if (err) {
-			console.log("Error:", err);
-		}
-
-		res.render("productReg", { Organization: Organization });
-	});
-})
-
-//Post Product registration
-app.post("/productReg", upload.single('image'), (req, res) => {
-	console.log(req.file)
-
-	var img = fs.readFileSync(req.file.path);
-	var encode_img = img.toString('base64');
-
-	var obj = {
-		productType: req.body.productType,
-		sellerName: req.body.sellerName,
-		organization: req.body.organization,
-		sellerAddress: req.body.sellerAddress,
-		productName: req.body.productName,
-		// image: {
-		// 	contentType: req.file.mimetype,
-		// 	image: new Buffer(encode_img, 'base64')
-		// },
-		image: {
-            data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-            contentType: 'image/jpg'
-        },
-		productQuantity: req.body.productQuantity,
-		productDesc: req.body.productDesc,
-		productColor: req.body.productColor,
-		productSize: req.body.productSize,
-		sellerPhone: req.body.sellerPhone,
-		sellerEmail: req.body.sellerEmail,
-		productPrice: req.body.productPrice,
-	}
+// // Product review page
+// app.get("/review/:id", ensureAuthenticated, (req, res) => {
+// 	Product.find({ '_id': req.params.id }, (err, prd) => {
+// 		err ? console.log(err) : res.render('review', { prd: prd, layout: false, user: req.user });
+// 	});
+// })
 
 
-	Product.create(obj, (err, item) => {
-		if (err) {
-			console.log(err);
-		}
-		else {
-			item.save();
-			console.log("ID: ", item._id)
-			Product.find({ '_id': item._id }, (err, prd) => {
-				err ? console.log(err) : res.render('review', { prd: prd });
-			});
-		}
-	});
+// Cart page
 
 
-	//res.render("secret")
-	//res.json({ status: 'ok' })
-});
-
-// Product review page
-app.get("/review/:id", (req, res) => {
-	Product.find({ '_id': req.params.id }, (err, prd) => {
-		err ? console.log(err) : res.render('review', { prd: prd });
-	});
-})
 
 
 

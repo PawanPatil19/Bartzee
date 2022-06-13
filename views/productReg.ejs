@@ -23,48 +23,9 @@
     <title>Bartzee</title>
 </head>
 
-<style>
-    div.preview-images>img {
-        width: 30%;
-    }
-</style>
-
 
 <body>
-    <!-- Top Navigation Bar if user is not logged in-->
-    <div class="container" id="div-main">
-        <div class="logo">
-            <a class="navbar-brand mt-2" href="/"><img src="../orbitalLogo.png" style="width:200px;height:60px;"></a>
-        </div>
-
-
-        <div class="box">
-            <i class="fa fa-search" aria-hidden="true"></i>
-            <input type="text" name="">
-        </div>
-
-        <div class="header-buttons">
-            <button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
-                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart</button>
-
-            <a href="/login"><button class="btn btn-outline-secondary btn-lg" type="button" style="width: 30%;"><i
-                        class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</button></a>
-        </div>
-    </div>
-
-    <nav class="navbar bg-light">
-        <form class="container-fluid justify-content-start">
-            <div class="dropdown">
-                <button class="dropbtn"><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;&nbsp;Menu</button>
-                <div class="dropdown-content">
-                    <a href="/">Home</a>
-                    <a href="/productReg">Sell your item</a>
-                    <a href="/">About Us</a>
-                </div>
-            </div>
-
-        </form>
-    </nav>
+    <%- include('partials/header', {user: user}); %>
 
     <div class="container mt-lg-5">
         <div class="row d-flex justify-content-center align-items-center">
@@ -274,7 +235,6 @@
 
     
 
-
     <script>
         
 
@@ -438,12 +398,6 @@
             }
         }
     </script>
-
-
-    </script>
-
-
-
 
 </body>
 

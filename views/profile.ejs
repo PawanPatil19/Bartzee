@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/product.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
+    <link rel="stylesheet" href="../css/profile.css">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Bartzee</title>
+</head>
+
+<body>
+    <%- include('partials/header', {user: user}); %>
+
+        <div class="container-profile">
+            <div class="profile-image" style="text-align: center;">
+                <i class="fa fa-user-circle-o" style="font-size:110px"></i>
+                <br><br>
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="left" title="Edit"><i class="fa fa-edit fa-lg" ></i></a>
+                &nbsp;&nbsp;
+                <a href="#" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete your profile"><i class="fa fa-trash fa-lg"></i></a>
+            </div>
+            <br><br>
+            <div class="profile-main">
+                <label class="profile-labels">Name</label>
+                <p class="profile-data"><%= user.name %></p>
+                <br>
+                <label class="profile-labels">Contact Number</label>
+                <p class="profile-data"><%= user.phone %></p>
+                <br>
+                <label class="profile-labels">Contact Email</label>
+                <p class="profile-data"><%= user.email %></p>
+                <br>
+                <label class="profile-labels">Organization</label>
+                <p class="profile-data"><%= user.organization %></p>
+                <br>
+                <label class="profile-labels">Date on which account was created</label>
+                <p class="profile-data"><%= user.date %></p>
+                <br>
+            </div>
+            <br>
+            <div style="text-align: center;">
+                <a href="/deleteUser"><button type="button" class="btn btn-outline-danger btn-lg" >Delete profile</button></a>
+                <a href="/"><button type="button" class="btn btn-outline-warning btn-lg" >Home</button></a>
+            </div>
+            
+
+        </div>
+
+
+
+</body>
+
+</html>
