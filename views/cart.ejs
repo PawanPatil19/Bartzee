@@ -30,6 +30,30 @@
     <br>
     <h1>YOUR CART</h1>
     <hr style="width: 80%; margin:auto;">
+    <br>
+
+    <% for (var i in orders) { %>
+        <div class="card" style="height: 300px; width: 80%; margin:auto; padding: 10px;">
+            <div class="row g-0">
+              <div class="col-md-4">
+                <img src="data:image/<%= orders[i].image.contentType%>;base64,
+                <%=orders[i].image.data.toString('base64')%>" class="img-fluid rounded-start" style="max-height:280px; " alt="...">
+              </div>
+              <div class="col-1" style="width: 50px;">
+                <div class="d-flex" style="height: 100%;">
+                  <div class="vr"></div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="card-body">
+                  <h5 class="card-title"><%= orders[i].productName %></h5>
+                  <p class="card-text"><%= orders[i].productDesc %></p>
+                  <p class="card-text"><small class="text-muted">Seller: <%= orders[i].organization %></small></p>
+                </div>
+              </div>
+            </div>
+          </div>
+    <% } %>
 
 
 

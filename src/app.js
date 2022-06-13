@@ -18,27 +18,8 @@ var Auth0Strategy = require("passport-auth0");
 require("dotenv").config();
 require("./config/passport")(passport)
 
-
-
-
-
-
 const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 
-// setting up multer to stroing uploaded images
-// var multer = require('multer');
-// const { Template } = require("ejs");
-
-// var storage = multer.diskStorage({
-// 	destination: (req, file, cb) => {
-// 		cb(null, './src/uploads')
-// 	},
-// 	filename: (req, file, cb) => {
-// 		cb(null, file.fieldname + '-' + Date.now())
-// 	}
-// });
-
-// var upload = multer({ storage: storage });
 
 
 //calling the database connection
