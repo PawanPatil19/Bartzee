@@ -16,7 +16,7 @@ var fs = require("fs")
 var ObjectId = require('mongodb').ObjectID;
 var Auth0Strategy = require("passport-auth0");
 const router = express.Router();
-const {ensureAuthenticated} = require('../config/auth') 
+const { ensureAuthenticated } = require('../config/auth')
 var mongo = require('mongodb');
 
 var MongoClient = mongo.MongoClient;
@@ -38,13 +38,24 @@ var upload = multer({ storage: storage });
 
 
 //login page
-router.get('/', (req,res)=>{
-	console.log("1: ",req.user)
-    Product.find({'buyer' : null}).exec(function (err, product) {
-		if (err) {
-			console.log("Error:", err);
+router.get('/', (req, res) => {
+	console.log("1: ", req.user)
+	Product.find({ 'buyer': null }).exec(function (err, product) {
+		if (req.user) {
+			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+				if (err) {
+					console.log("Error:", err);
+				}
+				var cnt = numberOfOrders.length
+				console.log("count", cnt)
+				res.render("index", { layout: false, product: product, user: req.user, count: 1 });
+
+			});
+		} else {
+			res.render("index", { layout: false, product: product, user: req.user, count: 0 });
 		}
-		res.render("index", { layout: false, product: product, user: req.user });
+
+
 
 	});
 })
@@ -94,7 +105,13 @@ router.get("/productReg", ensureAuthenticated, (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		res.render("productReg", { Organization: Organization, layout: false, user: req.user });
+		Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+			if (err) {
+				console.log("Error:", err);
+			}
+			res.render("productReg", { Organization: Organization, layout: false, user: req.user, count: numberOfOrders.length });
+		});
+
 	});
 })
 
@@ -105,7 +122,7 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 	var img = fs.readFileSync(req.file.path);
 	var encode_img = img.toString('base64');
 
-	console.log(__dirname+'/uploads');
+	console.log(__dirname + '/uploads');
 	var obj = {
 		productType: req.body.productType,
 		sellerName: req.body.sellerName,
@@ -113,7 +130,7 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 		sellerAddress: req.body.sellerAddress,
 		productName: req.body.productName,
 		image: {
-			data: fs.readFileSync(path.join(__dirname , '..', 'uploads', req.file.filename)),
+			data: fs.readFileSync(path.join(__dirname, '..', 'uploads', req.file.filename)),
 			contentType: 'image/jpg'
 		},
 		productQuantity: req.body.productQuantity,
@@ -133,9 +150,22 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 		else {
 			item.save();
 			console.log("ID: ", item._id)
-			Product.find({ '_id': item._id }, (err, prd) => {
-				err ? console.log(err) : res.render('review', { prd: prd, user: req.user });
-			});
+			// Product.find({ '_id': item._id }, (err, prd) => {
+			// 	err ? console.log(err) : res.render('review', { prd: prd, user: req.user });
+			// });
+
+			Product.find({ '_id': item._id }).exec(function (err, prd) {
+				if (err) {
+					console.log(err);
+				}
+				Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+					if (err) {
+						console.log("Error:", err);
+					}
+					res.render("productReg", { prd: prd, layout: false, user: req.user, count: numberOfOrders.length });
+				});
+
+			})
 		}
 	});
 
@@ -143,53 +173,94 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 
 // Product review page
 router.get("/review/:id", (req, res) => {
-	Product.find({ '_id': req.params.id }, (err, prd) => {
-		err ? console.log(err) : res.render('review', { prd: prd, layout: false, user: req.user });
-	});
+	// Product.find({ '_id': req.params.id }, (err, prd) => {
+	// 	err ? console.log(err) : res.render('review', { prd: prd, layout: false, user: req.user, count: 0 });
+	// });
+
+	Product.find({ '_id': req.params.id }).exec(function (err, prd) {
+		if (req.user) {
+			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+				if (err) {
+					console.log("Error:", err);
+				}
+				res.render("review", { prd: prd, layout: false, user: req.user, count: numberOfOrders.length });
+			});
+		} else {
+			res.render('review', { prd: prd, layout: false, user: req.user, count: 0 });
+		}
+
+	})
 })
 
 router.post("/review/:id", (req, res) => {
-	Product.updateOne({'_id': req.params.id}, {buyer: req.user._id}, function (err, docs) {
-		if (err){
+	Product.updateOne({ '_id': req.params.id }, { buyer: req.user._id }, function (err, docs) {
+		if (err) {
 			console.log(err)
 		}
-		else{
+		else {
+
 			console.log("Item added to cart! ", docs);
-		
-		}});
-	
+			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+				if (err) {
+					console.log("Error:", err);
+				}
+				res.render("cart", { orders: numberOfOrders, layout: false, user: req.user, count: numberOfOrders.length });
+			});
+
+		}
+	});
+
 })
 
 // Cart page
 router.get("/cart", (req, res) => {
-	Product.find({ 'buyer': req.user._id}, (err, orders) => {
-		err ? console.log(err) : res.render('cart', { orders: orders, layout: false, user: req.user });
+	Product.find({ 'buyer': req.user._id }, (err, orders) => {
+		err ? console.log(err) : res.render('cart', { layout: false, user: req.user, count: orders.length });
 	});
 
 })
 
 // Profile page
 router.get("/profile", (req, res) => {
-	res.render("profile", { layout: false, user: req.user });
+	Product.find({ 'buyer': req.user._id }, (err, orders) => {
+		err ? console.log(err) : res.render('profile', { layout: false, user: req.user, count: orders.length });
+	});
 })
 
 //Delete user
 router.get("/deleteUser", function (req, res) {
 	User.findByIdAndRemove(req.user._id, (err, doc) => {
-        if (!err) {
+		if (!err) {
 			Product.find({}).exec(function (err, product) {
 				if (err) {
 					console.log("Error:", err);
 				}
-				res.render("index", { layout: false, product: product, user: null });
-		
+				res.render("index", { layout: false, product: product, user: null, count: 0 });
+
 			});
-        } else {
-            console.log('Failed to Delete user Details: ' + err);
-        }
-    });
-	
-  });
+		} else {
+			console.log('Failed to Delete user Details: ' + err);
+		}
+	});
+
+});
+
+
+//Remove product from user cart
+router.get("/removeCart/:id", function (req, res) {
+	Product.updateOne({ '_id': req.params.id }, { buyer: null }, function (err, docs) {
+		if (err) {
+			console.log(err)
+		}
+		else {
+			console.log("Item removed from cart! ", docs);
+			Product.find({ 'buyer': req.user._id }, (err, orders) => {
+				err ? console.log(err) : res.render('cart', { orders: orders, layout: false, user: req.user, count: orders.length });
+			});
+
+		}
+	});
+});
 
 
 router.get("/error", function (req, res) {

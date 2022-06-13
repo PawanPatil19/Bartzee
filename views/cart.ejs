@@ -33,26 +33,41 @@
     <br>
 
     <% for (var i in orders) { %>
-        <div class="card" style="height: 300px; width: 80%; margin:auto; padding: 10px;">
-            <div class="row g-0">
-              <div class="col-md-4">
+        <div class="card" style="height: 190px; width: 80%; margin:auto; padding: 5px;">
+            <div class="row">
+              <div class="col-md-2">
                 <img src="data:image/<%= orders[i].image.contentType%>;base64,
-                <%=orders[i].image.data.toString('base64')%>" class="img-fluid rounded-start" style="max-height:280px; " alt="...">
+                <%=orders[i].image.data.toString('base64')%>" class="img-fluid rounded-start" style="height:170px; width: 170px; " alt="...">
               </div>
-              <div class="col-1" style="width: 50px;">
-                <div class="d-flex" style="height: 100%;">
+              <div class="col-1" style="width: 30px;">
+                <div class="d-flex" style="height: 90%;">
                   <div class="vr"></div>
                 </div>
               </div>
-              <div class="col-md-6">
+              <div class="col-md-7">
                 <div class="card-body">
-                  <h5 class="card-title"><%= orders[i].productName %></h5>
-                  <p class="card-text"><%= orders[i].productDesc %></p>
-                  <p class="card-text"><small class="text-muted">Seller: <%= orders[i].organization %></small></p>
+                  <% var item = Number(i) + 1; %> 
+                  <small class="text-muted">Item # <%= item %></small>
+                  <h5 class="card-title"><b><%= orders[i].productName %></b></h5>
+                  <p class="card-text">Color: <%= orders[i].productColor %> <b>|</b> Size: <%= orders[i].productSize %> <b>|</b> Quantity: <%= orders[i].productQuantity %></p>
+                  <p class="card-text">$ <%= orders[i].productPrice %></p>
+                  <p class="card-text"><small class="text-muted">Seller: <%= orders[i].sellerName %>, <%= orders[i].organization %></small></p>
+                </div>
+              </div>
+              <div class="col-md-2" style="margin:auto;">
+                <div class="d-grid gap-2" >
+                  <a href="/review/<%= orders[i]._id %>"><button class="btn btn-outline-warning" type="button"><i class="fa fa-search" aria-hidden="true"></i>
+                    View Item Details</button></a>
+                  <a href="/removeCart/<%= orders[i]._id %>"><button class="btn btn-outline-warning" type="button"><i class="fa fa-trash" aria-hidden="true"></i>
+                    Remove from cart</button></a>
+                  <a href="#"><button class="btn btn-outline-warning" type="button"><i class="fa fa-comments-o" aria-hidden="true"></i>
+                    Chat with Seller</button></a>
+                    
                 </div>
               </div>
             </div>
           </div>
+          <br><br>
     <% } %>
 
 

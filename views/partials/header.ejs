@@ -29,7 +29,7 @@
         <div class="header-buttons">
             <% if (user) { %>
             <a href="/cart"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
-                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart</button></a>
+                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span class="circle-number"><%= count %></span></button></a>
 
                 <div class="dropdown">
                     <button class="btn btn-outline-secondary btn-lg"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;Hi <%=
@@ -47,7 +47,7 @@
 
                 <% } else { %>
                     <a href="/users/login"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
-                        class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart</button></a>
+                        class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span class="circle-number"><%= count %></span></button></a>
 
                     <a href="/users/login"><button class="btn btn-outline-secondary btn-lg" type="button"
                             style="width: 30%;"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</button></a>
@@ -63,13 +63,13 @@
             <div class="dropdown">
                 <button class="dropbtn"><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;&nbsp;Menu</button>
                 <div class="dropdown-content">
-                    <a href="/">Home</a>
+                    <a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Home</a>
                     <% if (user) { %>
-                    <a href="/productReg">Sell your item</a>
+                    <a href="/productReg"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;Sell your item</a>
                     <% } else { %>
-                    <a href="/users/login">Sell your item</a>
+                    <a href="/users/login"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;Sell your item</a>
                     <% } %>
-                    <a href="/">About Us</a>
+                    <a href="/"><i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;About Us</a>
                 </div>
             </div>
 

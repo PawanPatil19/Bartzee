@@ -20,3 +20,16 @@
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     grid-gap: .1rem;
 }
+
+.circle-number {
+    border-radius: 50%;
+    padding-left: 5px;
+    padding-right: 5px; 
+    border: 2px solid orange;
+}
+.circle-number :hover {
+    border-radius: 50%;
+    padding-left: 5px;
+    padding-right: 5px; 
+    border: 2px solid black;
+}
