@@ -3,6 +3,7 @@ var path = require("path");
 var User = require("./models/userModel");
 var Product = require("./models/productModel");
 var Org = require("./models/orgModel");
+var Chat = require("./models/chatModel");
 var passport = require("passport");
 var bodyParser = require("body-parser");
 var LocalStrategy = require("passport-local").Strategy;
@@ -15,12 +16,11 @@ var cookieParser = require("cookie-parser");
 var fs = require("fs")
 var ObjectId = require('mongodb').ObjectID;
 var Auth0Strategy = require("passport-auth0");
+
 require("dotenv").config();
 require("./config/passport")(passport)
 
 const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
-
-
 
 //calling the database connection
 require("./connection")
@@ -33,25 +33,61 @@ const port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
+// Socket.io setup
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+var users = {};
+io.on('connection', (socket) => {
+	console.log('User connected', socket.id);
+
+	socket.on("new-user-joined", (username)=>{
+		users[socket.id]=username;
+		console.log(users);
+		socket.broadcast.emit('user-connected',username);
+	})
+
+	// socket.on('chat message', function (message) {
+	// 	console.log("message: " + msg);
+
+	// 	socket.broadcast.emit("received", { message: msg });
+
+	// 	var chatMessage = new Chat({ message: message, sender: "Anonymous" });
+	// 	chatMessage.save();
+	// });
+
+
+
+	socket.on("disconnect", () => {
+		socket.broadcast.emit('user-disconnected', user= users[socket.id]);
+		delete users[socket.id];
+		console.log('User disconnected')
+	})
+
+	socket.on('message', (data) => {
+		socket.broadcast.emit("message", {user: data.user, msg: data.msg});
+	})
+});
+
+
 
 // Session management
 app.use(session({
 	secret: 'secret',
-	resave : true,
-	saveUninitialized : true
+	resave: true,
+	saveUninitialized: true
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use((req,res,next)=> {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error  = req.flash('error');
-next();
+app.use((req, res, next) => {
+	res.locals.success_msg = req.flash('success_msg');
+	res.locals.error_msg = req.flash('error_msg');
+	res.locals.error = req.flash('error');
+	next();
 })
 
 
-const {ensureAuthenticated} = require("./config/auth.js")
+const { ensureAuthenticated } = require("./config/auth.js")
 
 
 const staticpath = path.join(__dirname, "../public");
@@ -63,117 +99,11 @@ app.use(express.static(staticpath))
 
 app.set('view engine', 'ejs');
 
-app.use('/',require('./routes/index'));
-app.use('/users',require('./routes/users'));
-
-// //Organization Registration page
-// app.get("/orgReg", (req, res) => {
-// 	res.render("orgReg");
-// })
-
-// //Post Organization Registration
-// app.post("/orgReg", async (req, res) => {
-// 	const { org, country } = req.body
-
-// 	try {
-// 		const response = await Org.create({
-// 			org,
-// 			country
-// 		})
-// 		console.log('Organization Registered ', response)
-// 	} catch (error) {
-// 		if (error.code === 11000) {
-// 			// duplicate key
-// 			return res.json({ status: 'error', error: 'Organization already registered..' })
-// 		}
-// 		throw error
-// 	}
-
-// 	Org.find({}).exec(function (err, Organization) {
-
-// 		if (err) {
-// 			console.log("Error:", err);
-// 		}
-
-// 		res.render("register", { Organization: Organization });
-// 	});
-// 	//res.json({ status: 'ok' })
-// });
-
-// //Error page
-// app.get("/error", (req, res) => {
-// 	res.render("error");
-// })
-
-// // Product Registration Page
-// app.get("/productReg", ensureAuthenticated, (req, res) => {
-// 	console.log(req.user);
-// 	Org.find({}).exec(function (err, Organization) {
-
-// 		if (err) {
-// 			console.log("Error:", err);
-// 		}
-
-// 		res.render("productReg", { Organization: Organization, layout: false, user: req.user});
-// 	});
-// })
-
-// //Post Product registration
-// app.post("/productReg", upload.single('image'), (req, res) => {
-// 	console.log(req.file)
-
-// 	var img = fs.readFileSync(req.file.path);
-// 	var encode_img = img.toString('base64');
-
-// 	var obj = {
-// 		productType: req.body.productType,
-// 		sellerName: req.body.sellerName,
-// 		organization: req.body.organization,
-// 		sellerAddress: req.body.sellerAddress,
-// 		productName: req.body.productName,
-// 		image: {
-// 			data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-// 			contentType: 'image/jpg'
-// 		},
-// 		productQuantity: req.body.productQuantity,
-// 		productDesc: req.body.productDesc,
-// 		productColor: req.body.productColor,
-// 		productSize: req.body.productSize,
-// 		sellerPhone: req.body.sellerPhone,
-// 		sellerEmail: req.body.sellerEmail,
-// 		productPrice: req.body.productPrice,
-// 	}
-
-
-// 	Product.create(obj, (err, item) => {
-// 		if (err) {
-// 			console.log(err);
-// 		}
-// 		else {
-// 			item.save();
-// 			console.log("ID: ", item._id)
-// 			Product.find({ '_id': item._id }, (err, prd) => {
-// 				err ? console.log(err) : res.render('review', { prd: prd });
-// 			});
-// 		}
-// 	});
-// });
-
-// // Product review page
-// app.get("/review/:id", ensureAuthenticated, (req, res) => {
-// 	Product.find({ '_id': req.params.id }, (err, prd) => {
-// 		err ? console.log(err) : res.render('review', { prd: prd, layout: false, user: req.user });
-// 	});
-// })
-
-
-// Cart page
-
-
-
-
+// Routes 
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
 
 //server create
-app.listen(port, () => {
+http.listen(port, () => {
 	console.log(`server is running at port at port no ${port}`);
 })

@@ -37,6 +37,10 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage });
 
 
+
+
+
+
 //login page
 router.get('/', (req, res) => {
 	console.log("1: ", req.user)
@@ -48,7 +52,7 @@ router.get('/', (req, res) => {
 				}
 				var cnt = numberOfOrders.length
 				console.log("count", cnt)
-				res.render("index", { layout: false, product: product, user: req.user, count: 1 });
+				res.render("index", { layout: false, product: product, user: req.user, count: cnt });
 
 			});
 		} else {
@@ -215,7 +219,7 @@ router.post("/review/:id", (req, res) => {
 // Cart page
 router.get("/cart", (req, res) => {
 	Product.find({ 'buyer': req.user._id }, (err, orders) => {
-		err ? console.log(err) : res.render('cart', { layout: false, user: req.user, count: orders.length });
+		err ? console.log(err) : res.render('cart', { orders: orders, layout: false, user: req.user, count: orders.length });
 	});
 
 })
@@ -262,6 +266,10 @@ router.get("/removeCart/:id", function (req, res) {
 	});
 });
 
+// Chat Interface
+router.get("/chatInterface", function (req, res) {
+	res.render("chatInterface", { user: req.user, layout: false, count: 0 });
+});
 
 router.get("/error", function (req, res) {
 	res.render('error');

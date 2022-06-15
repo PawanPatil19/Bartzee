@@ -25,11 +25,5 @@
     border-radius: 50%;
     padding-left: 5px;
     padding-right: 5px; 
-    border: 2px solid orange;
-}
-.circle-number :hover {
-    border-radius: 50%;
-    padding-left: 5px;
-    padding-right: 5px; 
-    border: 2px solid black;
+    border: 2px solid ;
 }

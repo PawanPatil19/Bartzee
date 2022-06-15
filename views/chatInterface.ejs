@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bartzee</title>
+    <link rel="stylesheet" href="../css/chat.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.js"
+        integrity="sha512-oFOCo2/3DtjrJG4N27BjSLQWoiBv171sK6a+JiWjp/7agxC2nCUP358AqzxkBUb5jX8g6CYLPdSKQTbC0weCwA=="
+        crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <!-- <script>
+        var socket = io();
+    </script> -->
+    <script defer src="chat.js" userDetails= '<%= user.name %>' ></script>
+
+
+</head>
+
+<body>
+    <%- include('partials/header', {user: user, count: count}); %>
+
+        <div id="form_wrapper">
+            <div id="chat-panel">
+
+            </div>
+            <hr>
+            <div id="form-bottom">
+                <form class="input-group mb-3" style="width:90%; margin:auto;" id="chat-form">
+                        <input type="text" class="form-control" placeholder="Type here ..."
+                            aria-label="Recipient's username" id="chat-input" autocomplete="off">
+                        <input class="btn btn-outline-dark" type="submit" id="chat-submit" value="Send">
+                        <!-- <i class="fa fa-send-o"></i>                     -->
+                        </form>
+            </div>
+        </div>
+
+</body>
+
+</html>
