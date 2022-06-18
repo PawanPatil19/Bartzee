@@ -3,6 +3,7 @@ var path = require("path");
 var User = require("../models/userModel");
 var Product = require("../models/productModel");
 var Org = require("../models/orgModel");
+var Chat = require("../models/chatModel");
 var passport = require("passport");
 var bodyParser = require("body-parser");
 var LocalStrategy = require("passport-local").Strategy;
@@ -35,10 +36,6 @@ var storage = multer.diskStorage({
 	}
 });
 var upload = multer({ storage: storage });
-
-
-
-
 
 
 //login page
@@ -97,7 +94,6 @@ router.post("/orgReg", async (req, res) => {
 	});
 	//res.json({ status: 'ok' })
 });
-
 
 
 
@@ -165,7 +161,7 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 					if (err) {
 						console.log("Error:", err);
 					}
-					res.render("productReg", { prd: prd, layout: false, user: req.user, count: numberOfOrders.length });
+					res.render('review', { prd: prd, layout: false, user: req.user, count: numberOfOrders.length });
 				});
 
 			})
@@ -173,6 +169,15 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 	});
 
 });
+
+router.get("/review", (req, res) => {
+	// Product.find({ '_id': req.params.id }, (err, prd) => {
+	// 	err ? console.log(err) : res.render('review', { prd: prd, layout: false, user: req.user, count: 0 });
+	// });
+	res.render('review');
+})
+
+
 
 // Product review page
 router.get("/review/:id", (req, res) => {
@@ -251,6 +256,16 @@ router.get("/deleteUser", function (req, res) {
 
 //Remove product from user cart
 router.get("/removeCart/:id", function (req, res) {
+	var myquery = { roomID: req.params.id };
+	Chat.remove(myquery, (err, doc) => {
+		if(err) {
+			console.log(err)
+		} else{
+			console.log('Chats deleted for the product')
+		}
+	})
+
+
 	Product.updateOne({ '_id': req.params.id }, { buyer: null }, function (err, docs) {
 		if (err) {
 			console.log(err)
@@ -273,6 +288,48 @@ router.get("/chatInterface/:roomID", function (req, res) {
 		err ? console.log(err) : res.render('chatInterface', { layout: false, room: room, user: req.user, count: orders.length });
 	});
 });
+
+// Sell Cart
+router.get("/sellCart", (req, res) => {
+	Product.find({ 'buyer': req.user._id }, function(err, orders)  {
+		if(err){
+			console.log(err)
+		} else {
+			Product.find({'sellerEmail' : req.user.email}, function(err, sellItems) {
+				if(err) {
+					console.log(err);
+				} else {
+					console.log(sellItems);
+					res.render('sellCart', { layout: false, user: req.user, count: orders.length, sellItems: sellItems });
+				}
+			})
+			
+		}
+		
+	});
+
+})
+
+//Delete Item to sell
+router.get("/deleteItem/:id", (req, res) => {
+	var myquery = { roomID: req.params.id };
+	Chat.remove(myquery, (err, doc) => {
+		if(err) {
+			console.log(err)
+		} else{
+			console.log('Chats deleted for the product')
+		}
+	})
+	
+	Product.findByIdAndRemove(req.params.id, (err, doc) => {
+		if(err) {
+			console.log(err);
+		} else {
+			console.log("Product Deleted!")
+		}
+	})
+})
+
 
 
 router.get("/error", function (req, res) {

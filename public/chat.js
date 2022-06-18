@@ -14,7 +14,7 @@ socket.emit('new-user-joined', roomID, userID);
 
 socket.on('user-connected', (socket_name) => {
     console.log('user-connected')
-    userJoinLeft(socket_name, 'joined');
+    //userJoinLeft(socket_name, 'joined');
 });
 
 function userJoinLeft(name, status) {
@@ -30,7 +30,7 @@ function userJoinLeft(name, status) {
 
 socket.on('user-disconnected', (user) => {
     console.log('user-disconnected')
-    userJoinLeft(user, 'left');
+    //userJoinLeft(user, 'left');
 });
 
 

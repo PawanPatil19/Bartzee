@@ -25,7 +25,7 @@
 
 
 <body>
-    <%- include('partials/header', {user: user}); %>
+    <%- include('partials/header', {user: user, count: count}); %>
 
     <br>
     <h1>YOUR CART</h1>
@@ -79,40 +79,7 @@
           <br><br>
     <% } %>
 
-    <!-- <script>
-      window.onload = function () {
-            const form = document.getElementById("room-id")
-        }
-        form.addEventListener("submit", getRoomID)
-
-        async function getRoomID(event) {
-            event.preventDefault()
-            const roomID = document.getElementById('chatRoomID').value
-            console.log(roomID);
-           
-
-            const result = await fetch('/chatInterface', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    roomID
-                })
-            }).then((res) => res.json())
-
-            if (result.status === 'ok') {
-                // everythign went fine
-                alert('Success')
-            } else {
-                alert(result.error)
-            }
-        }
-      
-      
-    </script> -->
-
-
+  
 
 </body>
 </html>
