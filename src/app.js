@@ -40,31 +40,40 @@ var users = {};
 io.on('connection', (socket) => {
 	console.log('User connected', socket.id);
 
-	socket.on("new-user-joined", (username)=>{
-		users[socket.id]=username;
-		console.log(users);
-		socket.broadcast.emit('user-connected',username);
+	Chat.find({}).limit(100).sort({_id:1}).exec(function(err,res){
+		if(err) {
+			throw err;
+		}
+
+		socket.emit('chat-history', res);
 	})
 
-	// socket.on('chat message', function (message) {
-	// 	console.log("message: " + msg);
-
-	// 	socket.broadcast.emit("received", { message: msg });
-
-	// 	var chatMessage = new Chat({ message: message, sender: "Anonymous" });
-	// 	chatMessage.save();
-	// });
-
-
+	socket.on("new-user-joined", (userID) => {
+		users[socket.id] = userID;
+		//console.log(users);
+		socket.broadcast.emit('user-connected', userID);
+	})
 
 	socket.on("disconnect", () => {
-		socket.broadcast.emit('user-disconnected', user= users[socket.id]);
+		socket.broadcast.emit('user-disconnected', user = users[socket.id]);
 		delete users[socket.id];
-		console.log('User disconnected')
+		//console.log('User disconnected')
 	})
 
 	socket.on('message', (data) => {
-		socket.broadcast.emit("message", {user: data.user, msg: data.msg});
+		
+
+		User.findOne({_id: data.userID}, function (err, chatUser) {
+			if(err) {
+				console.log(err);
+			} else {
+				socket.broadcast.emit("message", { username: chatUser.name, userID: data.userID, msg: data.msg });
+				let chatMessage = new Chat({ message: data.msg, senderName: chatUser.name, senderID: chatUser._id, socketID: socket.id });
+				chatMessage.save();
+			}
+		});
+
+		
 	})
 });
 

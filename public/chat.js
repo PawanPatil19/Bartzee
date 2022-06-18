@@ -1,15 +1,15 @@
-console.log('chat.js file loaded!')
+console.log('chat.js file loaded!')  
 
 var socket = io()
-var username = document.currentScript.getAttribute('userDetails');
+var username = document.currentScript.getAttribute('userName');
 
 const chat = document.getElementById('chat-form')
 const input = document.getElementById('chat-input')
 const chatPanel = document.getElementById('chat-panel')
-//const user = document.currentScript.getAttribute('userDetails');
+const userID = document.currentScript.getAttribute('userID');
 
 
-socket.emit("new-user-joined", username);
+socket.emit('new-user-joined', userID);
 
 socket.on('user-connected', (socket_name) => {
     console.log('user-connected')
@@ -24,6 +24,7 @@ function userJoinLeft(name, status) {
     let content = `<p><b>${name}</b> has ${status} the chat</p>`;
     div.innerHTML=content;
     chatPanel.appendChild(div);
+    chatPanel.scrollTop = chatPanel.scrollHeight;
 }
 
 socket.on('user-disconnected', (user) => {
@@ -32,12 +33,11 @@ socket.on('user-disconnected', (user) => {
 });
 
 
-
-
 chat.addEventListener('submit', event => {
     event.preventDefault()
     let data = {
-        user : username,
+        username : username,
+        userID: userID,
         msg: input.value
     }
 
@@ -46,8 +46,6 @@ chat.addEventListener('submit', event => {
         socket.emit('message', data)
         input.value='';
     }
-
-
 })
 
 
@@ -57,12 +55,31 @@ function renderMessage(data, status) {
     div.classList.add(`message-${status}`)
 
     let content = `
-    <small>${data.user}</small> 
+    <small>${data.username}</small> 
     <p>${data.msg}</p>`;
     div.innerHTML = content;
-    chatPanel.appendChild(div)    
+    chatPanel.appendChild(div);    
+    chatPanel.scrollTop = chatPanel.scrollHeight;
 }
 
 socket.on('message', (data) => {
     renderMessage(data, 'incoming')
 })
+
+socket.on('chat-history', (res) => {
+    for (var i in res) {
+        console.log(res[i])
+        let data={
+            username:res[i].senderName,
+            userID:res[i].senderID,
+            msg: res[i].message
+        }
+        if(data.userID == userID) {
+            console.log('outgoing')
+            renderMessage(data,'outgoing');
+        } else {
+            console.log('incoming')
+            renderMessage(data,'incoming');
+        }
+    }
+} )

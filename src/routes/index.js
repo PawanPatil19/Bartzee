@@ -43,7 +43,7 @@ var upload = multer({ storage: storage });
 
 //login page
 router.get('/', (req, res) => {
-	console.log("1: ", req.user)
+	//console.log("1: ", req.user)
 	Product.find({ 'buyer': null }).exec(function (err, product) {
 		if (req.user) {
 			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
@@ -51,7 +51,6 @@ router.get('/', (req, res) => {
 					console.log("Error:", err);
 				}
 				var cnt = numberOfOrders.length
-				console.log("count", cnt)
 				res.render("index", { layout: false, product: product, user: req.user, count: cnt });
 
 			});
@@ -268,8 +267,21 @@ router.get("/removeCart/:id", function (req, res) {
 
 // Chat Interface
 router.get("/chatInterface", function (req, res) {
-	res.render("chatInterface", { user: req.user, layout: false, count: 0 });
+	var room = req.body.roomID;
+	console.log(room);
+	Product.find({ 'buyer': req.user._id }, (err, orders) => {
+		err ? console.log(err) : res.render('chatInterface', { layout: false, user: req.user, count: orders.length });
+	});
 });
+
+router.post("/cart", async (req, res) => {
+	var room = req.body.roomID;
+	console.log('Room: ', req.body.roomID);
+	Product.find({ 'buyer': req.user._id }, (err, orders) => {
+		err ? console.log(err) : res.render('chatInterface', { layout: false, room : room, user: req.user, count: orders.length });
+	});
+
+})
 
 router.get("/error", function (req, res) {
 	res.render('error');
