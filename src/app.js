@@ -48,10 +48,13 @@ io.on('connection', (socket) => {
 		socket.emit('chat-history', res);
 	})
 
-	socket.on("new-user-joined", (userID) => {
+	socket.on("new-user-joined", (roomID, userID) => {
+		
+		socket.join(roomID);
 		users[socket.id] = userID;
+
 		//console.log(users);
-		socket.broadcast.emit('user-connected', userID);
+		socket.broadcast.to(roomID).emit('user-connected', userID);
 	})
 
 	socket.on("disconnect", () => {
@@ -60,21 +63,25 @@ io.on('connection', (socket) => {
 		//console.log('User disconnected')
 	})
 
-	socket.on('message', (data) => {
-		
+	socket.on('message', (roomID, data) => {		
 
 		User.findOne({_id: data.userID}, function (err, chatUser) {
 			if(err) {
 				console.log(err);
 			} else {
-				socket.broadcast.emit("message", { username: chatUser.name, userID: data.userID, msg: data.msg });
-				let chatMessage = new Chat({ message: data.msg, senderName: chatUser.name, senderID: chatUser._id, socketID: socket.id });
+				socket.broadcast.to(roomID).emit("message", { username: chatUser.name, userID: data.userID, msg: data.msg });
+				let chatMessage = new Chat({ message: data.msg, senderName: chatUser.name, senderID: chatUser._id, roomID: roomID,  socketID: socket.id });
 				chatMessage.save();
 			}
 		});
 
 		
 	})
+
+	// socket.on('join-room', function(room) {
+    //     console.log("joined room")
+    //     socket.join(data.room);
+    // });
 });
 
 

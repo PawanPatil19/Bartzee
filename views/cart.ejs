@@ -66,8 +66,8 @@
                   </a>
                   <form method="post" id="room-id"> 
                     <input type="hidden" id="chatRoomID" value="<%= orders[i]._id %>">
-                  <a href="/chatInterface">
-                    <button class="btn btn-outline-warning" id="chatBtn" type="submit" value="<%= orders[i]._id %>"><i class="fa fa-comments-o" aria-hidden="true"></i>
+                  <a href="/chatInterface/<%= orders[i]._id %>">
+                    <button class="btn btn-outline-warning" id="chatBtn" type="button" value="<%= orders[i]._id %>"><i class="fa fa-comments-o" aria-hidden="true"></i>
                     Chat with Seller</button>
                   </a>
                   </form>
@@ -79,7 +79,7 @@
           <br><br>
     <% } %>
 
-    <script>
+    <!-- <script>
       window.onload = function () {
             const form = document.getElementById("room-id")
         }
@@ -110,7 +110,7 @@
         }
       
       
-    </script>
+    </script> -->
 
 
 

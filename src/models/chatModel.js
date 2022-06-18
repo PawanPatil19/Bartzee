@@ -6,6 +6,7 @@ const chatSchema = mongoose.Schema(
         message: { type: String },
         senderName: { type: String },
         senderID: { type: String },
+        roomID: { type: String},
         socketID: { type: String }
     },
     {
