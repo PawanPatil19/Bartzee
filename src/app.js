@@ -63,8 +63,7 @@ io.on('connection', (socket) => {
 		//console.log('User disconnected')
 	})
 
-	socket.on('message', (roomID, data) => {		
-
+	socket.on('message', (roomID, data) => {
 		User.findOne({_id: data.userID}, function (err, chatUser) {
 			if(err) {
 				console.log(err);
@@ -73,15 +72,10 @@ io.on('connection', (socket) => {
 				let chatMessage = new Chat({ message: data.msg, senderName: chatUser.name, senderID: chatUser._id, roomID: roomID,  socketID: socket.id });
 				chatMessage.save();
 			}
-		});
-
-		
+		});		
 	})
 
-	// socket.on('join-room', function(room) {
-    //     console.log("joined room")
-    //     socket.join(data.room);
-    // });
+	
 });
 
 

@@ -29,9 +29,9 @@
             <img src="../logo.png" alt="computer icon" style="width:300px;">
         </div>
         <div id="form_right">
-            <h1><b>Hello there !</b></h1>
+            <h1><b>Reset your password</b></h1>
             <br>
-            <form method="post" id="login">
+            <form method="post" id="forgotPass">
 
                 <div class="input_container" style="margin-bottom: 15px;">
                     <i class="fas fa-user"></i>
@@ -40,16 +40,20 @@
                 </div>
                 <div class="input_container" style="margin-bottom: 15px;">
                     <i class="fas fa-lock"></i>
-                    <input placeholder="Password" type="password" name="password" id="password" class='input_field'>
+                    <input placeholder="Enter New Password" type="password" name="password" id="password" class='input_field'>
                 </div>
-                <input type="submit" value="Login" id='input_submit' class='input_field'>
+                <div class="input_container" style="margin-bottom: 15px;">
+                    <i class="fas fa-lock"></i>
+                    <input placeholder="Re-enter New Password" type="password" name="re-password" id="re-password" class='input_field'>
+                </div>
+                <input type="submit" value="Reset Password" id='input_submit' class='input_field'>
             </form>
             <span id="create_account">
-                <a href="/users/forgotPass">Forgot Password ?</a>
+                <a href="/users/login">Login ➡</a>
             </span>
 
             <span id='create_account'>
-                <a href="/users/register">Not Yet Registered ➡ </a>
+                <a href="/users/register">Not Yet Registered? ➡ </a>
             </span>
             <span id='create_account'>
                 <a href="/"><u>Go to Home page</u></a>
@@ -63,16 +67,16 @@
 
     <script>
         window.onload = function () {
-            const form = document.getElementById('login')
+            const form = document.getElementById('forgotPass')
         }
-        form.addEventListener('submit', login)
+        form.addEventListener('submit', forgotPass)
 
-        async function login(event) {
+        async function forgotPass(event) {
             event.preventDefault()
             const email = document.getElementById('email').value
             const password = document.getElementById('password').value
 
-            const result = await fetch('/login', {
+            const result = await fetch('/forgotPass', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

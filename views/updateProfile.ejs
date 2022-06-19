@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- documentation at http://getbootstrap.com/docs/4.1/, alternative themes at https://bootswatch.com/ -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://raw.githubusercontent.com/ysoftaoglu/GradientButtons/master/gradient-buttons/gradient-buttons.min.css" />
+    <!-- https://favicon.io/emoji-favicons/money-mouth-face/ -->
+
+    <link href="../css/styles.css" rel="stylesheet">
+    <link href="../css/buttons.css" rel="stylesheet">
+    <link href="../css/login.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://www.google.com/reCAPTCHA/api.js" async defer></script>
+    <link rel="shortcut icon" href="#">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+        integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
+    <title>Bartzee</title>
+</head>
+
+
+<body>
+    <div id="form_wrapper_re">
+        <div id="form_left">
+            <img src="../logo.png" alt="computer icon" style="width:300px;">
+        </div>
+
+        <div id="form_right">
+
+            <h1>Update your profile</h1>
+            <form method="post" id="update-form">
+                <div class="input_container" style="margin-bottom: 15px;">
+                    <i class="fas fa-bars"></i>
+                    <input placeholder="Enter Full Name" type="text" name="name" id="name" class='input_field' value="<%= user.name %>">
+                </div>
+                <div class="input_container" style="margin-bottom: 15px;">
+                    <i class="fas fa-envelope"></i>
+                    <input placeholder="Enter your Email ID" type="email" name="email" id="email" class='input_field' value="<%= user.email %>">
+
+                </div>
+                <div class="input_container" style="margin-bottom: 15px;">
+                    <i class="fas fa-phone"></i>
+                    <input placeholder="Enter your Phone Number" type="text" name="phone" id="phone"
+                        class='input_field' value="<%= user.phone %>">
+
+                </div>
+                <div class="input_container" style="margin-bottom: 15px;">
+                    <i class="far fa-building"></i>
+                    <select placeholder="Search your Organization" type="text" name="organization" id="organization"
+                        class='input_field'>
+                        <option>Select your school/university/office..</option>
+                        <% for (var i in Organization) { %>
+                            <% if(Organization[i].org == user.organization) {%>
+                            <option value="<%= Organization[i].org %>" class="input_field" selected>
+                                <%= Organization[i].org %>, <%= Organization[i].country %>
+                            </option>
+                            <% } else { %>
+                                <option value="<%= Organization[i].org %>" class="input_field">
+                                    <%= Organization[i].org %>, <%= Organization[i].country %>
+                                </option>
+                            <% } %>
+                            <% } %>
+                    </select>
+                </div>
+
+
+                <input type="submit" value="Update" id='input_submit' class='input_field'>
+            </form>
+            <span id='create_account'>
+                <h5><a href="/users/login" style="color:green;">Login&nbsp;<i class="fas fa-sign-in-alt"></i></a></h5>
+            </span>
+            <br>
+            <span id='create_account'>
+                <a href="/"><u>Go to Home page</u></a>
+            </span>
+            <br>
+        </div>
+
+    </div>
+
+    <script>
+        // password validation, you can submit only if the pass is at least 8 characters and contains only alphanumeric characters
+        // document.querySelector('#input_submit').disabled = true;
+        // document.querySelector('#field_pass').onkeyup = function () {
+        //     let password = document.querySelector('#field_pass').value;
+
+        //     if (password.length > 7 && password.match(/^[0-9a-z]+$/i) && password.match(/\d/) && password.match(/[a-z]/i)) {
+        //         document.querySelector('#input_submit').disabled = false;
+        //     }
+        //     else {
+        //         document.querySelector('#input_submit').disabled = true;
+        //     }
+        // }
+        // document.getElementById("name").innerHTML = 'Pawan'
+        // document.getElementById("email").innerHTML = user.email
+        // document.getElementById("phone").innerHTML = user.phone
+        // document.getElementById("organization").innerHTML = user.organization
+
+        window.onload = function () {
+
+            const form = document.getElementById("update-form")
+        }
+        form.addEventListener("submit", updateUser)
+
+        async function updateUser(event) {
+            event.preventDefault()
+            const name = document.getElementById('name').value
+            const email = document.getElementById('email').value
+            const phone = document.getElementById('phone').value
+            const orgn = document.getElementById('organization')
+            const organization = orgn.options[orgn.selectedIndex].text
+
+            const result = await fetch('/updateProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    phone,
+                    organization
+                })
+            }).then((res) => res.json())
+
+            if (result.status === 'ok') {
+                // everythign went fine
+                alert('Success')
+            } else {
+                alert(result.error)
+            }
+        }
+    </script>
+
+</body>
+
+</html>

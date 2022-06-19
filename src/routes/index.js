@@ -95,8 +95,6 @@ router.post("/orgReg", async (req, res) => {
 	//res.json({ status: 'ok' })
 });
 
-
-
 // Product Registration Page
 router.get("/productReg", ensureAuthenticated, (req, res) => {
 	console.log("2: ", req.user)
@@ -170,14 +168,15 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 
 });
 
+// Product Review page after registration
 router.get("/review", (req, res) => {
-	// Product.find({ '_id': req.params.id }, (err, prd) => {
-	// 	err ? console.log(err) : res.render('review', { prd: prd, layout: false, user: req.user, count: 0 });
-	// });
-	res.render('review');
+	Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+		if (err) {
+			console.log("Error:", err);
+		}
+		res.render("review", { layout: false, user: req.user, count: numberOfOrders.length });
+	});
 })
-
-
 
 // Product review page
 router.get("/review/:id", (req, res) => {
@@ -206,7 +205,6 @@ router.post("/review/:id", (req, res) => {
 			console.log(err)
 		}
 		else {
-
 			console.log("Item added to cart! ", docs);
 			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
 				if (err) {
@@ -258,9 +256,9 @@ router.get("/deleteUser", function (req, res) {
 router.get("/removeCart/:id", function (req, res) {
 	var myquery = { roomID: req.params.id };
 	Chat.remove(myquery, (err, doc) => {
-		if(err) {
+		if (err) {
 			console.log(err)
-		} else{
+		} else {
 			console.log('Chats deleted for the product')
 		}
 	})
@@ -291,21 +289,21 @@ router.get("/chatInterface/:roomID", function (req, res) {
 
 // Sell Cart
 router.get("/sellCart", (req, res) => {
-	Product.find({ 'buyer': req.user._id }, function(err, orders)  {
-		if(err){
+	Product.find({ 'buyer': req.user._id }, function (err, orders) {
+		if (err) {
 			console.log(err)
 		} else {
-			Product.find({'sellerEmail' : req.user.email}, function(err, sellItems) {
-				if(err) {
+			Product.find({ 'sellerEmail': req.user.email }, function (err, sellItems) {
+				if (err) {
 					console.log(err);
 				} else {
 					console.log(sellItems);
 					res.render('sellCart', { layout: false, user: req.user, count: orders.length, sellItems: sellItems });
 				}
 			})
-			
+
 		}
-		
+
 	});
 
 })
@@ -314,20 +312,66 @@ router.get("/sellCart", (req, res) => {
 router.get("/deleteItem/:id", (req, res) => {
 	var myquery = { roomID: req.params.id };
 	Chat.remove(myquery, (err, doc) => {
-		if(err) {
+		if (err) {
 			console.log(err)
-		} else{
+		} else {
 			console.log('Chats deleted for the product')
 		}
 	})
-	
+
 	Product.findByIdAndRemove(req.params.id, (err, doc) => {
-		if(err) {
+		if (err) {
 			console.log(err);
 		} else {
 			console.log("Product Deleted!")
 		}
 	})
+})
+
+//Edit user page
+router.get("/updateProfile", (req, res) => {
+	Org.find({}).exec(function (err, Organization) {
+		if (err) {
+			console.log("Error:", err);
+		}
+		res.render("updateProfile", { user: req.user, Organization: Organization});
+	});
+	
+})
+
+// Edit user profile 
+router.post("/updateProfile", async (req, res) => {
+	const { name, email, phone, organization } = req.body
+
+
+	let errors = [];
+
+	if (!name || !email || !phone || !organization) {
+		errors.push({ msg: "Please fill in all fields" })
+	}
+
+	if (errors.length > 0) {
+		res.render('error')
+	} else {
+		var myquery = { _id: req.user._id };
+		var newvalues = { $set: { name: name, email:email, phone:phone, organization:organization } };
+		User.updateOne(myquery, newvalues, function (err, docs) {
+			if (err) {
+				console.log(err)
+			} else {
+				console.log("User Profile updated successfully!")
+				User.findOne({ _id: req.user._id }).exec((err, user) => {
+					if(err) {
+						console.log(err);
+					} else {
+						Product.find({ 'buyer': req.user._id }, (err, orders) => {
+							err ? console.log(err) : res.render('profile', { layout: false, user: user, count: orders.length });
+						});
+					}
+				})
+			}
+		})
+	}
 })
 
 
