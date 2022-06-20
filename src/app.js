@@ -16,6 +16,7 @@ var cookieParser = require("cookie-parser");
 var fs = require("fs")
 var ObjectId = require('mongodb').ObjectID;
 var Auth0Strategy = require("passport-auth0");
+const cool = require('cool-ascii-faces');
 
 require("dotenv").config();
 require("./config/passport")(passport)
@@ -111,6 +112,10 @@ app.set('view engine', 'ejs');
 // Routes 
 app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
+
+app.get("/cool", (req, res) => {
+	res.send(cool())
+})
 
 //server create
 http.listen(process.env.PORT || 3000, function(){
