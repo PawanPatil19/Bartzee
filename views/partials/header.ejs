@@ -14,69 +14,87 @@
 
 
 
-    <!-- Top Navigation Bar if user is not logged in-->
-    <div class="container" id="div-main">
-        <div class="logo">
-            <a class="navbar-brand mt-2" href="/"><img src="../orbitalLogo.png" style="width:200px;height:60px;"></a>
+<!-- Top Navigation Bar if user is not logged in-->
+<div class="container" id="div-main">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="logo">
+                <a class="navbar-brand mt-2" href="/"><img src="../orbitalLogo.png"
+                        style="width:200px;height:60px;"></a>
+            </div>
         </div>
 
 
-        <div class="box">
-            <i class="fa fa-search" aria-hidden="true"></i>
-            <input type="text" name="">
+        <div class="col-md-6">
+            <div class="box">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                <input type="text" name="">
+            </div>
         </div>
 
 
-        <div class="header-buttons">
-            <% if (user) { %>
-            <a href="/cart"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
-                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span class="circle-number"><%= count %></span></button></a>
+        <div class="col-md-3">
+            <div class="header-buttons">
+                <% if (user) { %>
+                    <a href="/cart"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
+                                class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span class="circle-number">
+                                <%= count %>
+                            </span></button></a>
 
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary btn-lg"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;Hi <%=
-                            user.name%>!</button>
-                    <div class="dropdown-content">
-                        <a class="dropdown-item" href="/profile"><i class="fa fa-user" aria-hidden="true"></i>
-                            &nbsp;Profile</a>
-                        <a class="dropdown-item" href="/users/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>
-                            &nbsp;Logout</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-question-circle" aria-hidden="true"></i>
-                            &nbsp;Help</a>
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-lg"><i class="fa fa-user-circle-o"
+                                aria-hidden="true"></i>&nbsp;Hi <%= user.name%>!</button>
+                        <div class="dropdown-content">
+                            <a class="dropdown-item" href="/profile"><i class="fa fa-user" aria-hidden="true"></i>
+                                &nbsp;Profile</a>
+                            <a class="dropdown-item" href="/users/logout"><i class="fa fa-sign-out"
+                                    aria-hidden="true"></i>
+                                &nbsp;Logout</a>
+                            <a class="dropdown-item" href="#"><i class="fa fa-question-circle" aria-hidden="true"></i>
+                                &nbsp;Help</a>
+                        </div>
                     </div>
-                </div>
 
 
-                <% } else { %>
-                    <a href="/users/login"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
-                        class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span class="circle-number"><%= count %></span></button></a>
+                    <% } else { %>
+                        <a href="/users/login"><button class="btn btn-outline-warning btn-lg" type="button"
+                                style="width: 30%;"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span
+                                    class="circle-number">
+                                    <%= count %>
+                                </span></button></a>
 
-                    <a href="/users/login"><button class="btn btn-outline-secondary btn-lg" type="button"
-                            style="width: 30%;"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</button></a>
-                    <% } %>
+                        <a href="/users/login"><button class="btn btn-outline-secondary btn-lg" type="button"
+                                style="width: 30%;"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</button></a>
+                        <% } %>
+            </div>
+
         </div>
-
     </div>
+</div>
 
 
-    <!-- Menu Bar -->
-    <nav class="navbar bg-light">
-        <form class="container-fluid justify-content-start">
-            <div class="dropdown">
-                <button class="dropbtn"><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;&nbsp;Menu</button>
-                <div class="dropdown-content">
-                    <a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Home</a>
-                    <% if (user) { %>
-                    <a href="/productReg"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;Sell your item</a>
+<!-- Menu Bar -->
+<nav class="navbar bg-light">
+    <form class="container-fluid justify-content-start">
+        <div class="dropdown">
+            <button class="dropbtn"><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;&nbsp;Menu</button>
+            <div class="dropdown-content">
+                <a href="/"><i class="fa fa-home" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Home</a>
+                <% if (user) { %>
+                    <a href="/productReg"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;Sell your
+                        item</a>
                     <a href="/sellCart"><i class="fa fa-archive" aria-hidden="true"></i>
                         &nbsp;Your Items</a>
                     <% } else { %>
-                    <a href="/users/login"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;Sell your item</a>
-                    <a href="/users/login"><i class="fa fa-archive" aria-hidden="true"></i>
-                        &nbsp;Your Items</a>
-                    <% } %>
-                    <a href="/"><i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;About Us</a>
-                </div>
+                        <a href="/users/login"><i class="fa fa-handshake-o" aria-hidden="true"></i>&nbsp;Sell your
+                            item</a>
+                        <a href="/users/login"><i class="fa fa-archive" aria-hidden="true"></i>
+                            &nbsp;Your Items</a>
+                        <% } %>
+                            <a href="/"><i class="fa fa-info" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;&nbsp;About
+                                Us</a>
             </div>
-        </form>
-        
-    </nav>
+        </div>
+    </form>
+
+</nav>
