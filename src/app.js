@@ -27,7 +27,6 @@ require("./connection")
 
 const app = express();
 const router = express.Router();
-const port = process.env.PORT || 3000;
 
 //user management
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -114,6 +113,6 @@ app.use('/', require('./routes/index'));
 app.use('/users', require('./routes/users'));
 
 //server create
-http.listen(port, () => {
-	console.log(`server is running at port at port no ${port}`);
-})
+http.listen(process.env.PORT || 3000, function(){
+	console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
+  });
