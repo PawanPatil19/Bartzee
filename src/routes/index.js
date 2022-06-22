@@ -52,35 +52,35 @@ router.get('/', (req, res) => {
 
 			});
 		} else {
-			res.render("index", { layout: false,search: null, product: product, user: req.user, count: 0 });
+			res.render("index", { layout: false,search: null, product: product, user: req.user, count: 0, search:null });
 		}
 	});
 })
 
-router.get('/:searchQuery', (req, res) => {
-	Product.find({
-		$or: [{ "productName": { "$regex": req.params.searchQuery, "$options": '$i' } },
-		{ 'productType': req.params.searchQuery },
-		{"productType": {"$regex": req.params.searchQuery, "$options": '$i'}},
-		{"sellerName": {"$regex": req.params.searchQuery, "$options": '$i'}},
-		{ "organization": { "$regex": req.params.searchQuery, "$options": '$i' } },
-		{ "productDesc": { "$regex": req.params.searchQuery, "$options": '$i' } }],
-		'buyer': null
-	}).exec(function (err, product) {
-		if (req.user) {
-			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
-				if (err) {
-					console.log("Error:", err);
-				}
-				var cnt = numberOfOrders.length
-				res.render("index", { layout: false, product: product, user: req.user, count: cnt });
+// router.get('/index/:searchQuery', (req, res) => {
+// 	Product.find({
+// 		$or: [{ "productName": { "$regex": req.params.searchQuery, "$options": '$i' } },
+// 		{ 'productType': req.params.searchQuery },
+// 		{"productType": {"$regex": req.params.searchQuery, "$options": '$i'}},
+// 		{"sellerName": {"$regex": req.params.searchQuery, "$options": '$i'}},
+// 		{ "organization": { "$regex": req.params.searchQuery, "$options": '$i' } },
+// 		{ "productDesc": { "$regex": req.params.searchQuery, "$options": '$i' } }],
+// 		'buyer': null
+// 	}).exec(function (err, product) {
+// 		if (req.user) {
+// 			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+// 				if (err) {
+// 					console.log("Error:", err);
+// 				}
+// 				var cnt = numberOfOrders.length
+// 				res.render("index", { layout: false, product: product, user: req.user, count: cnt });
 
-			});
-		} else {
-			res.render("index", { layout: false, search: req.params.searchQuery, product: product, user: req.user, count: 0 });
-		}
-	});
-})
+// 			});
+// 		} else {
+// 			res.render("index", { layout: false, search: req.params.searchQuery, product: product, user: req.user, count: 0 });
+// 		}
+// 	});
+// })
 
 
 
@@ -263,7 +263,7 @@ router.post("/review/:id", (req, res) => {
 // Cart page
 router.get("/cart", (req, res) => {
 	Product.find({ 'buyer': req.user._id }, (err, orders) => {
-		err ? console.log(err) : res.render('cart', { orders: orders, layout: false, user: req.user, count: orders.length });
+		err ? console.log(err) : res.render('cart', { orders: orders, layout: false, user: req.user, count: orders.length, search:null });
 	});
 
 })

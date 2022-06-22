@@ -34,17 +34,17 @@
                                 aria-hidden="true"></i></button>
                         <div class="dropdown-content">
                             <a href="/">All</a>
-                            <a href="/Electronics">Electronics</a>
-                            <a href="/Stationary">Stationary</a>
-                            <a href="/Sports">Sport Equipments</a>
-                            <a href="/Gaming">Gaming</a>
-                            <a href="/Clothing">Clothing</a>
-                            <a href="/Student Resources">Student Resources</a>
-                            <a href="/Books">Books</a>
-                            <a href="/Room Decor">Room Decor</a>
-                            <a href="/Hardware">Hardware</a>
-                            <a href="/Household">Household</a>
-                            <a href="/Others">Others</a>
+                            <a href="/search/Electronics">Electronics</a>
+                            <a href="/search/Stationary">Stationary</a>
+                            <a href="/search/Sports">Sport Equipments</a>
+                            <a href="/search/Gaming">Gaming</a>
+                            <a href="/search/Clothing">Clothing</a>
+                            <a href="/search/Student Resources">Student Resources</a>
+                            <a href="/search/Books">Books</a>
+                            <a href="/search/Room Decor">Room Decor</a>
+                            <a href="/search/Hardware">Hardware</a>
+                            <a href="/search/Household">Household</a>
+                            <a href="/search/Others">Others</a>
                         </div>
                     </div>
                     <input type="search" class="form-control" id="searchBar">
@@ -149,7 +149,7 @@
 
             function search() {
                 var searchQuery = document.getElementById('searchBar').value;
-                window.location.href = `/${searchQuery}`;
+                window.location.href = `/search/${searchQuery}`;
             }
 
         </script>
