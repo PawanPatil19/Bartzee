@@ -48,18 +48,60 @@ router.get('/', (req, res) => {
 					console.log("Error:", err);
 				}
 				var cnt = numberOfOrders.length
+				res.render("index", { layout: false, search: null, product: product, user: req.user, count: cnt });
+
+			});
+		} else {
+			res.render("index", { layout: false,search: null, product: product, user: req.user, count: 0 });
+		}
+	});
+})
+
+router.get('/:searchQuery', (req, res) => {
+	Product.find({
+		$or: [{ "productName": { "$regex": req.params.searchQuery, "$options": '$i' } },
+		{ 'productType': req.params.searchQuery },
+		{"productType": {"$regex": req.params.searchQuery, "$options": '$i'}},
+		{"sellerName": {"$regex": req.params.searchQuery, "$options": '$i'}},
+		{ "organization": { "$regex": req.params.searchQuery, "$options": '$i' } },
+		{ "productDesc": { "$regex": req.params.searchQuery, "$options": '$i' } }],
+		'buyer': null
+	}).exec(function (err, product) {
+		if (req.user) {
+			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+				if (err) {
+					console.log("Error:", err);
+				}
+				var cnt = numberOfOrders.length
 				res.render("index", { layout: false, product: product, user: req.user, count: cnt });
 
 			});
 		} else {
-			res.render("index", { layout: false, product: product, user: req.user, count: 0 });
+			res.render("index", { layout: false, search: req.params.searchQuery, product: product, user: req.user, count: 0 });
 		}
-
-
-
 	});
 })
 
+
+
+// router.get('/:searchQuery', (req, res) => {
+
+// 	Product.find( {"productName": {"$regex": req.params.searchQuery, "$options": '$i'}}).exec(function (err, product) {
+// 		console.log(product);
+// 		if (req.user) {
+// 			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+// 				if (err) {
+// 					console.log("Error:", err);
+// 				}
+// 				var cnt = numberOfOrders.length
+// 				res.render("index", { layout: false, product: product, user: req.user, count: cnt });
+
+// 			});
+// 		} else {
+// 			res.render("index", { layout: false, product: product, user: req.user, count: 0 });
+// 		}
+// 	});
+// })
 
 //Organization Registration page
 router.get("/orgReg", (req, res) => {
@@ -334,9 +376,9 @@ router.get("/updateProfile", (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		res.render("updateProfile", { user: req.user, Organization: Organization});
+		res.render("updateProfile", { user: req.user, Organization: Organization });
 	});
-	
+
 })
 
 // Edit user profile 
@@ -354,14 +396,14 @@ router.post("/updateProfile", async (req, res) => {
 		res.render('error')
 	} else {
 		var myquery = { _id: req.user._id };
-		var newvalues = { $set: { name: name, email:email, phone:phone, organization:organization } };
+		var newvalues = { $set: { name: name, email: email, phone: phone, organization: organization } };
 		User.updateOne(myquery, newvalues, function (err, docs) {
 			if (err) {
 				console.log(err)
 			} else {
 				console.log("User Profile updated successfully!")
 				User.findOne({ _id: req.user._id }).exec((err, user) => {
-					if(err) {
+					if (err) {
 						console.log(err);
 					} else {
 						Product.find({ 'buyer': req.user._id }, (err, orders) => {
@@ -373,6 +415,8 @@ router.post("/updateProfile", async (req, res) => {
 		})
 	}
 })
+
+
 
 
 

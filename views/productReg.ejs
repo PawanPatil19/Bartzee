@@ -77,13 +77,14 @@
                                 <option>Electronics</option>
                                 <option>Stationary</option>
                                 <option>Sport Equipments</option>
-                                <option>Games</option>
+                                <option>Gaming</option>
                                 <option>Clothing</option>
                                 <option>Student Resources</option>
+                                <option>Books</option>
                                 <option>Room Decor</option>
                                 <option>Hardware</option>
                                 <option>Household</option>
-                                <otpion>Others</otpion>
+                                <option>Others</option>
                             </select>
                         </p>
                         <br>
@@ -132,8 +133,7 @@
                         <h6>Contact</h6>
                         <p><input placeholder="Enter your phone number.." oninput="this.className = ''"
                                 name="sellerPhone" id="sellerPhone"></p>
-                        <p><input placeholder="Enter your email address.." oninput="this.className = ''"
-                                name="sellerEmail" id="sellerEmail"></p>
+                        <p><input name="sellerEmail" id="sellerEmail" value="<%= user.email %>" readonly></p>
                     </div>
 
                     <div class="tab">
@@ -141,9 +141,13 @@
                         <p>
                         <div class="input-group mb-3">
                             <span class="input-group-text">$</span>
-                            <input placeholder="Enter the price you want to sell it for.." oninput="this.className = ''"
-                                name="productPrice" id="productPrice">
+                           
                         </div>
+                        <div class="input-group flex-nowrap">
+                            <span class="input-group-text" id="addon-wrapping">$</span>
+                            <input placeholder="Enter the price you want to sell it for.." oninput="this.className = ''"
+                            name="productPrice" id="productPrice">
+                          </div>
 
                         </p>
 
