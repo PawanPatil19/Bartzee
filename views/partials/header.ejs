@@ -26,7 +26,7 @@
 
 
         <div class="col-md-7">
-        
+
             <form id="search-form">
                 <div class="input-group" style="height:45px;">
                     <div class="dropdown">
@@ -48,11 +48,11 @@
                         </div>
                     </div>
                     <input type="search" class="form-control" id="searchBar">
-                    <button class="btn btn-warning" type="button" onclick="search()">&nbsp;<i class="fa fa-search"
-                            aria-hidden="true"></i>&nbsp;</button>
+                    <button class="btn btn-warning" type="button" id="searchBtn" onclick="search()">&nbsp;<i
+                            class="fa fa-search" aria-hidden="true"></i>&nbsp;</button>
                 </div>
-                </form>
-            
+            </form>
+
         </div>
 
 
@@ -67,7 +67,7 @@
                     <div class="dropdown">
                         <button class="btn btn-outline-secondary btn-lg"><i class="fa fa-user-circle-o"
                                 aria-hidden="true"></i>&nbsp;Hi <%= user.name%> <i class="fa fa-caret-down"
-                                aria-hidden="true"></i></button>
+                                    aria-hidden="true"></i></button>
                         <div class="dropdown-content">
                             <a class="dropdown-item" href="/profile"><i class="fa fa-user" aria-hidden="true"></i>
                                 &nbsp;Profile</a>
@@ -125,14 +125,31 @@
 
 <% if (search) { %>
     <div style="padding-left: 10px;">
-    <u><h6>Search results for : <b><%= search %></b></h6></u>
-</div>
-<% } %>
+        <u>
+            <h6>Search results for : <b>
+                    <%= search %>
+                </b></h6>
+        </u>
+    </div>
+    <% } %>
 
 
-<script>
-    function search() {
-        var searchQuery = document.getElementById('searchBar').value;
-        window.location.href = `/${searchQuery}`;
-    }
-</script>
+        <script>
+            var searchQuery = document.getElementById('searchBar').value;
+
+
+            var input = document.getElementById("searchBar");
+
+            input.addEventListener("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("searchBtn").click();
+                }
+            });
+
+            function search() {
+                var searchQuery = document.getElementById('searchBar').value;
+                window.location.href = `/${searchQuery}`;
+            }
+
+        </script>
