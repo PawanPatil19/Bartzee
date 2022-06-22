@@ -25,9 +25,10 @@
 
     <!-- Loader in the start -->
     <div id="loader"></div>
-    <%- include('partials/header', {user: user, count: count, search: search}); %>
+    <div id="div-main" class="animate-bottom" style="display: none;">
+        <%- include('partials/header', {user: user, count: count, search: search}); %>
 
-<!-- 
+            <!-- 
     
     <div class="container" id="div-main">
         <div class="logo">
@@ -90,66 +91,68 @@
         </form>
     </nav> -->
 
-    <!-- Main Body -->
-    <div class="container-main">
-        <div class="row">
-            <div class="card-deck">
-                <% for (var i in product) { %>
+            <!-- Main Body -->
+            <div class="container-main">
+                <div class="row">
+                    <div class="card-deck">
+                        <% for (var i in product) { %>
 
-                    <div class="card" style="height: 600px; width: 20rem;">
-                        <img src="data:image/<%= product[i].image.contentType%>;base64,
+                            <div class="card" style="height: 600px; width: 20rem;">
+                                <img src="data:image/<%= product[i].image.contentType%>;base64,
                     <%=product[i].image.data.toString('base64')%>" style="height:300px;" class="card-img-top"
-                            alt="...">
-                        <div class="card-body">
-                            <h6 class="prdType">
-                                <%= product[i].productType%>
-                            </h6>
-                            <h4 class="prdName" style="text-transform: capitalize;"><b>
-                                    <%= product[i].productName%>
-                                </b></h4>
-                            <p class="prdDesc">
-                                <%= product[i].productDesc%>
-                            </p>
-                            <p><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;
-                                <%= product[i].organization %><br>
-                            </p>
+                                    alt="...">
+                                <div class="card-body">
+                                    <h6 class="prdType">
+                                        <%= product[i].productType%>
+                                    </h6>
+                                    <h4 class="prdName" style="text-transform: capitalize;"><b>
+                                            <%= product[i].productName%>
+                                        </b></h4>
+                                    <p class="prdDesc">
+                                        <%= product[i].productDesc%>
+                                    </p>
+                                    <p><i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp;
+                                        <%= product[i].organization %><br>
+                                    </p>
 
-                            <h4><b>$&nbsp;<%= product[i].productPrice%></b></h4>
-                            <hr>
-                            <a href="/review/<%= product[i]._id %>" class="btn btn-outline-warning stretched-link"><i
-                                    class="fa fa-eye" aria-hidden="true"></i>
-                                &nbsp; View</a>
+                                    <h4><b>$&nbsp;<%= product[i].productPrice%></b></h4>
+                                    <hr>
+                                    <a href="/review/<%= product[i]._id %>"
+                                        class="btn btn-outline-warning stretched-link"><i class="fa fa-eye"
+                                            aria-hidden="true"></i>
+                                        &nbsp; View</a>
 
-                        </div>
+                                </div>
+                            </div>
+
+                            <% } %>
                     </div>
 
-                    <% } %>
+                </div>
             </div>
 
-        </div>
+
+
+
+            <%- include('partials/footer'); %>
     </div>
 
 
+    <script src="../jq/jquery.js" type="text/javascript"></script>
+    <script src="../js/bootstrap.js" type="text/javascript"></script>
 
-    
-    <%- include('partials/footer'); %>
+    <script>
+        var myVar;
 
+        function myFunction() {
+            myVar = setTimeout(showPage,500);
+        }
 
-        <script src="../jq/jquery.js" type="text/javascript"></script>
-        <script src="../js/bootstrap.js" type="text/javascript"></script>
-
-        <script>
-            var myVar;
-
-            function myFunction() {
-                myVar = setTimeout(showPage, 1000);
-            }
-
-            function showPage() {
-                document.getElementById("loader").style.display = "none";
-                document.getElementById("div-main").style.display = "block";
-            }
-        </script>
+        function showPage() {
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("div-main").style.display = "block";
+        }
+    </script>
 
 </body>
 

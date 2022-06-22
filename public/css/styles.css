@@ -10,13 +10,13 @@ html {
     width: 150px;
     height: 150px;
     margin: -75px 0 0 -75px;
-    border: 16px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 16px solid green;
+    border: 16px solid orange;
+    border-radius: 20%;
+    /* border-top: 16px solid orange; */
     width: 120px;
     height: 120px;
-    -webkit-animation: spin 1s linear infinite;
-    animation: spin 1s linear infinite;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 1.5s linear infinite;
 }
 
 @-webkit-keyframes spin {
@@ -73,10 +73,6 @@ body {
     padding: 20px;
     background-color:#ECECEC;
     position: relative;
-    
-    /* left: 50%;
-    top: 50%; */
-    /* transform: translate(-50%, -50%); */
 
 }
 
@@ -113,3 +109,21 @@ body {
    bottom:0;
    width:100%;
 }
+
+.animate-bottom {
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 1s;
+    animation-name: animatebottom;
+    animation-duration: 1s
+  }
+  
+  @-webkit-keyframes animatebottom {
+    from { bottom:-100px; opacity:0 }
+    to { bottom:0px; opacity:1 }
+  }
+  
+  @keyframes animatebottom {
+    from{ bottom:-100px; opacity:0 }
+    to{ bottom:0; opacity:1 }
+  }
