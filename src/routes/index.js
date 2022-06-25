@@ -4,6 +4,7 @@ var User = require("../models/userModel");
 var Product = require("../models/productModel");
 var Org = require("../models/orgModel");
 var Chat = require("../models/chatModel");
+var Notif = require("../models/notificationModel")
 var passport = require("passport");
 var bodyParser = require("body-parser");
 var LocalStrategy = require("passport-local").Strategy;
@@ -48,60 +49,20 @@ router.get('/', (req, res) => {
 					console.log("Error:", err);
 				}
 				var cnt = numberOfOrders.length
-				res.render("index", { layout: false, search: null, product: product, user: req.user, count: cnt });
 
+				Notif.find({ 'email': req.user.email }, function (err, msg) {
+					res.render("index", {
+						layout: false,
+						search: null, product: product, user: req.user, count: cnt, msg: msg
+					});
+				})
 			});
 		} else {
-			res.render("index", { layout: false,search: null, product: product, user: req.user, count: 0, search:null });
+			res.render("index", { layout: false, search: null, product: product, user: req.user, count: 0, search: null, msg: null });
 		}
 	});
 })
 
-// router.get('/index/:searchQuery', (req, res) => {
-// 	Product.find({
-// 		$or: [{ "productName": { "$regex": req.params.searchQuery, "$options": '$i' } },
-// 		{ 'productType': req.params.searchQuery },
-// 		{"productType": {"$regex": req.params.searchQuery, "$options": '$i'}},
-// 		{"sellerName": {"$regex": req.params.searchQuery, "$options": '$i'}},
-// 		{ "organization": { "$regex": req.params.searchQuery, "$options": '$i' } },
-// 		{ "productDesc": { "$regex": req.params.searchQuery, "$options": '$i' } }],
-// 		'buyer': null
-// 	}).exec(function (err, product) {
-// 		if (req.user) {
-// 			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
-// 				if (err) {
-// 					console.log("Error:", err);
-// 				}
-// 				var cnt = numberOfOrders.length
-// 				res.render("index", { layout: false, product: product, user: req.user, count: cnt });
-
-// 			});
-// 		} else {
-// 			res.render("index", { layout: false, search: req.params.searchQuery, product: product, user: req.user, count: 0 });
-// 		}
-// 	});
-// })
-
-
-
-// router.get('/:searchQuery', (req, res) => {
-
-// 	Product.find( {"productName": {"$regex": req.params.searchQuery, "$options": '$i'}}).exec(function (err, product) {
-// 		console.log(product);
-// 		if (req.user) {
-// 			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
-// 				if (err) {
-// 					console.log("Error:", err);
-// 				}
-// 				var cnt = numberOfOrders.length
-// 				res.render("index", { layout: false, product: product, user: req.user, count: cnt });
-
-// 			});
-// 		} else {
-// 			res.render("index", { layout: false, product: product, user: req.user, count: 0 });
-// 		}
-// 	});
-// })
 
 //Organization Registration page
 router.get("/orgReg", (req, res) => {
@@ -139,7 +100,6 @@ router.post("/orgReg", async (req, res) => {
 
 // Product Registration Page
 router.get("/productReg", ensureAuthenticated, (req, res) => {
-	console.log("2: ", req.user)
 	Org.find({}).exec(function (err, Organization) {
 		if (err) {
 			console.log("Error:", err);
@@ -148,7 +108,10 @@ router.get("/productReg", ensureAuthenticated, (req, res) => {
 			if (err) {
 				console.log("Error:", err);
 			}
-			res.render("productReg", { Organization: Organization, layout: false, user: req.user, count: numberOfOrders.length });
+			Notif.find({ 'email': req.user.email }, function (err, msg) {
+				res.render("productReg", { msg: msg, Organization: Organization, layout: false, user: req.user, count: numberOfOrders.length });
+
+			})
 		});
 
 	});
@@ -156,12 +119,10 @@ router.get("/productReg", ensureAuthenticated, (req, res) => {
 
 //Post Product registration
 router.post("/productReg", upload.single('image'), (req, res) => {
-	console.log(req.file)
 
 	var img = fs.readFileSync(req.file.path);
 	var encode_img = img.toString('base64');
 
-	console.log(__dirname + '/uploads');
 	var obj = {
 		productType: req.body.productType,
 		sellerName: req.body.sellerName,
@@ -182,16 +143,13 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 	}
 
 
+
 	Product.create(obj, (err, item) => {
 		if (err) {
 			console.log(err);
 		}
 		else {
 			item.save();
-			console.log("ID: ", item._id)
-			// Product.find({ '_id': item._id }, (err, prd) => {
-			// 	err ? console.log(err) : res.render('review', { prd: prd, user: req.user });
-			// });
 
 			Product.find({ '_id': item._id }).exec(function (err, prd) {
 				if (err) {
@@ -201,7 +159,12 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 					if (err) {
 						console.log("Error:", err);
 					}
-					res.render('review', { prd: prd, layout: false, user: req.user, count: numberOfOrders.length });
+
+
+
+					Notif.find({ 'email': req.user.email }, function (err, msg) {
+						res.render('review', { msg: msg, prd: prd, layout: false, user: req.user, count: numberOfOrders.length });
+					})
 				});
 
 			})
@@ -216,15 +179,14 @@ router.get("/review", (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		res.render("review", { layout: false, user: req.user, count: numberOfOrders.length });
+		Notif.find({ 'email': req.user.email }, function (err, msg) {
+			res.render("review", { msg: msg, layout: false, user: req.user, count: numberOfOrders.length });
+		})
 	});
 })
 
 // Product review page
 router.get("/review/:id", (req, res) => {
-	// Product.find({ '_id': req.params.id }, (err, prd) => {
-	// 	err ? console.log(err) : res.render('review', { prd: prd, layout: false, user: req.user, count: 0 });
-	// });
 
 	Product.find({ '_id': req.params.id }).exec(function (err, prd) {
 		if (req.user) {
@@ -232,10 +194,23 @@ router.get("/review/:id", (req, res) => {
 				if (err) {
 					console.log("Error:", err);
 				}
-				res.render("review", { prd: prd, layout: false, user: req.user, count: numberOfOrders.length });
+				Notif.find({ 'email': req.user.email }, function (err, msg) {
+					res.render("review", { msg: msg, prd: prd, layout: false, user: req.user, count: numberOfOrders.length });
+				})
 			});
 		} else {
-			res.render('review', { prd: prd, layout: false, user: req.user, count: 0 });
+			for (var i in prd) {
+				var obj = {
+					email: prd[i].sellerEmail,
+					notif: 'Someone viewed your item'
+				}
+				Notif.create(obj, (err, item) => {
+					if (err) {
+						console.log(err)
+					}
+				})
+			}
+			res.render('review', { prd: prd, layout: false, user: req.user, count: 0, msg: null });
 		}
 
 	})
@@ -247,12 +222,26 @@ router.post("/review/:id", (req, res) => {
 			console.log(err)
 		}
 		else {
-			console.log("Item added to cart! ", docs);
+			Product.find({ '_id': req.params.id }, function (err, prd) {
+				for (var i in prd) {
+					var obj = {
+						email: prd[i].sellerEmail,
+						notif: `${req.user.name} had added your item to cart`
+					}
+					Notif.create(obj, (err, item) => {
+						if (err) {
+							console.log(err)
+						}
+					})
+				}
+			})
 			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
 				if (err) {
 					console.log("Error:", err);
 				}
-				res.render("cart", { orders: numberOfOrders, layout: false, user: req.user, count: numberOfOrders.length });
+				Notif.find({ 'email': req.user.email }, function (err, msg) {
+					res.render("cart", { msg: msg, orders: numberOfOrders, layout: false, user: req.user, count: numberOfOrders.length });
+				})
 			});
 
 		}
@@ -262,16 +251,26 @@ router.post("/review/:id", (req, res) => {
 
 // Cart page
 router.get("/cart", (req, res) => {
-	Product.find({ 'buyer': req.user._id }, (err, orders) => {
-		err ? console.log(err) : res.render('cart', { orders: orders, layout: false, user: req.user, count: orders.length, search:null });
+	Product.find({ 'buyer': req.user._id }, function (err, orders) {
+		if (err) {
+			console.log(err)
+		}
+		Notif.find({ 'email': req.user.email }, function (err, msg) {
+			res.render('cart', { msg: msg, orders: orders, layout: false, user: req.user, count: orders.length, search: null });
+		})
 	});
 
 })
 
 // Profile page
 router.get("/profile", (req, res) => {
-	Product.find({ 'buyer': req.user._id }, (err, orders) => {
-		err ? console.log(err) : res.render('profile', { layout: false, user: req.user, count: orders.length });
+	Product.find({ 'buyer': req.user._id }, function (err, orders) {
+		if (err) {
+			console.log(err)
+		}
+		Notif.find({ 'email': req.user.email }, function (err, msg) {
+			res.render('profile', { msg: msg, layout: false, user: req.user, count: orders.length });
+		})
 	});
 })
 
@@ -283,7 +282,7 @@ router.get("/deleteUser", function (req, res) {
 				if (err) {
 					console.log("Error:", err);
 				}
-				res.render("index", { layout: false, product: product, user: null, count: 0 });
+				res.render("index", { layout: false, product: product, user: null, count: 0, msg: null });
 
 			});
 		} else {
@@ -312,8 +311,10 @@ router.get("/removeCart/:id", function (req, res) {
 		}
 		else {
 			console.log("Item removed from cart! ", docs);
-			Product.find({ 'buyer': req.user._id }, (err, orders) => {
-				err ? console.log(err) : res.render('cart', { orders: orders, layout: false, user: req.user, count: orders.length });
+			Product.find({ 'buyer': req.user._id }, function (err, orders) {
+				Notif.find({ 'email': req.user.email }, function (err, msg) {
+					res.render('cart', { orders: orders, layout: false, user: req.user, count: orders.length, msg: msg });
+				})
 			});
 
 		}
@@ -324,8 +325,28 @@ router.get("/removeCart/:id", function (req, res) {
 router.get("/chatInterface/:roomID", function (req, res) {
 	var room = req.params.roomID;
 	console.log(room);
-	Product.find({ 'buyer': req.user._id }, (err, orders) => {
-		err ? console.log(err) : res.render('chatInterface', { layout: false, room: room, user: req.user, count: orders.length });
+
+	Product.find({ 'buyer': req.user._id }, function (err, orders) {
+		if (err) {
+			console.log(err)
+		}
+		Product.find({ '_id': req.params.roomID }, function (err, prd) {
+			for (var i in prd) {
+				var obj = {
+					email: prd[i].sellerEmail,
+					notif: `${req.user.name} has sent you a message`
+				}
+				Notif.create(obj, (err, item) => {
+					if (err) {
+						console.log(err)
+					}
+				})
+			}
+		})
+
+		Notif.find({ 'email': req.user.email }, function (err, msg) {
+			res.render('chatInterface', { layout: false, room: room, user: req.user, count: orders.length, msg: msg });
+		})
 	});
 });
 
@@ -339,8 +360,9 @@ router.get("/sellCart", (req, res) => {
 				if (err) {
 					console.log(err);
 				} else {
-					console.log(sellItems);
-					res.render('sellCart', { layout: false, user: req.user, count: orders.length, sellItems: sellItems });
+					Notif.find({ 'email': req.user.email }, function (err, msg) {
+						res.render('sellCart', { msg: msg, layout: false, user: req.user, count: orders.length, sellItems: sellItems });
+					})
 				}
 			})
 
@@ -366,6 +388,23 @@ router.get("/deleteItem/:id", (req, res) => {
 			console.log(err);
 		} else {
 			console.log("Product Deleted!")
+			Product.find({ 'buyer': req.user._id }, function (err, orders) {
+				if (err) {
+					console.log(err)
+				} else {
+					Product.find({ 'sellerEmail': req.user.email }, function (err, sellItems) {
+						if (err) {
+							console.log(err);
+						} else {
+							Notif.find({ 'email': req.user.email }, function (err, msg) {
+								res.render('sellCart', { msg: msg, layout: false, user: req.user, count: orders.length, sellItems: sellItems });
+							})
+						}
+					})
+		
+				}
+		
+			});
 		}
 	})
 })
@@ -406,8 +445,10 @@ router.post("/updateProfile", async (req, res) => {
 					if (err) {
 						console.log(err);
 					} else {
-						Product.find({ 'buyer': req.user._id }, (err, orders) => {
-							err ? console.log(err) : res.render('profile', { layout: false, user: user, count: orders.length });
+						Product.find({ 'buyer': req.user._id }, function (err, orders) {
+							Notif.find({ 'email': req.user.email }, function (err, msg) {
+								res.render('profile', { layout: false, user: user, count: orders.length, msg: msg });
+							})
 						});
 					}
 				})
@@ -416,6 +457,98 @@ router.post("/updateProfile", async (req, res) => {
 	}
 })
 
+
+// Edit product details
+router.get("/editProduct/:id", (req, res) => {
+	Org.find({}).exec(function (err, Organization) {
+		if (err) {
+			console.log("Error:", err);
+		}
+		Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+			if (err) {
+				console.log("Error:", err);
+			}
+			Product.find({ '_id': req.params.id }).exec(function (err, product) {
+				if (err) {
+					console.log(err);
+				}
+				Notif.find({ 'email': req.user.email }, function (err, msg) {
+					res.render("editProduct", { msg: msg, product: product, Organization: Organization, layout: false, user: req.user, count: numberOfOrders.length });
+				})
+			})
+		});
+
+	});
+})
+
+
+router.post("/editProduct/:id", async (req, res) => {
+	// var img = fs.readFileSync(req.file.path);
+	// var encode_img = img.toString('base64');
+
+	var obj = {
+		productType: req.body.productType,
+		sellerName: req.body.sellerName,
+		organization: req.body.organization,
+		sellerAddress: req.body.sellerAddress,
+		productName: req.body.productName,
+		// image: {
+		// 	data: fs.readFileSync(path.join(__dirname, '..', 'uploads', req.file.filename)),
+		// 	contentType: 'image/jpg'
+		// },
+		productQuantity: req.body.productQuantity,
+		productDesc: req.body.productDesc,
+		productColor: req.body.productColor,
+		productSize: req.body.productSize,
+		sellerPhone: req.body.sellerPhone,
+		productPrice: req.body.productPrice,
+	}
+
+	var myquery = { _id: req.params.id };
+	var newvalues = {
+		$set: {
+			productName: obj.productName,
+			sellerName: obj.sellerName,
+			sellerPhone: obj.sellerPhone,
+			sellerAddress: obj.sellerAddress,
+			organization: obj.organization,
+			productType: obj.productType,
+			productColor: obj.productColor,
+			productDesc: obj.productDesc,
+			productPrice: obj.productPrice,
+			productQuantity: obj.productQuantity,
+			productSize: obj.productSize
+		}
+	};
+	console.log(obj);
+	Product.updateOne(myquery, newvalues, function (err, docs) {
+		if (err) {
+			console.log(err)
+		} else {
+			console.log("Product Details updated successfully!: ", docs)
+			Product.find({ 'buyer': req.user._id }, function (err, orders) {
+				if (err) {
+					console.log(err)
+				} else {
+					Product.find({ 'sellerEmail': req.user.email }, function (err, sellItems) {
+						if (err) {
+							console.log(err);
+						} else {
+							Notif.find({ 'email': req.user.email }, function (err, msg) {
+								res.render('sellCart', { msg: msg, layout: false, user: req.user, count: orders.length, sellItems: sellItems });
+							})
+						}
+					})
+
+				}
+
+			});
+		}
+
+
+
+	})
+})
 
 
 

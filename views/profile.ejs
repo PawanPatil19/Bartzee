@@ -25,11 +25,12 @@
 </head>
 
 <body>
-    <%- include('partials/header', {user: user, count: count, search: null}); %>
+    <%- include('partials/header', {user: user, count: count, search: null, msg: msg}); %>
 
         <div class="container-profile">
             <div class="profile-image" style="text-align: center;">
-                <i class="fa fa-user-circle-o" style="font-size:110px"></i>
+                <i class="fa fa-user-circle-o" style="font-size:110px"></i><br>
+                <a href=""><small>Upload profile picture</small></a>
                 <br><br>
                 <a href="/updateProfile" data-bs-toggle="tooltip" data-bs-placement="left" title="Edit"><i class="fa fa-edit fa-lg" ></i></a>
                 &nbsp;&nbsp;

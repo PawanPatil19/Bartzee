@@ -25,293 +25,290 @@
 
 
 <body>
-    <%- include('partials/header', {user: user, count: count, search: null}); %>
+    <%- include('partials/header', {user: user, count: count, search: null, msg: msg}); %>
 
-    <div class="container mt-lg-5">
-        <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-md-10">
-                <form id="regForm" method="post" enctype="multipart/form-data">
-                    <h1 id="register">Register your product here</h1>
-                    <div class="all-steps" id="all-steps">
-                        <span class="step"><i class="fa fa-user"></i></span>
-                        <span class="step"><i class="fa fa-map-marker"></i></span>
-                        <span class="step"><i class="fa fa-shopping-bag"></i></span>
-                        <span class="step"><i class="fa fa-mobile-phone"></i></span>
-                        <span class="step"><i class="fa fa-money"></i></span>
-                        <span class="step"><i class="fa fa-flag"></i></span>
-                        <span class="step"><i class="fa fa-send-o"></i></span>
-                    </div>
+        <div class="container mt-lg-5">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-md-10">
+                    <form id="regForm" method="post" enctype="multipart/form-data">
+                        <h1 id="register">Register your product here</h1>
+                        <div class="all-steps" id="all-steps">
+                            <span class="step"><i class="fa fa-user"></i></span>
+                            <span class="step"><i class="fa fa-map-marker"></i></span>
+                            <span class="step"><i class="fa fa-shopping-bag"></i></span>
+                            <span class="step"><i class="fa fa-mobile-phone"></i></span>
+                            <span class="step"><i class="fa fa-money"></i></span>
+                            <span class="step"><i class="fa fa-flag"></i></span>
+                            <span class="step"><i class="fa fa-send-o"></i></span>
+                        </div>
 
-                    <div class="tab">
-                        <h6>Name</h6>
-                        <p>
-                            <input placeholder="Enter your full name..." oninput="this.className = ''" name="sellerName"
-                                id="sellerName">
-                        </p>
-
-                    </div>
-                    <div class="tab">
-                        <h6>Organization</h6>
-                        <p>
-                            <select type="text" name="organization" id="organization" class='input-select'>
-                                <option>Select your school/university/office..</option>
-                                <% for (var i in Organization) { %>
-                                    <option value="<%= Organization[i].org %>" class="input_field">
-                                        <%= Organization[i].org %>, <%= Organization[i].country %>
-                                    </option>
-                                    <% } %>
-                            </select>
-                        </p>
-                        <h6>Address</h6>
-                        <p><input placeholder="Enter your full address here..." oninput="this.className = ''"
-                                name="sellerAddress" id="sellerAddress">
-                        </p>
-
-                    </div>
-                    <div class="tab">
-                        <h6>Type of product</h6>
-                        <p>
-                            <select class="form-select" placeholder="Select the type of product you are selling..."
-                                type="text" name="productType" id="productType" class='input_field'>
-                                <option selected>Choose...</option>
-                                <option>Electronics</option>
-                                <option>Stationary</option>
-                                <option>Sport Equipments</option>
-                                <option>Gaming</option>
-                                <option>Clothing</option>
-                                <option>Student Resources</option>
-                                <option>Books</option>
-                                <option>Room Decor</option>
-                                <option>Hardware</option>
-                                <option>Household</option>
-                                <option>Others</option>
-                            </select>
-                        </p>
-                        <br>
-                        <h6>Product Name</h6>
-                        <p><input placeholder="Enter your product name..." oninput="this.className = ''"
-                                name="productName" id="productName">
-                        </p>
-                        <br>
-                        <h6>Upload an image of the product</h6>
-                        <p>
-                        <div class="input-group mb-3">
-                            <input type="file" class="form-control" id="image" name="image" accept="image/*"
-                                onchange="loadFile(event)">
+                        <div class="tab">
+                            <h6>Name</h6>
+                            <p>
+                                <input placeholder="Enter your full name..." oninput="this.className = ''"
+                                    name="sellerName" id="sellerName">
+                            </p>
 
                         </div>
-                        </p>
-                        <br>
-                        <h6>Quantity</h6>
-                        <p>
-                            <input placeholder="##" oninput="this.className = ''" name="productQuantity"
-                                id="productQuantity">
-                        </p>
-                        <br>
-                        <p>
-                        <h6>Product Description</h6>
-                        <textarea class="form-control"
-                            placeholder="Enter some details about the product like color, size, etc..." id="productDesc"
-                            name="productDesc"></textarea>
-                        </p>
-                        <br>
-                        <p>
-                        <h6>Color</h6>
-                        <input placeholder="eg: Black/White/Blue..." oninput="this.className = ''" name="productColor"
-                            id="productColor">
-                        </p>
-                        <br>
-                        <p>
-                        <h6>Size</h6>
-                        <input placeholder="eg: Shoe: US size 8..." oninput="this.className = ''" name="productSize"
-                            id="productSize">
-                        </p>
-                    </div>
+                        <div class="tab">
+                            <h6>Organization</h6>
+                            <p>
+                                <select type="text" name="organization" id="organization" class='input-select'>
+                                    <option>Select your school/university/office..</option>
+                                    <% for (var i in Organization) { %>
+                                        <option value="<%= Organization[i].org %>" class="input_field">
+                                            <%= Organization[i].org %>, <%= Organization[i].country %>
+                                        </option>
+                                        <% } %>
+                                </select>
+                            </p>
+                            <h6>Address</h6>
+                            <p><input placeholder="Enter your full address here..." oninput="this.className = ''"
+                                    name="sellerAddress" id="sellerAddress">
+                            </p>
 
-
-                    <div class="tab">
-                        <h6>Contact</h6>
-                        <p><input placeholder="Enter your phone number.." oninput="this.className = ''"
-                                name="sellerPhone" id="sellerPhone"></p>
-                        <p><input name="sellerEmail" id="sellerEmail" value="<%= user.email %>" readonly></p>
-                    </div>
-
-                    <div class="tab">
-                        <h6>Price</h6>
-                        <p>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">$</span>
-                           
                         </div>
-                        <div class="input-group flex-nowrap">
-                            <span class="input-group-text" id="addon-wrapping">$</span>
-                            <input placeholder="Enter the price you want to sell it for.." oninput="this.className = ''"
-                            name="productPrice" id="productPrice">
-                          </div>
+                        <div class="tab">
+                            <h6>Type of product</h6>
+                            <p>
+                                <select class="form-select" placeholder="Select the type of product you are selling..."
+                                    type="text" name="productType" id="productType" class='input_field'>
+                                    <option selected>Choose...</option>
+                                    <option>Electronics</option>
+                                    <option>Stationary</option>
+                                    <option>Sport Equipments</option>
+                                    <option>Gaming</option>
+                                    <option>Clothing</option>
+                                    <option>Student Resources</option>
+                                    <option>Books</option>
+                                    <option>Room Decor</option>
+                                    <option>Hardware</option>
+                                    <option>Household</option>
+                                    <option>Others</option>
+                                </select>
+                            </p>
+                            <br>
+                            <h6>Product Name</h6>
+                            <p><input placeholder="Enter your product name..." oninput="this.className = ''"
+                                    name="productName" id="productName">
+                            </p>
+                            <br>
+                            <h6>Upload an image of the product</h6>
+                            <p>
+                            <div class="input-group mb-3">
+                                <input type="file" class="form-control" id="image" name="image" accept="image/*"
+                                    onchange="loadFile(event)">
 
-                        </p>
+                            </div>
+                            </p>
+                            <br>
+                            <h6>Quantity</h6>
+                            <p>
+                                <input placeholder="##" oninput="this.className = ''" name="productQuantity"
+                                    id="productQuantity">
+                            </p>
+                            <br>
+                            <p>
+                            <h6>Product Description</h6>
+                            <textarea class="form-control"
+                                placeholder="Enter some details about the product like present condition of product/ years of use,etc"
+                                id="productDesc" name="productDesc"></textarea>
+                            </p>
+                            <br>
+                            <p>
+                            <h6>Color</h6>
+                            <input placeholder="eg: Black/White/Blue..." oninput="this.className = ''"
+                                name="productColor" id="productColor">
+                            </p>
+                            <br>
+                            <p>
+                            <h6>Size</h6>
+                            <input placeholder="eg: Shoe: US size 8..." oninput="this.className = ''" name="productSize"
+                                id="productSize">
+                            </p>
+                        </div>
 
-                    </div>
 
-                    <div class="tab" style="height:700px">
-                        <h3>Review your product</h3>
-                        <br>
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-5">
-                                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                                        <div class="carousel-inner">
-                                            <div class="carousel-item active">
-                                                <img class="d-block w-100" id="output"/>
+                        <div class="tab">
+                            <h6>Contact</h6>
+                            <p><input placeholder="Enter your phone number.." oninput="this.className = ''"
+                                    name="sellerPhone" id="sellerPhone"></p>
+                            <p><input name="sellerEmail" id="sellerEmail" value="<%= user.email %>" readonly></p>
+                        </div>
+
+                        <div class="tab">
+                            <h6>Price</h6>
+                            <p>
+                            <div class="input-group flex-nowrap">
+                                <span class="input-group-text" id="addon-wrapping">$</span>
+                                <input placeholder="Enter the price you want to sell it for.."
+                                    oninput="this.className = ''" name="productPrice" id="productPrice">
+                            </div>
+                            </p>
+
+                        </div>
+
+                        <div class="tab" style="height:700px">
+                            <h3>Review your product</h3>
+                            <br>
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                            <div class="carousel-inner">
+                                                <div class="carousel-item active">
+                                                    <img class="d-block w-100" id="output" />
+                                                </div>
+
                                             </div>
-
+                                            <a class="carousel-control-prev" href="#carouselExampleControls"
+                                                role="button" data-slide="prev">
+                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="carousel-control-next" href="#carouselExampleControls"
+                                                role="button" data-slide="next">
+                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
                                         </div>
-                                        <a class="carousel-control-prev" href="#carouselExampleControls" role="button"
-                                            data-slide="prev">
-                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Previous</span>
-                                        </a>
-                                        <a class="carousel-control-next" href="#carouselExampleControls" role="button"
-                                            data-slide="next">
-                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                            <span class="sr-only">Next</span>
-                                        </a>
                                     </div>
-                                </div>
-                                <div class="col-sm-7">
-                                    <div class="type"><label id="type"></label></div>
-                                    <h2><label id="name"></label></h1>
-                                        <hr>
+                                    <div class="col-sm-7">
+                                        <div class="type"><label id="type"></label></div>
+                                        <h2><label id="name"></label></h1>
+                                            <hr>
 
-                                        <h4>About</h4>
-                                        <label id="about"></label>
-                                        <br><br>
-                                        <i class="fa-solid fa-circle-small"></i>Color: <label id="color"></label>
-                                        <br>
-                                        <i class="fa-solid fa-circle-small"></i>Size: <label id="size"></label>
-                                        <br>
-                                        <i class="fa-solid fa-circle-small"></i>Quantity: <label id="quantity"></label>
+                                            <h4>About</h4>
+                                            <label id="about"></label>
+                                            <br><br>
+                                            <i class="fa-solid fa-circle-small"></i>Color: <label id="color"></label>
+                                            <br>
+                                            <i class="fa-solid fa-circle-small"></i>Size: <label id="size"></label>
+                                            <br>
+                                            <i class="fa-solid fa-circle-small"></i>Quantity: <label
+                                                id="quantity"></label>
 
 
-                                        <br>
-                                        <br>
-                                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp; Seller: <label
-                                            id="seller"></label><br>
-                                        <i class="fa fa-building-o" aria-hidden="true"></i>&nbsp; Seller Organization:
-                                        <label id="org"></label><br>
-                                        <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Seller Address:
-                                        <label id="add"></label><br>
-                                        <i class="fa fa-phone" aria-hidden="true"></i>&nbsp; Seller Contact:
-                                        <label id="contact"></label>
-                                        <hr>
+                                            <br>
+                                            <br>
+                                            <i class="fa fa-user" aria-hidden="true"></i>&nbsp; Seller: <label
+                                                id="seller"></label><br>
+                                            <i class="fa fa-building-o" aria-hidden="true"></i>&nbsp; Seller
+                                            Organization:
+                                            <label id="org"></label><br>
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Seller Address:
+                                            <label id="add"></label><br>
+                                            <i class="fa fa-phone" aria-hidden="true"></i>&nbsp; Seller Contact:
+                                            <label id="contact"></label>
+                                            <hr>
 
-                                        <h2><b>$<label id="price"></label></b></h2>
-                                        <br>
-                                        <button type="button" class="btn btn-outline-secondary btn-lg"><i
-                                                class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
-                                            ADD TO CART
-                                        </button>
+                                            <h2><b>$<label id="price"></label></b></h2>
+                                            <br>
+                                            <button type="button" class="btn btn-outline-secondary btn-lg"><i
+                                                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
+                                                ADD TO CART
+                                            </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="tab">
-                        <!-- <input type="submit" value="Register your product" id='input_submit' class='input_field'> -->
-                        
-                        <p style="text-align: center;">
-                            <button type="submit" class="btn btn-outline-dark btn-lg">Register your item</button>
-                        </p>
-                    </div>
+                        <div class="tab">
+                            <!-- <input type="submit" value="Register your product" id='input_submit' class='input_field'> -->
 
-                    <div style="overflow:auto;" id="nextprevious">
-                        <div style="float:right;">
-                            <button type="button" id="prevBtn" onclick="nextPrev(-1)"><i
-                                    class="fa fa-angle-double-left"></i></button>
-                            <button type="button" id="nextBtn" onclick="nextPrev(1)"><i
-                                    class="fa fa-angle-double-right"></i></button>
+                            <p style="text-align: center;">
+                                <button type="submit" class="btn btn-outline-dark btn-lg">Register your item</button>
+                            </p>
                         </div>
-                    </div>
-                </form>
+
+                        <div style="overflow:auto;" id="nextprevious">
+                            <div style="float:right;">
+                                <button type="button" id="prevBtn" onclick="nextPrev(-1)"><i
+                                        class="fa fa-angle-double-left"></i></button>
+                                <button type="button" id="nextBtn" onclick="nextPrev(1)"><i
+                                        class="fa fa-angle-double-right"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-
-    
-
-    <script>
-        
 
 
-        var currentTab = 0;
-        document.addEventListener("DOMContentLoaded", function (event) {
-            showTab(currentTab);
 
-        });
+        <script>
 
-        function showTab(n) {
-            var x = document.getElementsByClassName("tab");
-            x[n].style.display = "block";
-            if (n == 0) {
-                document.getElementById("prevBtn").style.display = "none";
-            } else {
-                document.getElementById("prevBtn").style.display = "inline";
+
+
+            var currentTab = 0;
+            document.addEventListener("DOMContentLoaded", function (event) {
+                showTab(currentTab);
+
+            });
+
+            function showTab(n) {
+                var x = document.getElementsByClassName("tab");
+                x[n].style.display = "block";
+                if (n == 0) {
+                    document.getElementById("prevBtn").style.display = "none";
+                } else {
+                    document.getElementById("prevBtn").style.display = "inline";
+                }
+                if (n == (x.length - 1)) {
+                    document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+                } else {
+                    document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+                }
+
+                fixStepIndicator(n)
             }
-            if (n == (x.length - 1)) {
-                document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
-            } else {
-                document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+
+            function nextPrev(n) {
+                var x = document.getElementsByClassName("tab");
+                if (n == 1 && !validateForm()) return false;
+                x[currentTab].style.display = "none";
+                currentTab = currentTab + n;
+                if (currentTab >= x.length) {
+
+                    document.getElementById("nextprevious").style.display = "none";
+                    document.getElementById("all-steps").style.display = "none";
+                    document.getElementById("register").style.display = "none";
+                    document.getElementById("text-message").style.display = "block";
+                }
+                showTab(currentTab);
+
+
+                const productType = document.getElementById('productType').value
+                const sellerName = document.getElementById('sellerName').value
+                const orgn = document.getElementById('organization')
+                const organization = orgn.options[orgn.selectedIndex].text
+                const sellerAddress = document.getElementById('sellerAddress').value
+                const productName = document.getElementById('productName').value
+
+                const productQuantity = document.getElementById('productQuantity').value
+                const productDesc = document.getElementById('productDesc').value
+                const productColor = document.getElementById('productColor').value
+                const productSize = document.getElementById('productSize').value
+                const sellerPhone = document.getElementById('sellerPhone').value
+                const sellerEmail = document.getElementById('sellerEmail').value
+                const productPrice = document.getElementById('productPrice').value
+
+
+
+
+                document.getElementById("type").innerHTML = productType
+                document.getElementById("name").innerHTML = productName
+                document.getElementById("about").innerHTML = productDesc
+                document.getElementById("color").innerHTML = productColor
+                document.getElementById("size").innerHTML = productSize
+                document.getElementById("quantity").innerHTML = productQuantity
+                document.getElementById("seller").innerHTML = sellerName
+                document.getElementById("org").innerHTML = organization
+                document.getElementById("add").innerHTML = sellerAddress
+                document.getElementById("contact").innerHTML = sellerPhone
+                document.getElementById("price").innerHTML = productPrice
             }
-
-            fixStepIndicator(n)
-        }
-
-        function nextPrev(n) {
-            var x = document.getElementsByClassName("tab");
-            if (n == 1 && !validateForm()) return false;
-            x[currentTab].style.display = "none";
-            currentTab = currentTab + n;
-            if (currentTab >= x.length) {
-
-                document.getElementById("nextprevious").style.display = "none";
-                document.getElementById("all-steps").style.display = "none";
-                document.getElementById("register").style.display = "none";
-                document.getElementById("text-message").style.display = "block";
-            }
-            showTab(currentTab);
-
-
-            const productType = document.getElementById('productType').value
-            const sellerName = document.getElementById('sellerName').value
-            const orgn = document.getElementById('organization')
-            const organization = orgn.options[orgn.selectedIndex].text
-            const sellerAddress = document.getElementById('sellerAddress').value
-            const productName = document.getElementById('productName').value
-
-            const productQuantity = document.getElementById('productQuantity').value
-            const productDesc = document.getElementById('productDesc').value
-            const productColor = document.getElementById('productColor').value
-            const productSize = document.getElementById('productSize').value
-            const sellerPhone = document.getElementById('sellerPhone').value
-            const sellerEmail = document.getElementById('sellerEmail').value
-            const productPrice = document.getElementById('productPrice').value
-
-            
-
-
-            document.getElementById("type").innerHTML = productType
-            document.getElementById("name").innerHTML = productName
-            document.getElementById("about").innerHTML = productDesc
-            document.getElementById("color").innerHTML = productColor
-            document.getElementById("size").innerHTML = productSize
-            document.getElementById("quantity").innerHTML = productQuantity
-            document.getElementById("seller").innerHTML = sellerName
-            document.getElementById("org").innerHTML = organization
-            document.getElementById("add").innerHTML = sellerAddress
-            document.getElementById("contact").innerHTML = sellerPhone
-            document.getElementById("price").innerHTML = productPrice
-        }
-        var loadFile = function (event) {
+            var loadFile = function (event) {
                 var output = document.getElementById('output');
                 output.src = URL.createObjectURL(event.target.files[0]);
                 output.onload = function () {
@@ -319,89 +316,89 @@
                 }
             };
 
-        function validateForm() {
-            var x, y, i, valid = true;
-            x = document.getElementsByClassName("tab");
-            y = x[currentTab].getElementsByTagName("input");
-            for (i = 0; i < y.length; i++) {
-                if (y[i].value == "") {
-                    y[i].className += " invalid";
-                    valid = false;
+            function validateForm() {
+                var x, y, i, valid = true;
+                x = document.getElementsByClassName("tab");
+                y = x[currentTab].getElementsByTagName("input");
+                for (i = 0; i < y.length; i++) {
+                    if (y[i].value == "") {
+                        y[i].className += " invalid";
+                        valid = false;
+                    }
+
+
                 }
-
-
+                if (valid) {
+                    document.getElementsByClassName("step")[currentTab].className += " finish";
+                }
+                return valid;
             }
-            if (valid) {
-                document.getElementsByClassName("step")[currentTab].className += " finish";
+
+            function fixStepIndicator(n) {
+                var i, x = document.getElementsByClassName("step");
+                for (i = 0; i < x.length; i++) {
+                    x[i].className = x[i].className.replace(" active", "");
+                }
+                x[n].className += " active";
             }
-            return valid;
-        }
 
-        function fixStepIndicator(n) {
-            var i, x = document.getElementsByClassName("step");
-            for (i = 0; i < x.length; i++) {
-                x[i].className = x[i].className.replace(" active", "");
+
+
+
+            // Handling user input
+            window.onload = function () {
+                const form = document.getElementById("regForm")
             }
-            x[n].className += " active";
-        }
+            form.addEventListener("submit", registerProduct)
+
+            async function registerProduct(event) {
+                event.preventDefault()
+                const productType = document.getElementById('productType').value
+                const sellerName = document.getElementById('sellerName').value
+                const orgn = document.getElementById('organization')
+                const organization = orgn.options[orgn.selectedIndex].text
+                const sellerAddress = document.getElementById('sellerAddress').value
+                const productName = document.getElementById('productName').value
+                const image = document.getElementById('image').value
+                const productQuantity = document.getElementById('productQuantity').value
+                const productDesc = document.getElementById('productDesc').value
+                const productColor = document.getElementById('productColor').value
+                const productSize = document.getElementById('productSize').value
+                const sellerPhone = document.getElementById('sellerPhone').value
+                const sellerEmail = document.getElementById('sellerEmail').value
+                const productPrice = document.getElementById('productPrice').value
 
 
+                const result = await fetch('/productReg', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productType,
+                        sellerName,
+                        organization,
+                        sellerAddress,
+                        productName,
+                        image,
+                        productQuantity,
+                        productDesc,
+                        productColor,
+                        productSize,
+                        sellerPhone,
+                        sellerEmail,
+                        productPrice
+                    })
+                }).then((res) => res.json())
 
-
-        // Handling user input
-        window.onload = function () {
-            const form = document.getElementById("regForm")
-        }
-        form.addEventListener("submit", registerProduct)
-
-        async function registerProduct(event) {
-            event.preventDefault()
-            const productType = document.getElementById('productType').value
-            const sellerName = document.getElementById('sellerName').value
-            const orgn = document.getElementById('organization')
-            const organization = orgn.options[orgn.selectedIndex].text
-            const sellerAddress = document.getElementById('sellerAddress').value
-            const productName = document.getElementById('productName').value
-            const image = document.getElementById('image').value
-            const productQuantity = document.getElementById('productQuantity').value
-            const productDesc = document.getElementById('productDesc').value
-            const productColor = document.getElementById('productColor').value
-            const productSize = document.getElementById('productSize').value
-            const sellerPhone = document.getElementById('sellerPhone').value
-            const sellerEmail = document.getElementById('sellerEmail').value
-            const productPrice = document.getElementById('productPrice').value
-
-
-            const result = await fetch('/productReg', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    productType,
-                    sellerName,
-                    organization,
-                    sellerAddress,
-                    productName,
-                    image,
-                    productQuantity,
-                    productDesc,
-                    productColor,
-                    productSize,
-                    sellerPhone,
-                    sellerEmail,
-                    productPrice
-                })
-            }).then((res) => res.json())
-
-            if (result.status === 'ok') {
-                // everythign went fine
-                alert('Success')
-            } else {
-                alert(result.error)
+                if (result.status === 'ok') {
+                    // everythign went fine
+                    alert('Success')
+                } else {
+                    alert(result.error)
+                }
             }
-        }
-    </script>
+        </script>
 
 </body>
 

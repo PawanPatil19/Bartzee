@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/buttons.css">
+    <link rel="stylesheet" href="../css/product.css">
+    <link rel="stylesheet" href="../css/dropdown.css">
+    <link rel="stylesheet" href="../css/profile.css">
+
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Bartzee</title>
+</head>
+
+<body>
+    <%- include('partials/header', {user: user, count: count, search: null, msg: msg}); %>
+
+
+        <div class="container mt-lg-5">
+            <div class="row d-flex justify-content-center align-items-center">
+                <div class="col-md-10">
+                    <form id="regForm" method="post">
+                        <h1 id="register">Update your product details</h1>
+                        <br>
+                        <% for (var i in product) { %>
+                            <h6>Name</h6>
+                            <p>
+                                <input value="<%= product[i].sellerName%>" oninput="this.className = ''"
+                                    id="sellerName">
+                            </p>
+                            <% } %>
+
+
+                                <h6>Organization</h6>
+                                <p>
+                                    <select type="text" name="organization" id="organization" class='input-select'>
+                                        <option>Select your school/university/office..</option>
+                                        <% for (var i in Organization) { %>
+                                            <% if(Organization[i].org==user.organization) {%>
+                                                <option value="<%= Organization[i].org %>" class="input_field" selected>
+                                                    <%= Organization[i].org %>, <%= Organization[i].country %>
+                                                </option>
+                                                <% } else { %>
+                                                    <option value="<%= Organization[i].org %>" class="input_field">
+                                                        <%= Organization[i].org %>, <%= Organization[i].country %>
+                                                    </option>
+                                                    <% } %>
+                                                        <% } %>
+                                    </select>
+                                </p>
+                                <% for (var i in product) { %>
+                                    <h6>Address</h6>
+                                    <p><input value="<%= product[i].sellerAddress%>" oninput="this.className = ''"
+                                            name="sellerAddress" id="sellerAddress">
+                                    </p>
+                                    <% } %>
+
+                                        <% for (var i in product) { %>
+                                            <h6>Product Type</h6>
+                                            <p>
+                                                <select class="form-select"
+                                                    placeholder="Select the type of product you are selling..."
+                                                    type="text" name="productType" id="productType" class='input_field'>
+                                                    <option selected><%= product[i].productType %></option>
+                                                    <option>Electronics</option>
+                                                    <option>Stationary</option>
+                                                    <option>Sport Equipments</option>
+                                                    <option>Gaming</option>
+                                                    <option>Clothing</option>
+                                                    <option>Student Resources</option>
+                                                    <option>Books</option>
+                                                    <option>Room Decor</option>
+                                                    <option>Hardware</option>
+                                                    <option>Household</option>
+                                                    <option>Others</option>
+                                                </select>
+                                            </p>
+
+                                            <h6>Product Name</h6>
+                                            <p><input value="<%= product[i].productName%>" oninput="this.className = ''"
+                                                    name="productName" id="productName">
+                                            </p>
+
+                                            <p>
+                                            <h6>Product Description</h6>
+                                            <textarea class="form-control" id="productDesc"
+                                                name="productDesc"><%= product[i].productDesc%></textarea>
+                                            </p>
+                                            <h6>Quantity</h6>
+                                            <p>
+                                                <input value="<%= product[i].productQuantity%>"
+                                                    oninput="this.className = ''" name="productQuantity"
+                                                    id="productQuantity">
+                                            </p>
+
+
+
+                                            <p>
+                                            <h6>Color</h6>
+                                            <input value="<%= product[i].productColor%>" oninput="this.className = ''"
+                                                name="productColor" id="productColor">
+                                            </p>
+
+                                            <p>
+                                            <h6>Size</h6>
+                                            <input value="<%= product[i].productSize%>" oninput="this.className = ''"
+                                                name="productSize" id="productSize">
+                                            </p>
+
+                                            <h6>Contact</h6>
+                                            <p><input value="<%= product[i].sellerPhone%>" oninput="this.className = ''"
+                                                name="sellerPhone" id="sellerPhone"></p>
+
+
+                                            <h6>Price</h6>
+                                            <p>
+                                            <div class="input-group flex-nowrap">
+                                                <span class="input-group-text" id="addon-wrapping">$</span>
+                                                <input value="<%= product[i].productPrice%>"
+                                                    oninput="this.className = ''" name="productPrice" id="productPrice">
+                                            </div>
+                                            </p>
+                                            <% } %>
+
+                                                <br>
+
+
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <input type="submit" value="Update" id='input_submit' class='btn btn-outline-dark btn-lg' style="width:10%;">
+                                                    <a href="/sellCart"><button class="btn btn-outline-dark btn-lg"
+                                                            type="button">Cancel</button></a>
+                                                </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+        <script>
+            window.onload = function () {
+                const form = document.getElementById("regForm")
+            }
+            form.addEventListener("submit", updateProduct)
+
+            async function updateProduct(event) {
+                event.preventDefault()
+                const productType = document.getElementById('productType').value
+                const sellerName = document.getElementById('sellerName').value
+                const orgn = document.getElementById('organization')
+                const organization = orgn.options[orgn.selectedIndex].text
+                const sellerAddress = document.getElementById('sellerAddress').value
+                const productName = document.getElementById('productName').value
+                const productQuantity = document.getElementById('productQuantity').value
+                const productDesc = document.getElementById('productDesc').value
+                const productColor = document.getElementById('productColor').value
+                const productSize = document.getElementById('productSize').value
+                const sellerPhone = document.getElementById('sellerPhone').value
+                const productPrice = document.getElementById('productPrice').value
+
+
+                const result = await fetch('/productReg', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        productType,
+                        sellerName,
+                        organization,
+                        sellerAddress,
+                        productName,
+                        productQuantity,
+                        productDesc,
+                        productColor,
+                        productSize,
+                        sellerPhone,
+                        productPrice
+                    })
+                }).then((res) => res.json())
+
+                if (result.status === 'ok') {
+                    // everythign went fine
+                    alert('Success')
+                } else {
+                    alert(result.error)
+                }
+            }
+        </script>
+
+
+
+</body>
+
+</html>

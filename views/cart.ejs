@@ -25,7 +25,8 @@
 
 
 <body>
-  <%- include('partials/header', {user: user, count: count, search: null}); %>
+  
+  <%- include('partials/header', {user: user, count: count, msg: msg, search: null}); %>
     <br>
     <h1>YOUR CART</h1>
     <hr style="width: 80%; margin:auto;">
@@ -48,32 +49,32 @@
             <div class="card-body">
               <% var item=Number(i) + 1; %>
                 <small class="text-muted">Item # <%= item %></small>
-                <h5 class="card-title"><b>
+                <h5 class="card-title" style="text-transform: capitalize;"><b>
                     <%= orders[i].productName %>
                   </b></h5>
-                <p class="card-text">Color: <%= orders[i].productColor %> <b>|</b> Size: <%= orders[i].productSize %>
+                <p class="card-text" style="text-transform: capitalize;">Color: <%= orders[i].productColor %> <b>|</b> Size: <%= orders[i].productSize %>
                       <b>|</b> Quantity: <%= orders[i].productQuantity %>
                 </p>
                 <p class="card-text">$ <%= orders[i].productPrice %>
                 </p>
-                <p class="card-text"><small class="text-muted">Seller: <%= orders[i].sellerName %>, <%=
+                <p class="card-text" style="text-transform: capitalize;"><small class="text-muted">Seller: <%= orders[i].sellerName %>, <%=
                         orders[i].organization %></small></p>
             </div>
           </div>
           <div class="col-md-2" style="margin:auto;">
             <div class="d-grid gap-2">
               <a href="/review/<%= orders[i]._id %>">
-                <button class="btn btn-outline-warning" type="button"><i class="fa fa-search" aria-hidden="true"></i>
+                <button class="btn btn-outline-warning" type="button" style="width:100%;"><i class="fa fa-search" aria-hidden="true"></i>
                   View Item Details</button>
               </a>
               <a href="/removeCart/<%= orders[i]._id %>">
-                <button class="btn btn-outline-warning" type="button"><i class="fa fa-trash" aria-hidden="true"></i>
+                <button class="btn btn-outline-warning" type="button" style="width:100%;"><i class="fa fa-trash" aria-hidden="true"></i>
                   Remove from cart</button>
               </a>
               <form method="post" id="room-id">
                 <input type="hidden" id="chatRoomID" value="<%= orders[i]._id %>">
                 <a href="/chatInterface/<%= orders[i]._id %>">
-                  <button class="btn btn-outline-warning" id="chatBtn" type="button" value="<%= orders[i]._id %>"><i
+                  <button class="btn btn-outline-warning" id="chatBtn" style="width:100%;" type="button" value="<%= orders[i]._id %>"><i
                       class="fa fa-comments-o" aria-hidden="true"></i>
                     Chat with Seller</button>
                 </a>

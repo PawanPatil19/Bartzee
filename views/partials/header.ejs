@@ -60,7 +60,8 @@
             <div class="header-buttons">
                 <% if (user) { %>
                     <a href="/cart"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
-                                class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span class="circle-number">
+                                class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span
+                                class="badge bg-warning ms-1">
                                 <%= count %>
                             </span></button></a>
 
@@ -82,8 +83,8 @@
 
                     <% } else { %>
                         <a href="/users/login"><button class="btn btn-outline-warning btn-lg" type="button"
-                                style="width: 30%;"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span
-                                    class="circle-number">
+                                style="width: 30%;"><i class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;
+                                <span class="badge bg-warning ms-1">
                                     <%= count %>
                                 </span></button></a>
 
@@ -99,7 +100,8 @@
 
 <!-- Menu Bar -->
 <nav class="navbar bg-light">
-    <form class="container-fluid justify-content-start">
+    <div class="container-fluid">
+
         <div class="dropdown">
             <button class="dropbtn"><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;&nbsp;Menu</button>
             <div class="dropdown-content">
@@ -119,7 +121,36 @@
                                 Us</a>
             </div>
         </div>
-    </form>
+
+
+        <span class="navbar-text">
+            <div class="dropdown" style="float:right;">
+                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-bell-o fa-lg" aria-hidden="true"></i>
+                    <span class="badge rounded-pill bg-danger badge-dot">0</span>
+                </button>
+                <div class="dropdown-content-notif">
+                    <div style="text-align: center;"><b>Notifications</b></div>
+                    <br>
+                    <% for (var i in msg) {%>
+                    <a class="dropdown-item" href="#">• <%= msg[i].notif %>
+                    <br>
+                    <div style="text-align: right;"><small><%= msg[i].date.toLocaleDateString() %></small></div>
+                    </a>
+                    <hr>
+                    <% } %>
+                </div>
+            </div>
+
+
+
+
+
+        </span>
+
+    </div>
+
 
 </nav>
 
@@ -136,8 +167,6 @@
 
         <script>
             var searchQuery = document.getElementById('searchBar').value;
-
-
             var inp = document.getElementById("searchBar");
 
             inp.addEventListener("keyup", function (event) {
@@ -147,9 +176,14 @@
                 }
             });
 
-            function search() {
+            function search(event) {
                 var searchQuery = document.getElementById('searchBar').value;
-                window.location.href = `/search/${searchQuery}`;
+                if (searchQuery.trim().length == 0) {
+                    event.preventDefault();
+                } else {
+                    window.location.href = `/search/${searchQuery}`;
+                }
+
             }
 
         </script>
