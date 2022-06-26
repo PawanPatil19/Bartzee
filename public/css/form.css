@@ -9,7 +9,7 @@
 }
 
 #register{
-  color: #6A1B9A;
+  color: #06283D;
 }
 
 h1 {
@@ -40,12 +40,11 @@ input {
 
 .tab input:focus{
 
-  border:1px solid #6a1b9a !important;
+  border:1px solid #06283D !important;
   outline: none;
 }
 
 input.invalid {
- 
     border:1px solid #e03a0666;
 }
 
@@ -57,7 +56,7 @@ input.invalid {
 }
 
 button {
-    background-color: #6A1B9A;
+    background-color: #06283D;
     color: #ffffff;
     border: none;
     border-radius: 50%;
@@ -101,7 +100,7 @@ button:focus{
     justify-content: center;
     align-items: center;
     font-size: 15px;
-    color: #6a1b9a;
+    color: #06283D;
     opacity: 0.5;
 }
 
@@ -112,7 +111,7 @@ button:focus{
 
 .step.finish {
    color: #fff;
-   background: #6a1b9a;
+   background: #06283D;
    opacity: 1;
 
 }

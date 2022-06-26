@@ -72,7 +72,7 @@
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content-notif a:hover {
+.dropdown-content-notif i:hover {
   background-color: #f1f1f1
 }
 
@@ -80,3 +80,9 @@
 .dropdown:hover .dropdown-content-notif {
   display: block;
 }
+
+.nav-item a:hover {
+  background-color: #DFF6FF;
+  border-radius: 30px;
+}
+
