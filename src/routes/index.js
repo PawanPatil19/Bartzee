@@ -282,7 +282,7 @@ router.get("/deleteUser", function (req, res) {
 				if (err) {
 					console.log("Error:", err);
 				}
-				res.render("index", { layout: false, product: product, user: null, count: 0, msg: null });
+				res.render("index", { layout: false, product: product, search: null, user: null, count: 0, msg: null });
 
 			});
 		} else {
