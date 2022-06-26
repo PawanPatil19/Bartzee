@@ -28,78 +28,15 @@
     <div id="div-main" class="animate-bottom" style="display: none;">
         <%- include('partials/header', {user: user, count: count, search: search, msg: msg}); %>
 
-            <!-- 
-    
-    <div class="container" id="div-main">
-        <div class="logo">
-            <a class="navbar-brand mt-2" href="/"><img src="../orbitalLogo.png" style="width:200px;height:60px;"></a>
-        </div>
-
-
-        <div class="box">
-            <i class="fa fa-search" aria-hidden="true"></i>
-            <input type="text" name="">
-        </div>
-
-
-        <div class="header-buttons">
-            <a href="/cart"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
-                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart</button></a>
-
-
-            <% if (user) { %>
-
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary btn-lg dropbtn"><i class="fa fa-user-circle-o" aria-hidden="true"></i>&nbsp;Hi <%=
-                            user.name%>!</button>
-                    <div class="dropdown-content">
-                        <a class="dropdown-item" href="/"><i class="fa fa-user" aria-hidden="true"></i>
-                            &nbsp;Profile</a>
-                        <a class="dropdown-item" href="/users/logout"><i class="fa fa-sign-out" aria-hidden="true"></i>
-                            &nbsp;Logout</a>
-                        <a class="dropdown-item" href="#"><i class="fa fa-question-circle" aria-hidden="true"></i>
-                            &nbsp;Help</a>
-                    </div>
-                </div>
-
-
-                <% } else { %>
-                    <a href="/users/login"><button class="btn btn-outline-secondary btn-lg" type="button"
-                            style="width: 30%;"><i class="fa fa-sign-in"></i>&nbsp;&nbsp;Login</button></a>
-                    <% } %>
-        </div>
-
-    </div>
-
-
-    
-    <nav class="navbar bg-light">
-        <form class="container-fluid justify-content-start">
-            <div class="dropdown">
-                <button class="dropbtn"><i class="fa fa-bars" aria-hidden="true"></i>&nbsp;&nbsp;Menu</button>
-                <div class="dropdown-content">
-                    <a href="/">Home</a>
-                    <% if (user) { %>
-                    <a href="/productReg">Sell your item</a>
-                    <% } else { %>
-                    <a href="/users/login">Sell your item</a>
-                    <% } %>
-                    <a href="/">About Us</a>
-                </div>
-            </div>
-
-        </form>
-    </nav> -->
-
             <!-- Main Body -->
             <div class="container-main">
-                <div class="row">
+                <div class="column">
                     <div class="card-deck">
                         <% for (var i in product) { %>
 
-                            <div class="card" style="height: 600px; width: 20rem;">
+                            <div class="card" style="height: 600px; width: 20rem; border-radius: 15px;">
                                 <img src="data:image/<%= product[i].image.contentType%>;base64,
-                    <%=product[i].image.data.toString('base64')%>" style="height:300px;" class="card-img-top"
+                    <%=product[i].image.data.toString('base64')%>" style="height:300px;border-radius: 15px;" class="card-img-top"
                                     alt="...">
                                 <div class="card-body">
                                     <h6 class="prdType">

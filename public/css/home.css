@@ -1,24 +1,30 @@
 .container-main {
+    display: flex;
     margin: auto;
-    width: 90%;
     padding: 20px;
+    background-color: #f6f6f6;
+    justify-content: center;
 }
 
 .prdType {
     text-transform: uppercase;
-    color: darkgoldenrod;
+    color: #222831;
 }
 
 .card-main {
-    height: 200px;
+    background: white;
+    margin: 10px;
+    
 }
 
+
 .card-deck{
-    margin-top: 10px;
-    margin-left: auto;
+    margin: 30px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    grid-gap: .1rem;
+    max-width: 1400px;
+    grid-gap: 5rem;
+    border-radius: 1cm;
 }
 
 .circle-number {

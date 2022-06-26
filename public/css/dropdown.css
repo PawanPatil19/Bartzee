@@ -84,5 +84,6 @@
 .nav-item a:hover {
   background-color: #DFF6FF;
   border-radius: 30px;
+  transform: scale(1.2);
 }
 
