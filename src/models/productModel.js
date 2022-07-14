@@ -22,7 +22,9 @@ const productSchema = mongoose.Schema(
         sellerPhone: { type: String, required: false },
         sellerEmail: { type: String, required: false },
         productPrice: { type: Number, required: false },
-        buyer: { type: String, sparse: false, default: null }
+        orderStatus: {type: String, default: 0},
+        buyer: { type: String, sparse: false, default: null },
+        buyerName:{type:String, default:null}
     },
     { collection: 'products' }
 );

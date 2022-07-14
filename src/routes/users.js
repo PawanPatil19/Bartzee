@@ -38,11 +38,23 @@ router.get('/register', (req, res) => {
 
 //Register handle
 router.post('/login', (req, res, next) => {
-    passport.authenticate('local', {
-        successRedirect: '/',
-        failureRedirect: '/error',
-        failureFlash: true
-    })(req, res, next)
+	User.find({'email': req.body.email}, function(err, user) {
+		for(var i in user) {
+			if(user[i].admin) {
+				passport.authenticate('local', {
+					successRedirect: '/admin',
+					failureRedirect: '/error',
+					failureFlash: true
+				})(req, res, next)
+			} else{
+				passport.authenticate('local', {
+					successRedirect: '/',
+					failureRedirect: '/error',
+					failureFlash: true
+				})(req, res, next)
+			}
+		}
+	})
 })
 
 // Post Registration

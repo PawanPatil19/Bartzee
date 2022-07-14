@@ -10,7 +10,13 @@ const userSchema = mongoose.Schema(
 		password: { type: String, required: true },
 		phone: { type: String, required: true },
 		organization: { type: String, required: true },
-		date: { type: Date, default: Date.now }
+		image:
+        {
+            data: Buffer,
+            contentType: String
+        },
+		date: { type: Date, default: Date.now },
+		admin: {type: String, default: null}
 
 	},
 	{ collection: 'users' }

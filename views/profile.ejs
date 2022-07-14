@@ -16,6 +16,8 @@
     <link rel="stylesheet" href="../css/dropdown.css">
     <link rel="stylesheet" href="../css/profile.css">
 
+
+
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -26,44 +28,117 @@
 
 <body>
     <%- include('partials/header', {user: user, count: count, search: null, msg: msg}); %>
-
-        <div class="container-profile">
-            <div class="profile-image" style="text-align: center;">
-                <i class="fa fa-user-circle-o" style="font-size:110px"></i><br>
-                <a href=""><small>Upload profile picture</small></a>
-                <br><br>
-                <a href="/updateProfile" data-bs-toggle="tooltip" data-bs-placement="left" title="Edit"><i class="fa fa-edit fa-lg" ></i></a>
-                &nbsp;&nbsp;
-                <a href="/deleteUser" data-bs-toggle="tooltip" data-bs-placement="right" title="Delete your profile"><i class="fa fa-trash fa-lg"></i></a>
-            </div>
-            <br><br>
-            <div class="profile-main">
-                <label class="profile-labels">Name</label>
-                <p class="profile-data"><%= user.name %></p>
-                <br>
-                <label class="profile-labels">Contact Number</label>
-                <p class="profile-data"><%= user.phone %></p>
-                <br>
-                <label class="profile-labels">Contact Email</label>
-                <p class="profile-data"><%= user.email %></p>
-                <br>
-                <label class="profile-labels">Organization</label>
-                <p class="profile-data"><%= user.organization %></p>
-                <br>
-                <label class="profile-labels">Date on which account was created</label>
-                <p class="profile-data"><%= user.date %></p>
-                <br>
-            </div>
-            <br>
-            <div style="text-align: center;">
-                <a href="/deleteUser"><button type="button" class="btn btn-outline-danger btn-lg" >Delete profile</button></a>
-                <a href="/"><button type="button" class="btn btn-outline-warning btn-lg" >Home</button></a>
-            </div>
+        <% for(var i in user) { %>
+        <div id="form_wrapper">
             
+            <div class="form_left">
+                <div class="row">
+                    <div class="circle">
+                        <% if(user[i].image) { %>
+                            <img class="profile-pic" src="data:image/<%= user[i].image.contentType%>;base64,
+                                <%=user[i].image.data.toString('base64')%>">
+
+                            <% } else { %>
+                                <img class="profile-pic"
+                                    src="https://t3.ftcdn.net/jpg/03/46/83/96/360_F_346839683_6nAPzbhpSkIpb8pmAwufkC7c5eD7wYws.jpg">
+
+                                <% } %>
+                    </div>
+                </div>
+                <br>
+
+                <form method="post" id="profilePicture" enctype="multipart/form-data">
+
+                    <div class="input-group">
+                        <input type="file" class="form-control" id="image" name="image" accept="image/*"
+                            aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04"><i
+                                class="fa fa-camera upload-button"></i>&nbsp;Upload</button>
+                    </div>
+                </form>
+
+
+
+            </div>
+            <div class="form_right">
+
+                <br><br>
+                <div class="profile-main">
+                    <label class="profile-labels">Name</label>
+                    <p class="profile-data">
+                        <%= user[i].name %>
+                    </p>
+                    <br>
+                    <label class="profile-labels">Contact Number</label>
+                    <p class="profile-data">
+                        <%= user[i].phone %>
+                    </p>
+                    <br>
+                    <label class="profile-labels">Contact Email</label>
+                    <p class="profile-data">
+                        <%= user[i].email %>
+                    </p>
+                    <br>
+                    <label class="profile-labels">Organization</label>
+                    <p class="profile-data">
+                        <%= user[i].organization %>
+                    </p>
+                    <br>
+                    <label class="profile-labels">Date on which account was created</label>
+                    <p class="profile-data">
+                        <%= user[i].date %>
+                    </p>
+                    <br>
+                </div>
+                <br>
+                <div style="text-align: center;">
+                    <a href="/updateProfile"><button type="button"
+                            class="btn btn-outline-primary btn-lg">Edit</button></a>
+                    <a href="/deleteUser"><button type="button"
+                            class="btn btn-outline-primary btn-lg">Delete</button></a>
+                    <a href="/"><button type="button" class="btn btn-outline-primary btn-lg">Home</button></a>
+                </div>
+            </div>
+
+
 
         </div>
+        <% } %>
 
 
+        <script>
+
+
+
+            window.onload = function () {
+                const form = document.getElementById("profilePicture")
+            }
+            form.addEventListener("submit", updateProfileImage)
+
+            async function updateProfileImage(event) {
+                event.preventDefault()
+                const image = document.getElementById('image').value
+                console.log(profileImage)
+
+
+                const result = await fetch('/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        image
+                    })
+                }).then((res) => res.json())
+
+                if (result.status === 'ok') {
+                    // everythign went fine
+                    alert('Success')
+                } else {
+                    alert(result.error)
+                }
+            }
+        </script>
 
 </body>
 

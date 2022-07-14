@@ -1,5 +1,5 @@
 .container-profile {
-    width:30%;
+    width:70%;
     margin:auto;
     border-radius: 50px;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
@@ -17,4 +17,85 @@
 .profile-data {
     font-size: 15px;
     font-weight: 400;
+}
+
+#form_wrapper {
+    width: 950px;
+    /* this will help us center it*/
+    margin:auto;
+    background-color: var(--form_bg);
+    border-radius: 50px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    /* make it a grid container*/
+    display: grid;
+    /* with two columns of same width*/
+    grid-template-columns: 1fr 1fr;
+    /* with a small gap in between them*/
+    grid-gap: 5vw;
+    /* add some padding around */
+    padding: 50px;    
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#form_left {
+    /* center the image */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    padding-left: 50px;
+    
+}
+
+
+#form_right {
+    display: grid;
+    /* single column layout */
+    grid-template-columns: 1fr;
+    /* have some gap in between elements*/
+    grid-gap: 10px;
+    padding: 5% 5%;
+}
+
+
+
+/* Profile Picture Upload */
+
+
+.profile-pic {
+    
+    height: 400px;
+    width: 400px;
+    border-radius: 100%;
+    
+}
+
+.circle {
+    border-radius: 100%;    
+    width: 400px;
+    height: 400px;
+    text-align: center;
+}
+
+.p-image {
+  position: relative;
+  margin: auto;  
+  color: #666666;
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+  
+}
+.p-image:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+}
+.upload-button {
+  font-size: 1.2em;
+}
+
+.upload-button:hover {
+  transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+  color: #999;
+}
+.profile-pic:hover {
+    transform: scale(1.05);
+    
 }

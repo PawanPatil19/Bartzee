@@ -1,0 +1,59 @@
+html, body {
+    margin: 0px;
+    height: 100%;
+}
+
+
+.container-admin {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 20% 80%;
+    height: 100vh;
+}
+
+.container-admin {
+    display: grid;
+    grid-template-rows: auto;
+    grid-template-columns: 20% 80%;
+    height: 100vh;
+}
+
+.menu  {
+    background-color: darkslategray;
+    color: white;
+}
+.admin-view {
+    padding: 20px;
+}
+
+.list-group-menu button.active {
+    background-color: orange;
+}
+
+
+
+.list-group-menu .list-group-item {
+    color: white;
+    background-color: darkslategray;
+    border: 0;
+    padding:20px;
+    
+    text-align: left;
+    
+  }
+  
+  .list-group-menu .list-group-item:hover {
+    background-color: orange;
+    width: 100%;
+    color: black;
+  }
+
+  .tabcontent {
+    animation: fadeEffect 1s; /* Fading effect takes 1 second */
+  }
+  
+  /* Go from zero to full opacity */
+  @keyframes fadeEffect {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }

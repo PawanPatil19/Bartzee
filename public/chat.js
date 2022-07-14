@@ -28,6 +28,7 @@ function userJoinLeft(name, status) {
     chatPanel.scrollTop = chatPanel.scrollHeight;
 }
 
+
 socket.on('user-disconnected', (user) => {
     console.log('user-disconnected')
     //userJoinLeft(user, 'left');
@@ -47,6 +48,7 @@ chat.addEventListener('submit', event => {
         socket.emit('message', roomID, data)
         input.value = '';
     }
+    
 })
 
 

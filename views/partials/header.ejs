@@ -129,7 +129,11 @@
                     <button class="btn bg-transparent dropdown-toggle" type="button" id="dropdownMenuButton1"
                         data-bs-toggle="dropdown" aria-expanded="false" style="color:white; ">
                         <i class="fa fa-bell-o fa-lg" aria-hidden="true"></i>
-                        <span class="badge rounded-pill bg-danger badge-dot">0</span>
+                        <% if(msg) {%>
+                        <span class="badge rounded-pill bg-danger badge-dot"><%= msg.length %></span>
+                        <% } else { %>
+                            <span class="badge rounded-pill bg-danger badge-dot">0</span>
+                        <% } %>
                     </button>
                     <div class="dropdown-content-notif">
                         <div style="text-align: center;"><b>Notifications</b></div>

@@ -69,23 +69,23 @@
                                         aria-hidden="true"></i>
                                     View Item </button>
                             </a>
-                            <a href="/deleteItem/<%= sellItems[i]._id %>">
-                                <button class="btn btn-outline-warning" type="button" onclick="deleteItem()" style="width:100%;"><i
-                                        class="fa fa-trash" aria-hidden="true"></i>
-                                    Delete Item</button>
-                            </a>
-
                             <a href="/chatInterface/<%= sellItems[i]._id %>">
                                 <button class="btn btn-outline-warning" id="chatBtn" type="button" style="width:100%;"><i
                                         class="fa fa-comments-o" aria-hidden="true"></i>
                                     Chat with Buyer</button>
-                            </a>
+                            </a>                        
 
                             <a href="/editProduct/<%= sellItems[i]._id %>">
                                 <button class="btn btn-outline-warning" type="button" style="width:100%;"><i
                                         class="fa fa-edit" aria-hidden="true"></i>
                                     Edit Item</button>
                             </a>
+                            <a href="/deleteItem/<%= sellItems[i]._id %>">
+                                <button class="btn btn-outline-warning" type="button" onclick="deleteItem()" style="width:100%;"><i
+                                        class="fa fa-trash" aria-hidden="true"></i>
+                                    Delete Item</button>
+                            </a>
+
 
 
                         </div>

@@ -20,6 +20,7 @@ var Auth0Strategy = require("passport-auth0");
 const router = express.Router();
 const { ensureAuthenticated } = require('../config/auth')
 var mongo = require('mongodb');
+var XLSX = require('xlsx');
 
 var MongoClient = mongo.MongoClient;
 
@@ -42,7 +43,7 @@ var upload = multer({ storage: storage });
 //login page
 router.get('/', (req, res) => {
 	//console.log("1: ", req.user)
-	Product.find({ 'buyer': null }).exec(function (err, product) {
+	Product.find({ 'buyer': null }).sort({ _id: -1 }).exec(function (err, product) {
 		if (req.user) {
 			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
 				if (err) {
@@ -119,6 +120,7 @@ router.get("/productReg", ensureAuthenticated, (req, res) => {
 
 //Post Product registration
 router.post("/productReg", upload.single('image'), (req, res) => {
+	console.log(req.file)
 
 	var img = fs.readFileSync(req.file.path);
 	var encode_img = img.toString('base64');
@@ -180,7 +182,7 @@ router.get("/review", (req, res) => {
 			console.log("Error:", err);
 		}
 		Notif.find({ 'email': req.user.email }, function (err, msg) {
-			res.render("review", { msg: msg, layout: false, user: req.user, count: numberOfOrders.length });
+			res.render("review", {msg: msg, layout: false, user: req.user, count: numberOfOrders.length });
 		})
 	});
 })
@@ -210,14 +212,14 @@ router.get("/review/:id", (req, res) => {
 					}
 				})
 			}
-			res.render('review', { prd: prd, layout: false, user: req.user, count: 0, msg: null });
+			res.render('review', { prd: prd, layout: false, user: req.user, count: 0, msg: null, notifCount: 0 });
 		}
 
 	})
 })
 
 router.post("/review/:id", (req, res) => {
-	Product.updateOne({ '_id': req.params.id }, { buyer: req.user._id }, function (err, docs) {
+	Product.updateOne({ '_id': req.params.id }, { buyer: req.user._id, buyerName: req.user.name }, function (err, docs) {
 		if (err) {
 			console.log(err)
 		}
@@ -240,7 +242,7 @@ router.post("/review/:id", (req, res) => {
 					console.log("Error:", err);
 				}
 				Notif.find({ 'email': req.user.email }, function (err, msg) {
-					res.render("cart", { msg: msg, orders: numberOfOrders, layout: false, user: req.user, count: numberOfOrders.length });
+					res.render("cart", { notifCount: msg.length,msg: msg, orders: numberOfOrders, layout: false, user: req.user, count: numberOfOrders.length });
 				})
 			});
 
@@ -256,7 +258,7 @@ router.get("/cart", (req, res) => {
 			console.log(err)
 		}
 		Notif.find({ 'email': req.user.email }, function (err, msg) {
-			res.render('cart', { msg: msg, orders: orders, layout: false, user: req.user, count: orders.length, search: null });
+			res.render('cart', { notifCount: msg.length,msg: msg, orders: orders, layout: false, user: req.user, count: orders.length, search: null });
 		})
 	});
 
@@ -269,10 +271,51 @@ router.get("/profile", (req, res) => {
 			console.log(err)
 		}
 		Notif.find({ 'email': req.user.email }, function (err, msg) {
-			res.render('profile', { msg: msg, layout: false, user: req.user, count: orders.length });
+			User.find({ '_id': req.user._id }, function (err, user) {
+				res.render('profile', { msg: msg, layout: false, user: user, count: orders.length });
+			})
 		})
 	});
 })
+
+router.get("/profile/:id", (req, res) => {
+	User.find({ '_id': req.params.id }, function (err, user) {
+		res.render('profile', { msg: null, layout: false, user: user, count: 0 })
+	})
+})
+
+router.post("/profile", upload.single("image"), function (req, res) {
+	console.log(req.file)
+	var img = fs.readFileSync(req.file.path);
+	var encode_img = img.toString('base64');
+	var image = {
+		data: fs.readFileSync(path.join(__dirname, '..', 'uploads', req.file.filename)),
+		contentType: 'image/jpg'
+	}
+
+
+	var myquery = { _id: req.user._id };
+	var newvalues = { $set: { image: image } };
+	User.updateOne(myquery, newvalues, function (err, docs) {
+		if (err) {
+			console.log(err)
+		} else {
+			console.log("Profile Picture updated successfully!")
+			User.find({ _id: req.user._id }).exec((err, user) => {
+				if (err) {
+					console.log(err);
+				} else {
+					Product.find({ 'buyer': req.user._id }, function (err, orders) {
+						Notif.find({ 'email': req.user.email }, function (err, msg) {
+							res.render('profile', { layout: false, user: user, count: orders.length, msg: msg });
+						})
+					});
+				}
+			})
+		}
+	})
+})
+
 
 //Delete user
 router.get("/deleteUser", function (req, res) {
@@ -288,6 +331,33 @@ router.get("/deleteUser", function (req, res) {
 		} else {
 			console.log('Failed to Delete user Details: ' + err);
 		}
+	});
+
+});
+
+router.get("/deleteUser/:id", function (req, res) {
+	User.findByIdAndRemove(req.params.id, (err, doc) => {
+		User.find({}).exec(function (err, users) {
+			Product.find({}).exec(function (err, products) {
+				Product.find({ 'buyer': { $ne: null } }).exec(function (err, orders) {
+					Org.find({}).exec(function (err, orgs) {
+						res.render("admin", {
+							users: users,
+							userCount: users.length,
+							products: products,
+							productCount: products.length,
+							orders: orders,
+							orderCount: orders.length,
+							orgs: orgs,
+							orgCount: orgs.length
+						})
+					})
+
+				})
+
+			})
+
+		})
 	});
 
 });
@@ -401,9 +471,9 @@ router.get("/deleteItem/:id", (req, res) => {
 							})
 						}
 					})
-		
+
 				}
-		
+
 			});
 		}
 	})
@@ -549,6 +619,67 @@ router.post("/editProduct/:id", async (req, res) => {
 
 	})
 })
+
+router.get("/admin", function (req, res) {
+	User.find({}).exec(function (err, users) {
+		Product.find({}).exec(function (err, products) {
+			Product.find({ 'buyer': { $ne: null } }).exec(function (err, orders) {
+				Org.find({}).exec(function (err, orgs) {
+					res.render("admin", {
+						users: users,
+						userCount: users.length,
+						products: products,
+						productCount: products.length,
+						orders: orders,
+						orderCount: orders.length,
+						orgs: orgs,
+						orgCount: orgs.length
+					})
+				})
+
+			})
+
+		})
+
+	})
+})
+
+
+router.get('/exportUserData',(req,res)=>{
+    var wb = XLSX.utils.book_new(); //new workbook
+    User.find((err,data)=>{
+        if(err){
+            console.log(err)
+        }else{
+            var temp = JSON.stringify(data);
+            temp = JSON.parse(temp);
+            var ws = XLSX.utils.json_to_sheet(temp);
+            
+			var down = path.join(__dirname, '..','..','public', 'exportUserData.xlsx')
+           XLSX.utils.book_append_sheet(wb,ws,"sheet1");
+           XLSX.writeFile(wb,down);
+           res.download(down);
+        }
+    });
+});
+
+router.get('/exportProductData',(req,res)=>{
+    var wb = XLSX.utils.book_new(); //new workbook
+    Product.find((err,data)=>{
+        if(err){
+            console.log(err)
+        }else{
+            var temp = JSON.stringify(data);
+            temp = JSON.parse(temp);
+            var ws = XLSX.utils.json_to_sheet(temp);
+            var down = path.join(__dirname, '..','..','public', 'exportProductData.xlsx')
+           XLSX.utils.book_append_sheet(wb,ws,"sheet1");
+           XLSX.writeFile(wb,down);
+           res.download(down);
+        }
+    });
+});
+
 
 
 

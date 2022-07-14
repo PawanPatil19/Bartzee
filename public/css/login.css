@@ -39,10 +39,9 @@ body {
     /* with a small gap in between them*/
     grid-gap: 5vw;
     /* add some padding around */
-    padding: 10px;
-
-    
+    padding: 10px;    
 }
+
 #form_wrapper_re {
     width: 950px;
     /* this will help us center it*/
@@ -55,7 +54,7 @@ body {
     /* with two columns of same width*/
     grid-template-columns: 1fr 1fr;
     /* with a small gap in between them*/
-    grid-gap: 5vw;
+    grid-gap: 2vw;
     /* add some padding around */
     padding: 10px;    
     margin-top: 20px;
@@ -64,21 +63,19 @@ body {
  #form_left {
     /* center the image */
     display: flex;
-    justify-content: center;
     align-items: center;
+    text-align: center;
+    padding-left: 50px;
+    
 }
 
-#form_left img {
-    width: 210px;
-    height: 100px;
-}
 
 #form_right {
     display: grid;
     /* single column layout */
     grid-template-columns: 1fr;
     /* have some gap in between elements*/
-    grid-gap: 20px;
+    grid-gap: 10px;
     padding: 5% 5%;
 }
 
