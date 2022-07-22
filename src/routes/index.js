@@ -4,6 +4,7 @@ var User = require("../models/userModel");
 var Product = require("../models/productModel");
 var Org = require("../models/orgModel");
 var Chat = require("../models/chatModel");
+var History = require("../models/historyModel");
 var Notif = require("../models/notificationModel")
 var passport = require("passport");
 var bodyParser = require("body-parser");
@@ -182,7 +183,7 @@ router.get("/review", (req, res) => {
 			console.log("Error:", err);
 		}
 		Notif.find({ 'email': req.user.email }, function (err, msg) {
-			res.render("review", {msg: msg, layout: false, user: req.user, count: numberOfOrders.length });
+			res.render("review", { msg: msg, layout: false, user: req.user, count: numberOfOrders.length });
 		})
 	});
 })
@@ -242,7 +243,7 @@ router.post("/review/:id", (req, res) => {
 					console.log("Error:", err);
 				}
 				Notif.find({ 'email': req.user.email }, function (err, msg) {
-					res.render("cart", { notifCount: msg.length,msg: msg, orders: numberOfOrders, layout: false, user: req.user, count: numberOfOrders.length });
+					res.render("cart", { notifCount: msg.length, msg: msg, orders: numberOfOrders, layout: false, user: req.user, count: numberOfOrders.length });
 				})
 			});
 
@@ -253,16 +254,77 @@ router.post("/review/:id", (req, res) => {
 
 // Cart page
 router.get("/cart", (req, res) => {
-	Product.find({ 'buyer': req.user._id }, function (err, orders) {
+	Product.find({ $and: [{ "buyer": req.user._id },
+	{ 'orderStatus': {$lt: 2} }] }, function (err, orders) {
 		if (err) {
 			console.log(err)
 		}
 		Notif.find({ 'email': req.user.email }, function (err, msg) {
-			res.render('cart', { notifCount: msg.length,msg: msg, orders: orders, layout: false, user: req.user, count: orders.length, search: null });
+			res.render('cart', { notifCount: msg.length, msg: msg, orders: orders, layout: false, user: req.user, count: orders.length, search: null });
 		})
 	});
 
 })
+
+// Buyer Cart Order Completion
+
+router.get("/buyerOrderCompletion/:productID", function (req, res) {
+	Product.find({ '_id': req.params.productID }, function (err, product) {
+		for (var i in product) {
+
+			if (product[i].orderStatus == 0) {
+				Product.updateOne({ '_id': req.params.productID }, { orderStatus: product[i].orderStatus + 1 }, function (err, docs) {
+					console.log("Order Status Updated")
+				})
+				Product.find({ 'buyer': req.user._id }, function (err, orders) {
+					if (err) {
+						console.log(err)
+					}
+					Notif.find({ 'email': req.user.email }, function (err, msg) {
+						res.render('cart', { notifCount: msg.length, msg: msg, orders: orders, layout: false, user: req.user, count: orders.length, search: null });
+					})
+				});
+			}
+			if (product[i].orderStatus == 1) {
+				var myquery = { roomID: req.params.productID };
+				Chat.remove(myquery, (err, doc) => {
+					if (err) {
+						console.log(err)
+					} else {
+						console.log('Chats deleted for the product')
+					}
+				})
+
+				Product.updateOne({ '_id': req.params.productID }, { orderStatus: product[i].orderStatus + 1 }, function (err, docs) {
+					
+						
+						Product.find({ 'buyer': req.user._id }, function (err, orders) {
+							if (err) {
+								console.log(err)
+							} else {
+								Product.find({ 'sellerEmail': req.user.email }, function (err, sellItems) {
+									if (err) {
+										console.log(err);
+									} else {
+										Notif.find({ 'email': req.user.email }, function (err, msg) {
+											res.render('sellCart', { msg: msg, layout: false, user: req.user, count: orders.length, sellItems: sellItems });
+										})
+									}
+								})
+
+							}
+
+						});
+					})
+				
+			}
+
+
+		}
+	})
+})
+
+
 
 // Profile page
 router.get("/profile", (req, res) => {
@@ -285,7 +347,6 @@ router.get("/profile/:id", (req, res) => {
 })
 
 router.post("/profile", upload.single("image"), function (req, res) {
-	console.log(req.file)
 	var img = fs.readFileSync(req.file.path);
 	var encode_img = img.toString('base64');
 	var image = {
@@ -335,6 +396,7 @@ router.get("/deleteUser", function (req, res) {
 
 });
 
+//Delete user with id for admin purpose
 router.get("/deleteUser/:id", function (req, res) {
 	User.findByIdAndRemove(req.params.id, (err, doc) => {
 		User.find({}).exec(function (err, users) {
@@ -394,7 +456,6 @@ router.get("/removeCart/:id", function (req, res) {
 // Chat Interface
 router.get("/chatInterface/:roomID", function (req, res) {
 	var room = req.params.roomID;
-	console.log(room);
 
 	Product.find({ 'buyer': req.user._id }, function (err, orders) {
 		if (err) {
@@ -422,7 +483,8 @@ router.get("/chatInterface/:roomID", function (req, res) {
 
 // Sell Cart
 router.get("/sellCart", (req, res) => {
-	Product.find({ 'buyer': req.user._id }, function (err, orders) {
+	Product.find({ $and: [{ "buyer": req.user._id },
+	{ 'orderStatus': {$lt: 2} }]}, function (err, orders) {
 		if (err) {
 			console.log(err)
 		} else {
@@ -441,6 +503,74 @@ router.get("/sellCart", (req, res) => {
 	});
 
 })
+
+// Seller Order Completion
+router.get("/sellerOrderCompletion/:productID", function (req, res) {
+	Product.find({ '_id': req.params.productID }, function (err, product) {
+		for (var i in product) {
+
+			if (product[i].orderStatus == 0) {
+				Product.updateOne({ '_id': req.params.productID }, { orderStatus: product[i].orderStatus + 1 }, function (err, docs) {
+					console.log("Order Status Updated")
+				})
+				Product.find({ 'buyer': req.user._id }, function (err, orders) {
+					if (err) {
+						console.log(err)
+					} else {
+						Product.find({ 'sellerEmail': req.user.email }, function (err, sellItems) {
+							if (err) {
+								console.log(err);
+							} else {
+								Notif.find({ 'email': req.user.email }, function (err, msg) {
+									res.render('sellCart', { msg: msg, layout: false, user: req.user, count: orders.length, sellItems: sellItems });
+								})
+							}
+
+						})
+
+					}
+
+				});
+			}
+			if (product[i].orderStatus == 1) {
+				var myquery = { roomID: req.params.productID };
+				Chat.remove(myquery, (err, doc) => {
+					if (err) {
+						console.log(err)
+					} else {
+						console.log('Chats deleted for the product')
+					}
+				})
+
+				Product.updateOne({ '_id': req.params.productID }, { orderStatus: product[i].orderStatus + 1 }, function (err, docs) {
+					
+						console.log("Order Completed!")
+						Product.find({ 'buyer': req.user._id }, function (err, orders) {
+							if (err) {
+								console.log(err)
+							} else {
+								Product.find({ 'sellerEmail': req.user.email }, function (err, sellItems) {
+									if (err) {
+										console.log(err);
+									} else {
+										Notif.find({ 'email': req.user.email }, function (err, msg) {
+											res.render('sellCart', { msg: msg, layout: false, user: req.user, count: orders.length, sellItems: sellItems });
+										})
+									}
+								})
+
+							}
+
+						});
+					})
+				
+			}
+
+
+		}
+	})
+})
+
 
 //Delete Item to sell
 router.get("/deleteItem/:id", (req, res) => {
@@ -478,6 +608,44 @@ router.get("/deleteItem/:id", (req, res) => {
 		}
 	})
 })
+
+
+//Deletion by admin
+router.get("/deleteItemByAdmin/:id", (req, res) => {
+	var myquery = { roomID: req.params.id };
+	Chat.remove(myquery, (err, doc) => {
+		if (err) {
+			console.log(err)
+		} else {
+			console.log('Chats deleted for the product')
+		}
+	})
+
+	Product.findByIdAndRemove(req.params.id, (err, doc) => {
+		User.find({}).exec(function (err, users) {
+			Product.find({}).exec(function (err, products) {
+				Product.find({ 'buyer': { $ne: null } }).exec(function (err, orders) {
+					Org.find({}).exec(function (err, orgs) {
+						res.render("admin", {
+							users: users,
+							userCount: users.length,
+							products: products,
+							productCount: products.length,
+							orders: orders,
+							orderCount: orders.length,
+							orgs: orgs,
+							orgCount: orgs.length
+						})
+					})
+
+				})
+
+			})
+
+		})
+	})
+})
+
 
 //Edit user page
 router.get("/updateProfile", (req, res) => {
@@ -590,7 +758,6 @@ router.post("/editProduct/:id", async (req, res) => {
 			productSize: obj.productSize
 		}
 	};
-	console.log(obj);
 	Product.updateOne(myquery, newvalues, function (err, docs) {
 		if (err) {
 			console.log(err)
@@ -645,40 +812,79 @@ router.get("/admin", function (req, res) {
 })
 
 
-router.get('/exportUserData',(req,res)=>{
-    var wb = XLSX.utils.book_new(); //new workbook
-    User.find((err,data)=>{
-        if(err){
-            console.log(err)
-        }else{
-            var temp = JSON.stringify(data);
-            temp = JSON.parse(temp);
-            var ws = XLSX.utils.json_to_sheet(temp);
-            
-			var down = path.join(__dirname, '..','..','public', 'exportUserData.xlsx')
-           XLSX.utils.book_append_sheet(wb,ws,"sheet1");
-           XLSX.writeFile(wb,down);
-           res.download(down);
-        }
-    });
+router.get('/exportUserData', (req, res) => {
+	var wb = XLSX.utils.book_new(); //new workbook
+	User.find((err, data) => {
+		if (err) {
+			console.log(err)
+		} else {
+			var temp = JSON.stringify(data);
+			temp = JSON.parse(temp);
+			var ws = XLSX.utils.json_to_sheet(temp);
+
+			var down = path.join(__dirname, '..', '..', 'public', 'exportUserData.xlsx')
+			XLSX.utils.book_append_sheet(wb, ws, "sheet1");
+			XLSX.writeFile(wb, down);
+			res.download(down);
+		}
+	});
 });
 
-router.get('/exportProductData',(req,res)=>{
-    var wb = XLSX.utils.book_new(); //new workbook
-    Product.find((err,data)=>{
-        if(err){
-            console.log(err)
-        }else{
-            var temp = JSON.stringify(data);
-            temp = JSON.parse(temp);
-            var ws = XLSX.utils.json_to_sheet(temp);
-            var down = path.join(__dirname, '..','..','public', 'exportProductData.xlsx')
-           XLSX.utils.book_append_sheet(wb,ws,"sheet1");
-           XLSX.writeFile(wb,down);
-           res.download(down);
-        }
-    });
+router.get('/exportProductData', (req, res) => {
+	var wb = XLSX.utils.book_new(); //new workbook
+	Product.find((err, data) => {
+		if (err) {
+			console.log(err)
+		} else {
+			var temp = JSON.stringify(data);
+			temp = JSON.parse(temp);
+			var ws = XLSX.utils.json_to_sheet(temp);
+			var down = path.join(__dirname, '..', '..', 'public', 'exportProductData.xlsx')
+			XLSX.utils.book_append_sheet(wb, ws, "sheet1");
+			XLSX.writeFile(wb, down);
+			res.download(down);
+		}
+	});
 });
+
+router.get('/history/:id', function (req, res) {
+	User.findOne({ 'id': req.params.id }, function (err, seller) {
+		Product.find({$and: [{ 'orderStatus' : 2, 
+			$or: [{ "buyer": req.params.id },
+			{ 'sellerEmail': seller.email }]}]
+		}, function (err, orders) {
+			Notif.find({ 'email': req.user.email }, function (err, msg) {
+				res.render('history', { notifCount: msg.length, msg: msg, orders: orders, layout: false, user: req.user, count: orders.length, search: null });
+			})
+		});
+	})
+})
+
+router.get('deleteOrgByAdmin/:id', function(req, res) {
+	Org.findByIdAndRemove(req.params.id, (err, doc) => {
+		User.find({}).exec(function (err, users) {
+			Product.find({}).exec(function (err, products) {
+				Product.find({ 'buyer': { $ne: null } }).exec(function (err, orders) {
+					Org.find({}).exec(function (err, orgs) {
+						res.render("admin", {
+							users: users,
+							userCount: users.length,
+							products: products,
+							productCount: products.length,
+							orders: orders,
+							orderCount: orders.length,
+							orgs: orgs,
+							orgCount: orgs.length
+						})
+					})
+
+				})
+
+			})
+
+		})
+	})
+})
 
 
 

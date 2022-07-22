@@ -107,10 +107,25 @@
                             <br>
                             <% if (user) { %>
                               <form action="" method="post">
-                              <button type="submit" class="btn btn-outline-secondary btn-lg"><i
-                                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
-                                  ADD TO CART
-                                </button></form>
+                                <% console.log(prd[i].sellerEmail == user.email) %>
+                                <% if (prd[i].sellerEmail == user.email) { %>
+                              <a href="/deleteItem/<%= prd[i]._id %>"><button class="btn btn-outline-secondary btn-lg"><i
+                                    class="fa fa-trash-o"></i>&nbsp;&nbsp;
+                                  DELETE ITEM
+                                </button>
+                                </a>
+                                <a href="/editProduct/<%= prd[i]._id %>"><button class="btn btn-outline-secondary btn-lg"><i
+                                  class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;
+                              EDIT ITEM
+                              </button>
+                              </a>
+                              <% } else { %>
+                                <button type="submit" class="btn btn-outline-secondary btn-lg"><i
+                                  class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
+                                ADD TO CART
+                              </button>
+                              <% } %>
+                              </form>
                               <% } else { %>
                                 <a href="/users/login"><button type="button" class="btn btn-outline-secondary btn-lg"><i
                                       class="fa fa-shopping-cart"></i>&nbsp;&nbsp;

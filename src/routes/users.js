@@ -15,24 +15,31 @@ var cookieParser = require("cookie-parser");
 var fs = require("fs")
 var ObjectId = require('mongodb').ObjectID;
 var Auth0Strategy = require("passport-auth0");
+
 const router = express.Router();
 const {ensureAuthenticated} = require('../config/auth') 
 
+router.use(flash());
 
 
 
 //login handle
 
-router.get('/login', (req, res) => {
-    res.render('login');
+router.get('/login', (req, res, next) => {
+    res.render('login', {message:null});
 })
+
+router.get('/login/:error', (req, res, next) => {
+    res.render('login', {message: "Invalid Credentials"});
+})
+
 
 router.get('/register', (req, res) => {
     Org.find({}).exec(function (err, Organization) {
 		if (err) {
 			console.log("Error:", err);
 		}
-		res.render("register", { Organization: Organization});
+		res.render("register", { Organization: Organization, message: null});
 	});
 })
 
@@ -41,16 +48,38 @@ router.post('/login', (req, res, next) => {
 	User.find({'email': req.body.email}, function(err, user) {
 		for(var i in user) {
 			if(user[i].admin) {
-				passport.authenticate('local', {
+				passport.authenticate('local', {					
 					successRedirect: '/admin',
-					failureRedirect: '/error',
+					failureRedirect: '/users/login/error',
 					failureFlash: true
+					
 				})(req, res, next)
 			} else{
-				passport.authenticate('local', {
+				passport.authenticate('local', {					
 					successRedirect: '/',
-					failureRedirect: '/error',
+					failureRedirect: '/users/login/error',
+					failureFlash: true,
+				})(req, res, next)
+			}
+		}
+	})
+})
+
+router.post('/login/:error', (req, res, next) => {
+	User.find({'email': req.body.email}, function(err, user) {
+		for(var i in user) {
+			if(user[i].admin) {
+				passport.authenticate('local', {					
+					successRedirect: '/admin',
+					failureRedirect: '/users/login/error',
 					failureFlash: true
+					
+				})(req, res, next)
+			} else{
+				passport.authenticate('local', {					
+					successRedirect: '/',
+					failureRedirect: '/users/login/error',
+					failureFlash: true,
 				})(req, res, next)
 			}
 		}
@@ -59,22 +88,21 @@ router.post('/login', (req, res, next) => {
 
 // Post Registration
 router.post("/register", async (req, res) => {
-	const { name, email, password: plainTextPassword, phone, organization } = req.body
+	const { name, email, password: plainTextPassword, phone, organization, repassword: plainTextRePassword } = req.body
+
 
 	const password = await bcrypt.hash(plainTextPassword, 10)
 
-	let errors = [];
-
-	if (!name || !email || !password || !phone || !organization) {
-		errors.push({ msg: "Please fill in all fields" })
-	}
-
-	if (errors.length > 0) {
-		res.render('error')
+	if (plainTextPassword != plainTextRePassword && plainTextPassword.length < 8 && organization == "Select your school/university/office.." ) {
+		Org.find({}).exec(function (err, Organization) {
+			if (err) {
+				console.log("Error:", err);
+			}
+			res.render("register", { Organization: Organization, message: 'error'});
+		});
 	} else {
 		//validation passed
 		User.findOne({ email: email }).exec((err, user) => {
-			console.log(user);
 			if (user) {
 				errors.push({ msg: 'email already registered' });
 				console.log(errors);
@@ -103,22 +131,24 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/forgotPass", (req, res) => {
-	res.render("forgotPass");
+	res.render("forgotPass", {message: null});
 })
 //Forgot Password Page
 router.post("/forgotPass", async (req, res) => {
-	const { email, password:plainTextPassword } = req.body
+	const { email, password:plainTextPassword, repassword:plainTextRePassword } = req.body
 
 	const pass = await bcrypt.hash(plainTextPassword, 10);
-	let errors = [];
+	
+	console.log(plainTextPassword.length)
 
-	if (errors.length > 0) {
-		res.render('error')
+	if (plainTextPassword != plainTextRePassword ) {
+		res.render("forgotPass", {message: "Password does not match"})
+	} else if (plainTextPassword.length < 8){
+		res.render("forgotPass", {message: "Password is less than 8 characters"})
 	} else {
 		//validation passed
 		
 		User.findOne({ email: email }).exec((err, user) => {
-			console.log(user);
 			if (user) {
 				var myquery = {email : email};
 				var newvalues = { $set: {password: pass } };
@@ -131,9 +161,7 @@ router.post("/forgotPass", async (req, res) => {
 					}
 				})
 			} else {
-				errors.push({ msg: 'Invalid email!' });
-				console.log(errors);
-				res.render("error");
+				res.render("forgotPass", {message: "User not found"})
 			}
 		});
 	}

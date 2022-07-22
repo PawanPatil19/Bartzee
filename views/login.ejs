@@ -5,16 +5,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/buttons.css">
-    <link rel="stylesheet" href="../css/login.css">
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/form.css">
+    <link rel="stylesheet" href="/css/buttons.css">
+    <link rel="stylesheet" href="/css/login.css">
+
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link href="login.css" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
         integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400" rel="stylesheet">
@@ -24,37 +21,47 @@
 
 <body>
 
+
     <div id="form_wrapper">
         <div id="form_left">
-            <img src="../orbitalLogo.png" alt="computer icon" style="width:300px;">
+            <img src="/orbitalLogo.png" alt="computer icon" style="width:300px;">
         </div>
         <div id="form_right">
-            <h1><b>Hello there !</b></h1>
-            <br>
-            <form method="post" id="login">
-
-                <div class="input_container" style="margin-bottom: 15px;">
-                    <i class="fa fa-user"></i>
-                    <input placeholder="Email" type="text" name="email" id="email" class='input_field'>
-
+            <% if(message) {%>
+                <div class="alert alert-danger" role="alert">
+                    <i class="fa fa-exclamation" aria-hidden="true"></i> Invalid Credentials. Please try again
                 </div>
-                <div class="input_container" style="margin-bottom: 15px;">
-                    <i class="fa fa-lock"></i>
-                    <input placeholder="Password" type="password" name="password" id="password" class='input_field'>
-                </div>
-                <input type="submit" value="Login" id='input_submit' class='input_field'>
-            </form>
-            <span id="create_account">
-                <a href="/users/forgotPass" style="color: #393E46;">Forgot Password ?</a>
-            </span>
 
-            <span id='create_account'>
-                <a href="/users/register" style="color: #393E46;">Not Yet Registered ➡ </a>
-            </span>
-            <span id='create_account'>
-                <a href="/" style="color: black;"><u>Go to Home page</u></a>
-            </span>
-            <br>
+                <% } %>
+                    <br>
+                    <h1><b>Hello there !</b></h1>
+                    <br>
+                    <form method="post" id="login">
+
+                        <div class="input_container" style="margin-bottom: 15px;">
+                            <i class="fa fa-user"></i>
+                            <input placeholder="Email" type="text" name="email" id="email" class='input_field' required>
+
+                        </div>
+                        <div class="input_container" style="margin-bottom: 15px;">
+                            <i class="fa fa-lock"></i>
+                            <input placeholder="Password" type="password" name="password" id="password"
+                                class='input_field' required>
+                        </div>
+
+                        <input type="submit" value="Login" id='input_submit' class='input_field'>
+                    </form>
+                    <span id="create_account">
+                        <a href="/users/forgotPass" style="color: #393E46;">Forgot Password ?</a>
+                    </span>
+
+                    <span id='create_account'>
+                        <a href="/users/register" style="color: #393E46;">Not Yet Registered ➡ </a>
+                    </span>
+                    <span id='create_account'>
+                        <a href="/" style="color: black;"><u>Go to Home page</u></a>
+                    </span>
+                    <br>
         </div>
     </div>
 
@@ -92,6 +99,11 @@
                 alert(result.error)
             }
         }
+
+
+
+
+
     </script>
 </body>
 

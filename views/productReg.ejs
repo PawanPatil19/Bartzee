@@ -39,7 +39,7 @@
                             <span class="step"><i class="fa fa-mobile-phone"></i></span>
                             <span class="step"><i class="fa fa-money"></i></span>
                             <span class="step"><i class="fa fa-flag"></i></span>
-                            <span class="step"><i class="fa fa-send-o"></i></span>
+                            <span class="step"><i class="fa fa-check"></i></span>
                         </div>
 
                         <div class="tab">
@@ -221,7 +221,7 @@
                         <div style="overflow:auto;" id="nextprevious">
                             <div style="float:right;">
                                 <button type="button" id="prevBtn" onclick="nextPrev(-1)"><i
-                                        class="fa fa-angle-double-left"></i></button>
+                                        class="fa fa-angle-double-left" ></i></button>
                                 <button type="button" id="nextBtn" onclick="nextPrev(1)"><i
                                         class="fa fa-angle-double-right"></i></button>
                             </div>
@@ -252,9 +252,9 @@
                     document.getElementById("prevBtn").style.display = "inline";
                 }
                 if (n == (x.length - 1)) {
-                    document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+                    document.getElementById("nextBtn").style.display = "none";
                 } else {
-                    document.getElementById("nextBtn").innerHTML = '<i class="fa fa-angle-double-right"></i>';
+                    document.getElementById("nextBtn").style.display = "inline";
                 }
 
                 fixStepIndicator(n)

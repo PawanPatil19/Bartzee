@@ -27,14 +27,143 @@
 </head>
 
 <body>
-    <%- include('partials/header', {user: user, count: count, search: null, msg: msg}); %>
+    <div class="container" id="div-main">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="logo">
+                    <a class="navbar-brand mt-2" href="/"><img src="../orbitalLogo.png"
+                            style="width:200px;height:60px;"></a>
+                </div>
+            </div>
+    
+    
+            <div class="col-md-7">
+    
+                <form id="search-form">
+                    <div class="input-group" style="height:45px;">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary" style="height:45px;">All <i class="fa fa-caret-down"
+                                    aria-hidden="true"></i></button>
+                            <div class="dropdown-content">
+                                <a href="/">All</a>
+                                <a href="/search/Electronics">Electronics</a>
+                                <a href="/search/Stationary">Stationary</a>
+                                <a href="/search/Sport Equipments">Sport Equipments</a>
+                                <a href="/search/Gaming">Gaming</a>
+                                <a href="/search/Clothing">Clothing</a>
+                                <a href="/search/Student Resources">Student Resources</a>
+                                <a href="/search/Books">Books</a>
+                                <a href="/search/Room Decor">Room Decor</a>
+                                <a href="/search/Hardware">Hardware</a>
+                                <a href="/search/Household">Household</a>
+                                <a href="/search/Others">Others</a>
+                            </div>
+                        </div>
+                        <input type="search" class="form-control" id="searchBar">
+                        <button class="btn btn-warning" type="button" id="searchBtn" onclick="search()">&nbsp;<i
+                                class="fa fa-search" aria-hidden="true"></i>&nbsp;</button>
+                    </div>
+                </form>
+    
+            </div>
+    
+    
+            <div class="col-md-2">
+                <div class="header-buttons">
+                    <% for(var i in user) { %>
+                        <a href="/cart"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
+                                    class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span
+                                    class="badge bg-warning ms-1">
+                                    <%= count %>
+                                </span></button></a>
+    
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary btn-lg"><i class="fa fa-user-circle-o"
+                                aria-hidden="true"></i>&nbsp;Hi <%= user[i].name%> <i class="fa fa-caret-down"
+                                        aria-hidden="true"></i></button>
+                            <div class="dropdown-content">
+                                <a class="dropdown-item" href="/profile"><i class="fa fa-user" aria-hidden="true"></i>
+                                    &nbsp;Profile</a>
+                                <a class="dropdown-item" href="/users/logout"><i class="fa fa-sign-out"
+                                        aria-hidden="true"></i>
+                                    &nbsp;Logout</a>
+                                <a class="dropdown-item" href="#"><i class="fa fa-question-circle" aria-hidden="true"></i>
+                                    &nbsp;Help</a>
+                            </div>
+                        </div>
+    
+    
+                        <% } %>
+                            
+                </div>
+    
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- Menu Bar -->
+    <nav class="navbar navbar-expand-lg" style="background-color: #47B5FF;">
+        <div class="container-fluid">
+    
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/" style="color: #222831;">Home</a>
+                    </li>
+                    <% if (user) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/productReg" style="color: #222831;">Sell Your Item</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/sellCart" style="color: #222831;">Your Items</a>
+                        </li>
+                        <% } else { %>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/users/login" style="color: #222831;">Sell Your Item</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/users/login" style="color: #222831;">Your Items</a>
+                            </li>
+                            <% } %>
+                    
+                </ul>
+                <span class="navbar-text">
+                    <div class="dropdown" style="float:right;">
+                        <button class="btn bg-transparent dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false" style="color:white; ">
+                            <i class="fa fa-bell-o fa-lg" aria-hidden="true"></i>
+                            <% if(msg) {%>
+                            <span class="badge rounded-pill bg-danger badge-dot"><%= msg.length %></span>
+                            <% } else { %>
+                                <span class="badge rounded-pill bg-danger badge-dot">0</span>
+                            <% } %>
+                        </button>
+                        <div class="dropdown-content-notif">
+                            <div style="text-align: center;"><b>Notifications</b></div>
+                            <br>
+                            <% for (var i in msg) {%>
+                                <a class="dropdown-item" href="#">• <%= msg[i].notif %>
+                                        <br>
+                                        <div style="text-align: right;"><small>
+                                                <%= msg[i].date.toLocaleDateString() %>
+                                            </small></div>
+                                </a>
+                                <hr>
+                                <% } %>
+                        </div>
+                    </div>
+                </span>
+            </div>
+        </div>
+    </nav>
         <% for(var i in user) { %>
         <div id="form_wrapper">
             
             <div class="form_left">
                 <div class="row">
                     <div class="circle">
-                        <% if(user[i].image) { %>
+                        <% if(user[i].image.contentType) { %>
                             <img class="profile-pic" src="data:image/<%= user[i].image.contentType%>;base64,
                                 <%=user[i].image.data.toString('base64')%>">
 

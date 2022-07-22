@@ -25,69 +25,96 @@
 
 
 <body>
-  
+
   <%- include('partials/header', {user: user, count: count, msg: msg, search: null}); %>
     <br>
+    <div style="text-align: right;">
+      <a href="/history/<%= user._id %>">View history</a>
+    </div>
     <h1>YOUR CART</h1>
     <hr style="width: 80%; margin:auto;">
     <br>
 
     <% for (var i in orders) { %>
-      <div class="card" style="height: 190px; width: 80%; margin:auto; padding: 5px;">
-        <div class="row">
-          <div class="col-md-2">
-            <img src="data:image/<%= orders[i].image.contentType%>;base64,
+      <% if (orders[i].orderStatus < 2) { %>
+        <div class="card" style="height: 190px; width: 80%; margin:auto; padding: 5px;">
+          <div class="row">
+            <div class="col-md-2">
+              <img src="data:image/<%= orders[i].image.contentType%>;base64,
                 <%=orders[i].image.data.toString('base64')%>" class="img-fluid rounded-start"
-              style="height:170px; width: 170px; " alt="...">
-          </div>
-          <div class="col-1" style="width: 30px;">
-            <div class="d-flex" style="height: 90%;">
-              <div class="vr"></div>
+                style="height:170px; width: 170px; " alt="...">
             </div>
-          </div>
-          <div class="col-md-7">
-            <div class="card-body">
-              <% var item=Number(i) + 1; %>
-                <small class="text-muted">Item # <%= item %></small>
-                <h5 class="card-title" style="text-transform: capitalize;"><b>
-                    <%= orders[i].productName %>
-                  </b></h5>
-                <p class="card-text" style="text-transform: capitalize;">Color: <%= orders[i].productColor %> <b>|</b> Size: <%= orders[i].productSize %>
-                      <b>|</b> Quantity: <%= orders[i].productQuantity %>
-                </p>
-                <p class="card-text">$ <%= orders[i].productPrice %>
-                </p>
-                <p class="card-text" style="text-transform: capitalize;"><small class="text-muted">Seller: <%= orders[i].sellerName %>, <%=
-                        orders[i].organization %></small></p>
+            <div class="col-1" style="width: 30px;">
+              <div class="d-flex" style="height: 90%;">
+                <div class="vr"></div>
+              </div>
             </div>
-          </div>
-          <div class="col-md-2" style="margin:auto;">
-            <div class="d-grid gap-2">
-              <a href="/review/<%= orders[i]._id %>">
-                <button class="btn btn-outline-warning" type="button" style="width:100%;"><i class="fa fa-search" aria-hidden="true"></i>
-                  View Item Details</button>
-              </a>
-              <a href="/removeCart/<%= orders[i]._id %>">
-                <button class="btn btn-outline-warning" type="button" style="width:100%;"><i class="fa fa-trash" aria-hidden="true"></i>
-                  Remove from cart</button>
-              </a>
-              <form method="post" id="room-id">
+            <div class="col-md-7">
+              <div class="card-body">
+                <% var item=Number(i) + 1; %>
+                  <small class="text-muted">Item # <%= item %></small>
+                  <h5 class="card-title" style="text-transform: capitalize;"><b>
+                      <%= orders[i].productName %>
+                    </b></h5>
+                  <p class="card-text" style="text-transform: capitalize;">Color: <%= orders[i].productColor %> <b>|</b>
+                      Size: <%= orders[i].productSize %>
+                        <b>|</b> Quantity: <%= orders[i].productQuantity %>
+                  </p>
+                  <p class="card-text">$ <%= orders[i].productPrice %>
+                  </p>
+                  <p class="card-text" style="text-transform: capitalize;"><small class="text-muted">Seller: <%=
+                        orders[i].sellerName %>, <%= orders[i].organization %></small></p>
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div style="text-align: right;">
+                <small style="color:grey;">
+                  <% if (orders[i].orderStatus==1) { %>
+                    Waiting for confirmation....
+                    <% } %>
+                </small>
+              </div>
+              <form method="post" id="room-id"></form>
+              <div class="d-grid gap-2 d-md-block" style="text-align: right; margin-top: 110px;">
+                <a href="/review/<%= orders[i]._id %>">
+                  <button class="btn btn-outline-secondary" type="button" data-toggle="tooltip" data-placement="top"
+                    title="View Product"><i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
+                </a>
+                <a href="/removeCart/<%= orders[i]._id %>">
+                  <button class="btn btn-outline-secondary" type="button"><i class="fa fa-trash" aria-hidden="true"
+                      data-toggle="tooltip" data-placement="top" title="Remove from Cart"></i>
+                  </button>
+                </a>
+
                 <input type="hidden" id="chatRoomID" value="<%= orders[i]._id %>">
                 <a href="/chatInterface/<%= orders[i]._id %>">
-                  <button class="btn btn-outline-warning" id="chatBtn" style="width:100%;" type="button" value="<%= orders[i]._id %>"><i
-                      class="fa fa-comments-o" aria-hidden="true"></i>
-                    Chat with Seller</button>
+                  <button class="btn btn-outline-secondary" id="chatBtn" type="button" value="<%= orders[i]._id %>"
+                    data-toggle="tooltip" data-placement="top" title="Chat with Seller"><i class="fa fa-comments-o"
+                      aria-hidden="true"></i>
+                  </button>
                 </a>
-              </form>
 
+                <a href="/buyerOrderCompletion/<%= orders[i]._id %>">
+                  <button class="btn btn-outline-secondary" type="button" data-toggle="tooltip" data-placement="top"
+                    title="Finish Order"><i class="fa fa-check" aria-hidden="true"></i></button>
+                </a>
+
+              </div>
+              </form>
             </div>
           </div>
         </div>
-      </div>
-      <br><br>
-      <% } %>
+        <br><br>
+        <% } %>
+          <% } %>
 
 
+            <script>
+              $(document).ready(function () {
+                $('[data-toggle="tooltip"]').tooltip();
+              });
+            </script>
 
 </body>
 

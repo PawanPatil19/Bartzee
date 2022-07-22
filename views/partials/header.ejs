@@ -59,6 +59,7 @@
         <div class="col-md-2">
             <div class="header-buttons">
                 <% if (user) { %>
+                    
                     <a href="/cart"><button class="btn btn-outline-warning btn-lg" type="button" style="width: 30%;"><i
                                 class="fa fa-shopping-cart"></i>&nbsp;&nbsp;Cart&nbsp;&nbsp;<span
                                 class="badge bg-warning ms-1">
@@ -66,9 +67,16 @@
                             </span></button></a>
 
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary btn-lg"><i class="fa fa-user-circle-o"
-                                aria-hidden="true"></i>&nbsp;Hi <%= user.name%> <i class="fa fa-caret-down"
+                        <% if(user.image.contentType) {%>
+                            
+                        <button class="btn btn-outline-secondary btn-lg"><img src="data:image/<%= user.image.contentType%>;base64,
+                            <%=user.image.data.toString('base64')%>" style="height:30px; width:30px; border-radius: 100%; border: 2px solid #222831;">&nbsp;Hi <%= user.name%> <i class="fa fa-caret-down"
                                     aria-hidden="true"></i></button>
+                        <% } else { %>
+                            <button class="btn btn-outline-secondary btn-lg"><i class="fa fa-user-circle-o"
+                                aria-hidden="true"></i>&nbsp;Hi <%= user.name%> <i class="fa fa-caret-down"
+                                        aria-hidden="true"></i></button>
+                        <% } %>
                         <div class="dropdown-content">
                             <a class="dropdown-item" href="/profile"><i class="fa fa-user" aria-hidden="true"></i>
                                 &nbsp;Profile</a>

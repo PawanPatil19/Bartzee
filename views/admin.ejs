@@ -25,18 +25,21 @@
 
 <body>
 
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-arrow-up"
+            aria-hidden="true"></i></button>
+
     <div class="container" id="div-main">
         <div class="row">
             <div class="col-md-2">
                 <div class="logo">
-                    <a class="navbar-brand mt-2" href="/"><img src="../orbitalLogo.png"
+                    <a class="navbar-brand mt-2" href="/admin"><img src="../orbitalLogo.png"
                             style="width:200px;height:60px;"></a>
                 </div>
             </div>
 
             <div class="col-md-10" style="text-align: right;">
                 <a href="/users/logout"><button class="btn btn-outline-warning btn-lg"><i class="fa fa-sign-out"
-                        aria-hidden="true"></i>Logout</button></a>
+                            aria-hidden="true"></i>Logout</button></a>
             </div>
         </div>
     </div>
@@ -102,9 +105,11 @@
                         </div>
                         <div class="col-sm-3">
                             <div class="card border-warning mb-3" style="max-width: 18rem;">
-                                <div class="card-header">Last User Registered</div>
+                                <div class="card-header">Last User Registered On</div>
                                 <div class="card-body">
-                                    <h1>15-07-2022</h1>
+                                    <h1>
+                                        <%= users[userCount-1].date.toLocaleDateString() %>
+                                    </h1>
                                 </div>
                             </div>
 
@@ -152,7 +157,8 @@
                                 <%= users[i].organization %>
                             </h6>
                             <a href="/profile/<%= users[i]._id %>" class="card-link">View Profile</a>
-                            <a href="/deleteUser/<%= users[i]._id %>" class="card-link">Delete User</a>
+                            <a href="/deleteUser/<%= users[i]._id %>" class="card-link" style="float: right;">Delete
+                                User</a>
                         </div>
                     </div>
                     <% } %>
@@ -176,7 +182,8 @@
                                 <%= products[i].sellerName %>, <%= products[i].organization %>
                             </h6>
                             <a href="/review/<%= products[i]._id %>" class="card-link">View Product</a>
-                            <a href="/deleteItem/<%= products[i]._id %>" class="card-link">Delete Product</a>
+                            <a href="/deleteItemByAdmin/<%= products[i]._id %>" class="card-link"
+                                style="float: right;">Delete Product</a>
                         </div>
                     </div>
                     <% } %>
@@ -191,11 +198,16 @@
                     <div class="card">
                         <div class="card-body">
                             <small>Order # <%= orders[i]._id %></small>
-                            <h5 class="card-title"><%= orders[i].productName %></h5>
-                            <h6 class="card-subtitle mb-2 text-muted"><%= orders[i].sellerName %> ----> <%= orders[i].buyerName %></h6>
+                            <h5 class="card-title">
+                                <%= orders[i].productName %>
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">
+                                <%= orders[i].sellerName %> ----> <%= orders[i].buyerName %>
+                            </h6>
 
                             <a href="/review/<%= products[i]._id %>" class="card-link">View Product</a>
-                            <a href="/deleteItem/<%= products[i]._id %>" class="card-link">Delete Product</a>
+                            <a href="/deleteItem/<%= products[i]._id %>" class="card-link" style="float: right;">Delete
+                                Product</a>
                         </div>
                     </div>
                     <% } %>
@@ -210,7 +222,11 @@
                     <div class="card">
                         <div class="card-body">
                             <small>Organization # <%= orgs[i]._id %></small>
-                            <h5 class="card-title"> <%= orgs[i].org %>, <%= orgs[i].country %></h5>
+                            <h5 class="card-title">
+                                <%= orgs[i].org %>, <%= orgs[i].country %>
+                            </h5>
+                            <a href="/deleteOrgByAdmin/<%= orgs[i]._id %>" class="card-link"
+                                style="float: right;">Delete Organization</a>
                         </div>
                     </div>
                     <% } %>
@@ -249,6 +265,7 @@
 
 
     <script>
+        
 
         document.getElementById("defaultOpen").click();
 
@@ -271,6 +288,26 @@
             // Show the current tab, and add an "active" class to the button that opened the tab
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
+        }
+
+
+        mybutton = document.getElementById("myBtn");
+
+
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
         } 
     </script>
 

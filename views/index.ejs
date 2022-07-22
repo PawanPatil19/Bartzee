@@ -25,6 +25,8 @@
 
     <!-- Loader in the start -->
     <div id="loader"></div>
+    <button onclick="topFunction()" id="myBtn" title="Go to top"><i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </button>
     <div id="div-main" class="animate-bottom" style="display: none;">
         <%- include('partials/header', {user: user, count: count, search: search, msg: msg}); %>
 
@@ -36,8 +38,8 @@
 
                             <div class="card" style="height: 600px; width: 20rem; border-radius: 15px;">
                                 <img src="data:image/<%= product[i].image.contentType%>;base64,
-                    <%=product[i].image.data.toString('base64')%>" style="height:300px;border-radius: 15px;" class="card-img-top"
-                                    alt="...">
+                    <%=product[i].image.data.toString('base64')%>" style="height:300px;border-radius: 15px;"
+                                    class="card-img-top" alt="...">
                                 <div class="card-body">
                                     <h6 class="prdType">
                                         <%= product[i].productType%>
@@ -82,13 +84,32 @@
         var myVar;
 
         function myFunction() {
-            myVar = setTimeout(showPage,500);
+            myVar = setTimeout(showPage, 500);
         }
 
         function showPage() {
             document.getElementById("loader").style.display = "none";
             document.getElementById("div-main").style.display = "block";
         }
+
+        mybutton = document.getElementById("myBtn");
+
+        
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                mybutton.style.display = "block";
+            } else {
+                mybutton.style.display = "none";
+            }
+        }
+
+        
+        function topFunction() {
+            document.body.scrollTop = 0; 
+            document.documentElement.scrollTop = 0; 
+        } 
     </script>
 
 </body>

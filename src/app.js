@@ -31,6 +31,7 @@ const router = express.Router();
 
 //user management
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(flash());
 
 
 // Socket.io setup

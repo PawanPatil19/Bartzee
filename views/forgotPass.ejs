@@ -29,22 +29,32 @@
             <img src="../orbitalLogo.png" alt="computer icon" style="width:300px;">
         </div>
         <div id="form_right">
+            <% if(message) {%>
+                <div class="alert alert-danger" role="alert">
+                    <i class="fa fa-exclamation" aria-hidden="true"></i> <%= message %> 
+                </div>
+
+                <% } %>
+                <br>
             <h1><b>Reset your password</b></h1>
             <br>
             <form method="post" id="forgotPass">
 
                 <div class="input_container" style="margin-bottom: 15px;">
-                    <i class="fas fa-user"></i>
+                    <i class="fa fa-user"></i>
                     <input placeholder="Email" type="text" name="email" id="email" class='input_field'>
 
                 </div>
+                <b style="color:red;">* </b>Password must contain atleast 8 characters
+                <br>
+                <br>
                 <div class="input_container" style="margin-bottom: 15px;">
-                    <i class="fas fa-lock"></i>
+                    <i class="fa fa-lock"></i>
                     <input placeholder="Enter New Password" type="password" name="password" id="password" class='input_field'>
                 </div>
                 <div class="input_container" style="margin-bottom: 15px;">
-                    <i class="fas fa-lock"></i>
-                    <input placeholder="Re-enter New Password" type="password" name="re-password" id="re-password" class='input_field'>
+                    <i class="fa fa-lock"></i>
+                    <input placeholder="Re-enter New Password" type="password" name="repassword" id="repassword" class='input_field'>
                 </div>
                 <input type="submit" value="Reset Password" id='input_submit' class='input_field'>
             </form>
@@ -75,6 +85,7 @@
             event.preventDefault()
             const email = document.getElementById('email').value
             const password = document.getElementById('password').value
+            const repassword = document.getElementById('repassword').value
 
             const result = await fetch('/forgotPass', {
                 method: 'POST',
@@ -83,7 +94,8 @@
                 },
                 body: JSON.stringify({
                     email,
-                    password
+                    password,
+                    repassword
                 })
             }).then((res) => res.json())
 

@@ -11,7 +11,7 @@ module.exports = function(passport) {
                 User.findOne({email : email})
                 .then((user)=>{
                  if(!user) {
-                     return done(null,false,{message : 'Email is not registered with us!!'});
+                     return done(null,false,{message : 'Invalid Credentials'});
                  }
                  //match pass
                  bcrypt.compare(password,user.password,(err,isMatch)=>{
@@ -20,7 +20,8 @@ module.exports = function(passport) {
                      if(isMatch) {
                          return done(null,user);
                      } else {
-                         return done(null,false,{message : 'Incorrect Password! Please Try Again'});
+                        console.log("Invalid Credentials")
+                         return done(null,false,{message : 'Invalid Credentials'});
                      }
                  })
                 })

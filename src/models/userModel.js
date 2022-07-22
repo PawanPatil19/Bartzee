@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema(
 		image:
         {
             data: Buffer,
-            contentType: String
+            contentType: String,
         },
 		date: { type: Date, default: Date.now },
 		admin: {type: String, default: null}
