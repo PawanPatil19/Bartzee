@@ -33,112 +33,123 @@
 
     <!-- Loader in the start -->
     <!-- <div id="loader"></div> -->
-    
+
     <%- include('partials/header', {user: user, count: count, search: null, msg: msg}); %>
 
 
-    <!-- Main block -->
-    
-    <br>
-    <% for (var i in prd) { %>
-      <div class="container-a">
-        <div class="row">
-          <div class="col-sm-5">
-            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-              <div class="carousel-inner">
-                <div class="carousel-item active">
-                  <img class="d-block w-100" src="data:image/<%= prd[i].image.contentType%>;base64,
+      <!-- Main block -->
+
+      <br>
+      <% for (var i in prd) { %>
+        <div class="container-a">
+          <div class="row">
+            <div class="col-sm-5">
+              <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img class="d-block w-100" src="data:image/<%= prd[i].image.contentType%>;base64,
                   <%=prd[i].image.data.toString('base64')%>" alt="First slide">
+                  </div>
                 </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
               </div>
-              <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
             </div>
-          </div>
-          <div class="col-1" style="width: 50px;">
-            <div class="d-flex" style="height: 100%;">
-              <div class="vr"></div>
+            <div class="col-1" style="width: 50px;">
+              <div class="d-flex" style="height: 100%;">
+                <div class="vr"></div>
+              </div>
             </div>
-          </div>
 
 
-          <div class="col-sm-5">
-            <div class="type">
-              <%= prd[i].productType %>
-            </div>
-            <h1><b>
-                <%= prd[i].productName %>
-              </b></h1>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <span class="fa fa-star"></span>
-            <hr>
+            <div class="col-sm-5">
+              <div class="type">
+                <%= prd[i].productType %>
+              </div>
+              <h1><b>
+                  <%= prd[i].productName %>
+                </b></h1>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <span class="fa fa-star"></span>
+              <hr>
 
-            <h3>About</h3>
-            <%= prd[i].productDesc %><br><br>
+              <h3>About</h3>
+              <%= prd[i].productDesc %><br><br>
 
-              &nbsp;&nbsp;&nbsp;● Color: <%= prd[i].productColor %><br>
-                &nbsp;&nbsp;&nbsp;● Size: <%= prd[i].productSize %><br>
-                  &nbsp;&nbsp;&nbsp;● Quantity: <%= prd[i].productQuantity %>
+                &nbsp;&nbsp;&nbsp;● Color: <%= prd[i].productColor %><br>
+                  &nbsp;&nbsp;&nbsp;● Size: <%= prd[i].productSize %><br>
+                    &nbsp;&nbsp;&nbsp;● Quantity: <%= prd[i].productQuantity %>
 
 
 
-                    <br>
-                    <br>
-                    <i class="fa fa-user" aria-hidden="true"></i>&nbsp; Seller: <%= prd[i].sellerName %>
                       <br>
-                      <i class="fa fa-building-o" aria-hidden="true"></i>&nbsp; Seller Organization:
-                      <%= prd[i].organization %><br>
-                        <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Seller Address:
-                        <%= prd[i].sellerAddress %><br>
-                          <i class="fa fa-phone" aria-hidden="true"></i>&nbsp; Seller Contact:
-                          <%= prd[i].sellerPhone %>
-                            <hr>
+                      <br>
+                      <i class="fa fa-user" aria-hidden="true"></i>&nbsp; Seller: <%= prd[i].sellerName %>
+                        <br>
+                        <i class="fa fa-building-o" aria-hidden="true"></i>&nbsp; Seller Organization:
+                        <%= prd[i].organization %><br>
+                          <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Seller Address:
+                          <%= prd[i].sellerAddress %><br>
+                            <i class="fa fa-phone" aria-hidden="true"></i>&nbsp; Seller Contact:
+                            <%= prd[i].sellerPhone %>
+                              <hr>
 
-                            <h2><b>$&nbsp;<%= prd[i].productPrice %></b></h2>
-                            <br>
-                            <% if (user) { %>
-                              <form action="" method="post">
-                                <% console.log(prd[i].sellerEmail == user.email) %>
-                                <% if (prd[i].sellerEmail == user.email) { %>
-                              <a href="/deleteItem/<%= prd[i]._id %>"><button class="btn btn-outline-secondary btn-lg"><i
-                                    class="fa fa-trash-o"></i>&nbsp;&nbsp;
-                                  DELETE ITEM
-                                </button>
-                                </a>
-                                <a href="/editProduct/<%= prd[i]._id %>"><button class="btn btn-outline-secondary btn-lg"><i
-                                  class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;
-                              EDIT ITEM
-                              </button>
-                              </a>
-                              <% } else { %>
-                                <button type="submit" class="btn btn-outline-secondary btn-lg"><i
-                                  class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
-                                ADD TO CART
-                              </button>
-                              <% } %>
-                              </form>
-                              <% } else { %>
-                                <a href="/users/login"><button type="button" class="btn btn-outline-secondary btn-lg"><i
-                                      class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
-                                    ADD TO CART
-                                  </button></a>
-                                <% } %>
+                              <h2><b>$&nbsp;<%= prd[i].productPrice %></b></h2>
+                              <br>
+                              <% if (user) { %>
+                                <form action="" method="post">
+                                  <% console.log(prd[i].sellerEmail==user.email) %>
+                                    <% if (prd[i].sellerEmail==user.email) { %>
+                                      <a href="/deleteItem/<%= prd[i]._id %>"><button
+                                          class="btn btn-outline-secondary btn-lg"><i
+                                            class="fa fa-trash-o"></i>&nbsp;&nbsp;
+                                          DELETE ITEM
+                                        </button>
+                                      </a>
+                                      <a href="/editProduct/<%= prd[i]._id %>"><button
+                                          class="btn btn-outline-secondary btn-lg"><i
+                                            class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;
+                                          EDIT ITEM
+                                        </button>
+                                      </a>
+                                      <% } else { %>
+                                        <% if(prd[i].buyer==user._id) { %>
 
+                                          <a href="/removeCart/<%= prd[i]._id %>"><button class="btn btn-outline-secondary btn-lg"><i
+                                              class="fa fa-trash-o"></i>&nbsp;&nbsp;
+                                            REMOVE FROM CART
+                                          </button></a>
+                                          <% } else { %>
+                                            <button type="submit" class="btn btn-outline-secondary btn-lg"><i
+                                                class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
+                                              ADD TO CART
+                                            </button>
+                                            <% } %>
+                                              <% } %>
+                                </form>
+                                <% } else { %>
+                                  <a href="/users/login"><button type="button"
+                                      class="btn btn-outline-secondary btn-lg"><i
+                                        class="fa fa-shopping-cart"></i>&nbsp;&nbsp;
+                                      ADD TO CART
+                                    </button></a>
+                                  <% } %>
+
+
+            </div>
 
           </div>
-
+          <% } %>
         </div>
-        <% } %>
-      </div>
 
 
 

@@ -198,6 +198,15 @@
                     <div class="card">
                         <div class="card-body">
                             <small>Order # <%= orders[i]._id %></small>
+                            <h4 style="float: right">
+                                <% if(orders[i].orderStatus == 0) {%>
+                                    <mark  style="background-color: lightgray;">Order Status: Added to Cart</mark>
+                                <% } else if(orders[i].orderStatus == 1) {%>
+                                    <mark  style="background-color: lightgoldenrodyellow;">Status: In Process</mark>
+                                <% } else {%>
+                                    <mark style="background-color: lightgreen;">Order Status: Complete</mark>
+                                <% } %>
+                            </h4>
                             <h5 class="card-title">
                                 <%= orders[i].productName %>
                             </h5>

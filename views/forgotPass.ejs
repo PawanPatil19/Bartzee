@@ -26,7 +26,7 @@
 
     <div id="form_wrapper">
         <div id="form_left">
-            <img src="../orbitalLogo.png" alt="computer icon" style="width:300px;">
+            <a href="/"><img src="../orbitalLogo.png" alt="computer icon" style="width:300px;"></a>
         </div>
         <div id="form_right">
             <% if(message) {%>
@@ -36,7 +36,7 @@
 
                 <% } %>
                 <br>
-            <h1><b>Reset your password</b></h1>
+            <h2 style="text-align: center;"><b>Reset your password</b></h2>
             <br>
             <form method="post" id="forgotPass">
 
@@ -45,7 +45,7 @@
                     <input placeholder="Email" type="text" name="email" id="email" class='input_field'>
 
                 </div>
-                <b style="color:red;">* </b>Password must contain atleast 8 characters
+                <small><b style="color:red;">* </b>Password must contain atleast 8 characters.</small>
                 <br>
                 <br>
                 <div class="input_container" style="margin-bottom: 15px;">
@@ -59,15 +59,9 @@
                 <input type="submit" value="Reset Password" id='input_submit' class='input_field'>
             </form>
             <span id="create_account">
-                <a href="/users/login">Login ➡</a>
+                <a href="/users/login" style="color: #393E46;"><i class="fa fa-sign-in" aria-hidden="true"></i> Login</a>
             </span>
 
-            <span id='create_account'>
-                <a href="/users/register">Not Yet Registered? ➡ </a>
-            </span>
-            <span id='create_account'>
-                <a href="/"><u>Go to Home page</u></a>
-            </span>
             <br>
         </div>
     </div>

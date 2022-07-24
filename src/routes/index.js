@@ -4,7 +4,6 @@ var User = require("../models/userModel");
 var Product = require("../models/productModel");
 var Org = require("../models/orgModel");
 var Chat = require("../models/chatModel");
-var History = require("../models/historyModel");
 var Notif = require("../models/notificationModel")
 var passport = require("passport");
 var bodyParser = require("body-parser");
@@ -46,7 +45,7 @@ router.get('/', (req, res) => {
 	//console.log("1: ", req.user)
 	Product.find({ 'buyer': null }).sort({ _id: -1 }).exec(function (err, product) {
 		if (req.user) {
-			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+			Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }]}).exec(function (err, numberOfOrders) {
 				if (err) {
 					console.log("Error:", err);
 				}
@@ -106,7 +105,7 @@ router.get("/productReg", ensureAuthenticated, (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+		Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }).exec(function (err, numberOfOrders) {
 			if (err) {
 				console.log("Error:", err);
 			}
@@ -158,7 +157,7 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 				if (err) {
 					console.log(err);
 				}
-				Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+				Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }).exec(function (err, numberOfOrders) {
 					if (err) {
 						console.log("Error:", err);
 					}
@@ -178,7 +177,7 @@ router.post("/productReg", upload.single('image'), (req, res) => {
 
 // Product Review page after registration
 router.get("/review", (req, res) => {
-	Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+	Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }).exec(function (err, numberOfOrders) {
 		if (err) {
 			console.log("Error:", err);
 		}
@@ -193,7 +192,7 @@ router.get("/review/:id", (req, res) => {
 
 	Product.find({ '_id': req.params.id }).exec(function (err, prd) {
 		if (req.user) {
-			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+			Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }).exec(function (err, numberOfOrders) {
 				if (err) {
 					console.log("Error:", err);
 				}
@@ -238,7 +237,7 @@ router.post("/review/:id", (req, res) => {
 					})
 				}
 			})
-			Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+			Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }).exec(function (err, numberOfOrders) {
 				if (err) {
 					console.log("Error:", err);
 				}
@@ -298,7 +297,7 @@ router.get("/buyerOrderCompletion/:productID", function (req, res) {
 				Product.updateOne({ '_id': req.params.productID }, { orderStatus: product[i].orderStatus + 1 }, function (err, docs) {
 					
 						
-						Product.find({ 'buyer': req.user._id }, function (err, orders) {
+						Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 							if (err) {
 								console.log(err)
 							} else {
@@ -328,7 +327,7 @@ router.get("/buyerOrderCompletion/:productID", function (req, res) {
 
 // Profile page
 router.get("/profile", (req, res) => {
-	Product.find({ 'buyer': req.user._id }, function (err, orders) {
+	Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 		if (err) {
 			console.log(err)
 		}
@@ -366,7 +365,7 @@ router.post("/profile", upload.single("image"), function (req, res) {
 				if (err) {
 					console.log(err);
 				} else {
-					Product.find({ 'buyer': req.user._id }, function (err, orders) {
+					Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 						Notif.find({ 'email': req.user.email }, function (err, msg) {
 							res.render('profile', { layout: false, user: user, count: orders.length, msg: msg });
 						})
@@ -443,7 +442,7 @@ router.get("/removeCart/:id", function (req, res) {
 		}
 		else {
 			console.log("Item removed from cart! ", docs);
-			Product.find({ 'buyer': req.user._id }, function (err, orders) {
+			Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 				Notif.find({ 'email': req.user.email }, function (err, msg) {
 					res.render('cart', { orders: orders, layout: false, user: req.user, count: orders.length, msg: msg });
 				})
@@ -457,7 +456,7 @@ router.get("/removeCart/:id", function (req, res) {
 router.get("/chatInterface/:roomID", function (req, res) {
 	var room = req.params.roomID;
 
-	Product.find({ 'buyer': req.user._id }, function (err, orders) {
+	Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 		if (err) {
 			console.log(err)
 		}
@@ -513,7 +512,7 @@ router.get("/sellerOrderCompletion/:productID", function (req, res) {
 				Product.updateOne({ '_id': req.params.productID }, { orderStatus: product[i].orderStatus + 1 }, function (err, docs) {
 					console.log("Order Status Updated")
 				})
-				Product.find({ 'buyer': req.user._id }, function (err, orders) {
+				Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 					if (err) {
 						console.log(err)
 					} else {
@@ -545,7 +544,7 @@ router.get("/sellerOrderCompletion/:productID", function (req, res) {
 				Product.updateOne({ '_id': req.params.productID }, { orderStatus: product[i].orderStatus + 1 }, function (err, docs) {
 					
 						console.log("Order Completed!")
-						Product.find({ 'buyer': req.user._id }, function (err, orders) {
+						Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 							if (err) {
 								console.log(err)
 							} else {
@@ -588,7 +587,7 @@ router.get("/deleteItem/:id", (req, res) => {
 			console.log(err);
 		} else {
 			console.log("Product Deleted!")
-			Product.find({ 'buyer': req.user._id }, function (err, orders) {
+			Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 				if (err) {
 					console.log(err)
 				} else {
@@ -683,7 +682,7 @@ router.post("/updateProfile", async (req, res) => {
 					if (err) {
 						console.log(err);
 					} else {
-						Product.find({ 'buyer': req.user._id }, function (err, orders) {
+						Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 							Notif.find({ 'email': req.user.email }, function (err, msg) {
 								res.render('profile', { layout: false, user: user, count: orders.length, msg: msg });
 							})
@@ -702,7 +701,7 @@ router.get("/editProduct/:id", (req, res) => {
 		if (err) {
 			console.log("Error:", err);
 		}
-		Product.find({ 'buyer': req.user._id }).exec(function (err, numberOfOrders) {
+		Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }).exec(function (err, numberOfOrders) {
 			if (err) {
 				console.log("Error:", err);
 			}
@@ -763,7 +762,7 @@ router.post("/editProduct/:id", async (req, res) => {
 			console.log(err)
 		} else {
 			console.log("Product Details updated successfully!: ", docs)
-			Product.find({ 'buyer': req.user._id }, function (err, orders) {
+			Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 				if (err) {
 					console.log(err)
 				} else {
@@ -788,7 +787,7 @@ router.post("/editProduct/:id", async (req, res) => {
 })
 
 router.get("/admin", function (req, res) {
-	User.find({}).exec(function (err, users) {
+	User.find({'admin' : null}).exec(function (err, users) {
 		Product.find({}).exec(function (err, products) {
 			Product.find({ 'buyer': { $ne: null } }).exec(function (err, orders) {
 				Org.find({}).exec(function (err, orgs) {
@@ -848,8 +847,9 @@ router.get('/exportProductData', (req, res) => {
 });
 
 router.get('/history/:id', function (req, res) {
-	User.findOne({ 'id': req.params.id }, function (err, seller) {
-		Product.find({$and: [{ 'orderStatus' : 2, 
+	User.findOne({ '_id': req.params.id }, function (err, seller) {
+		console.log("seller: ", seller.email)
+		Product.find({$and: [{ 'orderStatus' : {$eq : 2}, 
 			$or: [{ "buyer": req.params.id },
 			{ 'sellerEmail': seller.email }]}]
 		}, function (err, orders) {

@@ -24,7 +24,7 @@
 
     <div id="form_wrapper">
         <div id="form_left">
-            <img src="/orbitalLogo.png" alt="computer icon" style="width:300px;">
+            <a href="/"><img src="/orbitalLogo.png" alt="computer icon" style="width:300px;"></a>
         </div>
         <div id="form_right">
             <% if(message) {%>
@@ -47,20 +47,21 @@
                             <i class="fa fa-lock"></i>
                             <input placeholder="Password" type="password" name="password" id="password"
                                 class='input_field' required>
+                                
                         </div>
+                        <small><a href="/users/forgotPass" style="color: #393E46; float: right;">Forgot Password ?</a></small>
+                        <br><br>
 
                         <input type="submit" value="Login" id='input_submit' class='input_field'>
                     </form>
-                    <span id="create_account">
+                    <!-- <span id="create_account">
                         <a href="/users/forgotPass" style="color: #393E46;">Forgot Password ?</a>
-                    </span>
+                    </span> -->
 
                     <span id='create_account'>
-                        <a href="/users/register" style="color: #393E46;">Not Yet Registered ➡ </a>
+                        <small><a href="/users/register" style="color: #393E46;">New to Bartzee? Create an account</a></small>
                     </span>
-                    <span id='create_account'>
-                        <a href="/" style="color: black;"><u>Go to Home page</u></a>
-                    </span>
+                    
                     <br>
         </div>
     </div>
