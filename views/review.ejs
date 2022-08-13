@@ -93,14 +93,15 @@
 
                       <br>
                       <br>
-                      <i class="fa fa-user" aria-hidden="true"></i>&nbsp; Seller: <%= prd[i].sellerName %>
+                      <h5><b>Seller Details</b></h5>
+                      <i class="fa fa-user" aria-hidden="true"></i>&nbsp; Name : <%= prd[i].sellerName %>
                         <br>
-                        <i class="fa fa-building-o" aria-hidden="true"></i>&nbsp; Seller Organization:
+                        <i class="fa fa-building-o" aria-hidden="true"></i>&nbsp; Organization:
                         <%= prd[i].organization %><br>
-                          <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Seller Address:
+                          <i class="fa fa-map-marker" aria-hidden="true"></i>&nbsp; Address:
                           <%= prd[i].sellerAddress %><br>
-                            <i class="fa fa-phone" aria-hidden="true"></i>&nbsp; Seller Contact:
-                            <%= prd[i].sellerPhone %>
+                            <i class="fa fa-envelope" aria-hidden="true"></i>&nbsp; Contact:
+                            <%= prd[i].sellerEmail %>
                               <hr>
 
                               <h2><b>$&nbsp;<%= prd[i].productPrice %></b></h2>
@@ -109,17 +110,15 @@
                                 <form action="" method="post">
                                   <% console.log(prd[i].sellerEmail==user.email) %>
                                     <% if (prd[i].sellerEmail==user.email) { %>
-                                      <a href="/deleteItem/<%= prd[i]._id %>"><button
-                                          class="btn btn-outline-secondary btn-lg"><i
-                                            class="fa fa-trash-o"></i>&nbsp;&nbsp;
+                                      <a href="/deleteItem/<%= prd[i]._id %>"><i
+                                            class="fa fa-trash-o"></i>&nbsp;
                                           DELETE ITEM
-                                        </button>
-                                      </a>
-                                      <a href="/editProduct/<%= prd[i]._id %>"><button
-                                          class="btn btn-outline-secondary btn-lg"><i
-                                            class="fa fa-pencil-square-o"></i>&nbsp;&nbsp;
+                                        
+                                      </a> &nbsp;&nbsp;
+                                      <a href="/editProduct/<%= prd[i]._id %>"><i
+                                            class="fa fa-pencil-square-o"></i>&nbsp;
                                           EDIT ITEM
-                                        </button>
+                                        
                                       </a>
                                       <% } else { %>
                                         <% if(prd[i].buyer==user._id) { %>

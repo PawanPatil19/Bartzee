@@ -28,8 +28,8 @@
 
   <%- include('partials/header', {user: user, count: count, msg: msg, search: null}); %>
     <br>
-    <div style="text-align: right;">
-      <a href="/history/<%= user._id %>">View history</a>
+    <div style="text-align: right; padding-right: 20px;"">
+      <a href="/history/<%= user._id %>"><b><i class="fa fa-history" aria-hidden="true"></i>&nbsp;View history</b></a>
     </div>
     <h1>YOUR CART</h1>
     <hr style="width: 80%; margin:auto;">
@@ -72,6 +72,7 @@
                   <% if (orders[i].orderStatus==1) { %>
                     Waiting for confirmation....
                     <% } %>
+                    
                 </small>
               </div>
               <form method="post" id="room-id"></form>
@@ -96,8 +97,13 @@
                 </a>
 
                 <a href="/buyerOrderCompletion/<%= orders[i]._id %>">
+                  <% if (orders[i].orderStatus==1) { %>
                   <button class="btn btn-outline-secondary" type="button" data-toggle="tooltip" data-placement="top"
-                    title="Finish Order"><i class="fa fa-check" aria-hidden="true"></i></button>
+                    title="Finish Order" disabled><i class="fa fa-check" aria-hidden="true"></i></button>
+                    <% } else {%>  
+                      <button class="btn btn-outline-secondary" type="button" data-toggle="tooltip" data-placement="top"
+                      title="Finish Order"><i class="fa fa-check" aria-hidden="true"></i></button>
+                      <% } %>
                 </a>
 
               </div>

@@ -119,7 +119,7 @@ router.post("/register", async (req, res) => {
                     })
                     console.log('User created successfully: ', response)
                     response.save();
-                    res.redirect('/users/login')
+                    res.render('/users/login')
                 } catch (error) {
                     console.log(error);
                 }
@@ -157,7 +157,7 @@ router.post("/forgotPass", async (req, res) => {
 						console.log(err)
 					} else {
 						console.log("Password changed successfully!")
-						res.redirect('/users/login')
+						res.render('login', {message: null})
 					}
 				})
 			} else {

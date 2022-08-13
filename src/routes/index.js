@@ -436,7 +436,7 @@ router.get("/removeCart/:id", function (req, res) {
 	})
 
 
-	Product.updateOne({ '_id': req.params.id }, { buyer: null }, function (err, docs) {
+	Product.updateOne({ '_id': req.params.id }, { buyer: null, buyerName: null }, function (err, docs) {
 		if (err) {
 			console.log(err)
 		}
@@ -684,7 +684,9 @@ router.post("/updateProfile", async (req, res) => {
 					} else {
 						Product.find({ $and : [{'buyer': req.user._id, 'orderStatus': {$lt:2}  }] }, function (err, orders) {
 							Notif.find({ 'email': req.user.email }, function (err, msg) {
-								res.render('profile', { layout: false, user: user, count: orders.length, msg: msg });
+								User.find({ '_id': req.user._id }, function (err, user) {
+									res.render('profile', { layout: false, user: user, count: orders.length, msg: msg });
+								})
 							})
 						});
 					}
@@ -693,6 +695,7 @@ router.post("/updateProfile", async (req, res) => {
 		})
 	}
 })
+
 
 
 // Edit product details
