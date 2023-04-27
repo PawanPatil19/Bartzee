@@ -1,3 +1,3 @@
 # Bartzee
 
-Try Bartzee. <a href="https://damp-crag-60882.herokuapp.com/">CLick here</a>.
+Project Demo: https://drive.google.com/file/d/10GG133pTlV4AJMByv6920x6E6B2ZOS6a/view
