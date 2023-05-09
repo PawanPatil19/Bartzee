@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 //creating a database
-mongoose.connect("mongodb+srv://dbUser_Pawan:gzqnXzsPYvy6IZKL@cluster0.2hgwz.mongodb.net/orbital?retryWrites=true&w=majority", {
+mongoose.connect("mongodb+srv://pkp:SWoeLX9VMOzpwe17@cluster0.acsjryo.mongodb.net/?retryWrites=true&w=majority", {
     useNewUrlParser: false,
     useUnifiedTopology: false
 })

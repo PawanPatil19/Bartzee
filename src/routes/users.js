@@ -119,7 +119,7 @@ router.post("/register", async (req, res) => {
                     })
                     console.log('User created successfully: ', response)
                     response.save();
-                    res.render('/users/login')
+                    res.render('login', {message: null})
                 } catch (error) {
                     console.log(error);
                 }
